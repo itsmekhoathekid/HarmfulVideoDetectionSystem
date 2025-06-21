@@ -99,4 +99,42 @@ def split_videos(
 
     print("✅ Done moving files!")
 
+"""
+{
+    "idx" : "url"
+}
+"""
 
+
+def create_json(src_folder, dst_folder):
+
+    
+
+    for split in os.listdir(src_folder):
+        res = {}
+        split_path = os.path.join(src_folder, split)
+        if not os.path.isdir(split_path):
+            continue
+        
+        for label in os.listdir(split_path):
+            label_path = os.path.join(split_path, label)
+            if not os.path.isdir(label_path):
+                continue
+            
+            for filename in os.listdir(label_path):
+                if filename.endswith(".mp4"):
+                    idx = filename.split(".")[0]
+                    url = os.path.join(split_path, label, filename)
+                    res[idx] = {}
+                    res[idx]["url"] = url
+                    res[idx]["label"] = label
+        
+        # Save to json file
+        json_path = os.path.join(dst_folder, f"{split}.json")
+        with open(json_path, "w") as f:
+            import json
+            json.dump(res, f, indent=4)
+    
+
+    print(f"Created json files in {dst_folder} for splits: {os.listdir(src_folder)}")
+                    

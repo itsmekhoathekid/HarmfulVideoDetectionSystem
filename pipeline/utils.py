@@ -137,4 +137,12 @@ def create_json(src_folder, dst_folder):
     
 
     print(f"Created json files in {dst_folder} for splits: {os.listdir(src_folder)}")
-                    
+
+def load_json(json_path):
+    """
+    Load json file
+    """
+    import json
+    with open(json_path, "r") as f:
+        data = json.load(f)
+    return data

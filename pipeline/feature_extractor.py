@@ -39,13 +39,17 @@ class PretrainedModelLoader:
         """
         Load the pretrained model and tokenizer.
         """
+        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        self.text_model.to(device)
+        
         return self.tokenizer, self.text_model, self.transcriber, self.rdgsegmenter
 
 
 class VideoProcessor:
-    def __init__(self, pretrained_loader, data_configs):
-        self.tokenizer, self.text_model, self.transcriber, self.rdgsegmenter = pretrained_loader.load_model()
-        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    def __init__(self, data_configs):
+        # self.tokenizer, self.text_model, self.transcriber, self.rdgsegmenter = pretrained_loader.load_model()
+        # self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        self.data_configs = data_configs
 
     def process_video(self, video_path):
         num_frames = self.data_configs.get("num_frames", 30)
@@ -87,7 +91,7 @@ class VideoProcessor:
         n_mfcc = self.data_configs.get("n_mfcc", 40)
         max_length = self.data_configs.get("max_length", 40)
 
-        audio_path = f"temp_audio.wav"
+        audio_path = f"/tmp/temp_audio_{uuid.uuid4().hex}.wav"
         try:
             video = VideoFileClip(video_path)
             audio = video.audio
@@ -113,30 +117,30 @@ class VideoProcessor:
                 os.remove(audio_path)
         return mfcc_tensor
     
-    def process_text(self, audio_path):
-        try:
-            result = self.transcriber(audio_path)
-            text = result["text"]
+    # def process_text(self, audio_path):
+    #     try:
+    #         result = self.transcriber(audio_path)
+    #         text = result["text"]
 
-            if text.strip() != "":
-                segmented_sentences = self.rdrsegmenter.tokenize(text)
-                segmented_text = " ".join(["_".join(sent) for sent in segmented_sentences])
-                inputs = self.tokenizer(
-                    segmented_text, 
-                    return_tensors="pt", 
-                    padding='max_length', 
-                    truncation=True, 
-                    max_length=128
-                )
-                inputs = {k: v.to(self.device) for k, v in inputs.items()}
+    #         if text.strip() != "":
+    #             segmented_sentences = self.rdrsegmenter.tokenize(text)
+    #             segmented_text = " ".join(["_".join(sent) for sent in segmented_sentences])
+    #             inputs = self.tokenizer(
+    #                 segmented_text, 
+    #                 return_tensors="pt", 
+    #                 padding='max_length', 
+    #                 truncation=True, 
+    #                 max_length=128
+    #             )
+    #             inputs = {k: v.to(self.device) for k, v in inputs.items()}
 
-                with torch.no_grad():
-                    text_output = self.text_model(**inputs)
-                    text_embedding = text_output.last_hidden_state[:, 0, :]
-            else:
-                text_embedding = torch.zeros(1, 768).to(self.device)
+    #             with torch.no_grad():
+    #                 text_output = self.text_model(**inputs)
+    #                 text_embedding = text_output.last_hidden_state[:, 0, :]
+    #         else:
+    #             text_embedding = torch.zeros(1, 768).to(self.device)
 
-            return text_embedding.squeeze(0).cpu()
-        except Exception as e:
-            print(f"Error processing text: {e}")
-            return torch.zeros(768)
+    #         return text_embedding.squeeze(0).cpu()
+    #     except Exception as e:
+    #         print(f"Error processing text: {e}")
+    #         return torch.zeros(768)

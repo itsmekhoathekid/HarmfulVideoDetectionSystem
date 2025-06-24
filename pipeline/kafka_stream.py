@@ -10,7 +10,7 @@ def get_data():
     json_data = load_json("/home/anhkhoa/spark_video_streaming/json/train.json")
     for key, value in json_data.items():
         yield {
-            "idx": key,
+            "idx": str(uuid.uuid5(uuid.NAMESPACE_DNS, key)),  # convert key to UUID
             "url": value["url"],
             "label": value["label"]
         }

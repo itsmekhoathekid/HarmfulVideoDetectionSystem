@@ -8,21 +8,19 @@ from pyspark.sql.types import StructType, StructField, StringType
 from pyspark.sql.functions import pandas_udf, PandasUDFType
 from pyspark.sql.types import ArrayType, FloatType, StringType
 import torch
-from feature_extractor import PretrainedModelLoader, VideoProcessor
+from feature_extractor import VideoProcessor
 import pandas as pd
+import uuid
 
-model_loader = None
-video_processor = None
-
-def init_model_once(configs):
-    global model_loader, video_processor
-    if model_loader is None:
-        model_loader = PretrainedModelLoader()
-        video_processor = VideoProcessor(model_loader, configs)
+video_processor = VideoProcessor({
+    "num_frames": 10,
+    "resize": (112, 112),
+    "n_mfcc": 20,
+    "max_length": 20
+})
 
 @pandas_udf(ArrayType(FloatType()))
 def extract_video_features(video_paths: pd.Series) -> pd.Series:
-    init_model_once({"num_frames": 30, "resize": (224, 224)})
     
     results = []
     for path in video_paths:
@@ -33,11 +31,11 @@ def extract_video_features(video_paths: pd.Series) -> pd.Series:
             print(e)
             flat = [0.0] * (3 * 30 * 224 * 224)
         results.append(flat)
+    print(f"✅ Processing video: {video_paths}")
     return pd.Series(results)
 
 @pandas_udf(ArrayType(FloatType()))
 def extract_audio_features(video_paths: pd.Series) -> pd.Series:
-    init_model_once({"n_mfcc": 40, "max_length": 40})
 
     results = []
     for path in video_paths:
@@ -48,22 +46,23 @@ def extract_audio_features(video_paths: pd.Series) -> pd.Series:
             print(e)
             flat = [0.0] * (40 * 40)
         results.append(flat)
+    print(f"✅ Processing video: {video_paths}")
     return pd.Series(results)
 
-@pandas_udf(ArrayType(FloatType()))
-def extract_text_embedding(video_paths: pd.Series) -> pd.Series:
-    init_model_once({})
+# @pandas_udf(ArrayType(FloatType()))
+# def extract_text_embedding(video_paths: pd.Series) -> pd.Series:
+#     init_model_once({})
     
-    results = []
-    for path in video_paths:
-        try:
-            emb = video_processor.process_text(path)  # path to audio
-            flat = emb.cpu().numpy().tolist()
-        except Exception as e:
-            print(e)
-            flat = [0.0] * 768
-        results.append(flat)
-    return pd.Series(results)
+#     results = []
+#     for path in video_paths:
+#         try:
+#             emb = video_processor.process_text(path)  # path to audio
+#             flat = emb.cpu().numpy().tolist()
+#         except Exception as e:
+#             print(e)
+#             flat = [0.0] * 768
+#         results.append(flat)
+#     return pd.Series(results)
 
 
 def create_keyspace(session):
@@ -84,7 +83,6 @@ def create_table(session):
             label TEXT,
             video_feat LIST<FLOAT>,
             audio_feat LIST<FLOAT>,
-            text_feat LIST<FLOAT>
         );
     """)
     print("Table created successfully!")
@@ -129,7 +127,7 @@ def create_spark_connection():
 def create_cassandra_connection():
     try:
         # connecting to the cassandra cluster
-        cluster = Cluster(['localhost'])
+        cluster = Cluster(['localhost'], protocol_version=5)
 
         cas_session = cluster.connect()
 
@@ -147,6 +145,7 @@ def connect_to_kafka(spark_conn):
             .option('kafka.bootstrap.servers', 'localhost:9092') \
             .option('subscribe', 'users_created') \
             .option('startingOffsets', 'earliest') \
+            .option("failOnDataLoss", "false") \
             .load()
         logging.info("kafka dataframe created successfully")
     except Exception as e:
@@ -156,46 +155,73 @@ def connect_to_kafka(spark_conn):
 
 from pyspark.sql.functions import udf
 from pyspark.sql.types import StringType
-import uuid
 
+
+
+            
 def create_selection_df_from_kafka(spark_df):
     if spark_df is not None:
-        # Define the schema for incoming Kafka JSON
         schema = StructType([
             StructField("idx", StringType()),
             StructField("url", StringType()),
             StructField("label", StringType())
         ])
 
-        # Parse Kafka JSON payload
         selection_df = spark_df.selectExpr("CAST(value AS STRING)") \
             .select(from_json(col("value"), schema).alias("data")) \
             .select("data.*")
 
-        # UDF to convert idx to UUID safely
-        @udf(StringType())
-        def to_uuid(idx):
-            try:
-                if idx is None or idx.strip() == "":
-                    raise ValueError("empty")
-                return str(uuid.UUID(idx))  # if already valid UUID
-            except:
-                return str(uuid.uuid5(uuid.NAMESPACE_DNS, str(idx)))  # generate UUID from idx
-
-        # Add 'id' column and drop 'idx'
-        selection_df = selection_df.withColumn("id", to_uuid(col("idx"))) \
-                                   .drop("idx")
         
-        # Optional: Print schema and preview (for debug only)
-        selection_df.printSchema()
-        # selection_df.writeStream.outputMode("append").format("console").start().awaitTermination()
 
-        logging.info("✅ Selection dataframe created successfully with UUID-safe 'id'")
+        selection_df = selection_df.withColumn("id", col("idx")) \
+                                   .drop("idx")
+
+        # 💡 Thêm các đặc trưng ngay tại đây
+        selection_df = selection_df \
+            .withColumn("video_feat", extract_video_features(col("url"))) \
+            .withColumn("audio_feat", extract_audio_features(col("url"))) \
+
+        logging.info("✅ Selection dataframe with features created successfully")
         return selection_df
     else:
-        logging.warning("❌ No valid Kafka dataframe available to create selection dataframe")
+        logging.warning("❌ No valid Kafka dataframe available")
         return None
-    
+
+
+def extract_features_udf(batch_iter):
+    # model_loader = PretrainedModelLoader()
+    video_processor = VideoProcessor({
+        "num_frames": 30,
+        "resize": (224, 224),
+        "n_mfcc": 40,
+        "max_length": 40
+    })
+
+    for pdf in batch_iter:
+        video_feats, audio_feats, text_feats = [], [], []
+        for path in pdf["url"]:
+            try:
+                video_tensor = video_processor.process_video(path)
+                video_feats.append(video_tensor.flatten().tolist())
+            except:
+                video_feats.append([0.0] * (3 * 30 * 224 * 224))
+
+            try:
+                audio_tensor = video_processor.process_audio(path)
+                audio_feats.append(audio_tensor.flatten().tolist())
+            except:
+                audio_feats.append([0.0] * (40 * 40))
+
+            # try:
+            #     text_tensor = video_processor.process_text(path)
+            #     text_feats.append(text_tensor.cpu().numpy().tolist())
+            # except:
+            #     text_feats.append([0.0] * 768)
+
+        pdf["video_feat"] = video_feats
+        pdf["audio_feat"] = audio_feats
+        # pdf["text_feat"] = text_feats
+        yield pdf
 
 def process_batch(batch_df, batch_id):
     from pyspark.sql.functions import col
@@ -205,7 +231,7 @@ def process_batch(batch_df, batch_id):
         enriched_df = batch_df \
             .withColumn("video_feat", extract_video_features(col("url"))) \
             .withColumn("audio_feat", extract_audio_features(col("url"))) \
-            .withColumn("text_feat", extract_text_embedding(col("url")))
+            # .withColumn("text_feat", extract_text_embedding(col("url")))
 
         # Ghi vào Cassandra
         enriched_df.write \
@@ -219,22 +245,25 @@ def process_batch(batch_df, batch_id):
 
 if __name__ == "__main__":
     spark_conn = create_spark_connection()
-
     if spark_conn is not None:
         spark_df = connect_to_kafka(spark_conn)
         selection_df = create_selection_df_from_kafka(spark_df)
-        session = create_cassandra_connection()
 
-        if session is not None:
-            create_keyspace(session)
-            create_table(session)
+        if selection_df is not None:
+            session = create_cassandra_connection()
+            if session is not None:
+                create_keyspace(session)
+                create_table(session)
 
             logging.info("⚡ Streaming started with feature extraction...")
 
             streaming_query = (selection_df.writeStream
-                               .foreachBatch(process_batch)
-                               .option("checkpointLocation", "/tmp/checkpoint")
+                               .foreachBatch(process_batch)  # ✅ Thay vì writeStream trực tiếp
+                               .option("checkpointLocation", "/tmp/checkpoint-v2")
                                .start())
 
             streaming_query.awaitTermination()
+        else:
+            print("⚠️ Kafka selection_df is None. Check Kafka connection or schema.")
+
 

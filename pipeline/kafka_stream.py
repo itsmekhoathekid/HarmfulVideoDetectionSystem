@@ -4,6 +4,7 @@ import time
 import logging
 from utils import load_json
 from feature_extractor import PretrainedModelLoader, VideoProcessor
+import uuid
 
 def get_data():
     json_data = load_json("/home/anhkhoa/spark_video_streaming/json/train.json")
@@ -16,7 +17,8 @@ def get_data():
 
 def stream_data():
     try:
-        producer = KafkaProducer(bootstrap_servers=['broker:29092'], max_block_ms=5000)
+        producer = KafkaProducer(bootstrap_servers=['localhost:9092'], max_block_ms=5000)
+
 
     except Exception as e:
         logging.error(f'Kafka connection failed: {e}')
@@ -24,7 +26,7 @@ def stream_data():
 
     curr_time = time.time()
     for res in get_data():
-        if time.time() > curr_time + 60:
+        if time.time() > curr_time + 120:
             break
         try:
             producer.send('users_created', json.dumps(res).encode('utf-8'))

@@ -5,6 +5,65 @@ from pyspark.sql import SparkSession
 from pyspark.sql.functions import from_json, col
 from pyspark.sql.types import StructType, StructField, StringType 
 
+from pyspark.sql.functions import pandas_udf, PandasUDFType
+from pyspark.sql.types import ArrayType, FloatType, StringType
+import torch
+from feature_extractor import PretrainedModelLoader, VideoProcessor
+import pandas as pd
+
+model_loader = None
+video_processor = None
+
+def init_model_once(configs):
+    global model_loader, video_processor
+    if model_loader is None:
+        model_loader = PretrainedModelLoader()
+        video_processor = VideoProcessor(model_loader, configs)
+
+@pandas_udf(ArrayType(FloatType()))
+def extract_video_features(video_paths: pd.Series) -> pd.Series:
+    init_model_once({"num_frames": 30, "resize": (224, 224)})
+    
+    results = []
+    for path in video_paths:
+        try:
+            tensor = video_processor.process_video(path)
+            flat = tensor.flatten().tolist()
+        except Exception as e:
+            print(e)
+            flat = [0.0] * (3 * 30 * 224 * 224)
+        results.append(flat)
+    return pd.Series(results)
+
+@pandas_udf(ArrayType(FloatType()))
+def extract_audio_features(video_paths: pd.Series) -> pd.Series:
+    init_model_once({"n_mfcc": 40, "max_length": 40})
+
+    results = []
+    for path in video_paths:
+        try:
+            tensor = video_processor.process_audio(path)
+            flat = tensor.flatten().tolist()
+        except Exception as e:
+            print(e)
+            flat = [0.0] * (40 * 40)
+        results.append(flat)
+    return pd.Series(results)
+
+@pandas_udf(ArrayType(FloatType()))
+def extract_text_embedding(video_paths: pd.Series) -> pd.Series:
+    init_model_once({})
+    
+    results = []
+    for path in video_paths:
+        try:
+            emb = video_processor.process_text(path)  # path to audio
+            flat = emb.cpu().numpy().tolist()
+        except Exception as e:
+            print(e)
+            flat = [0.0] * 768
+        results.append(flat)
+    return pd.Series(results)
 
 
 def create_keyspace(session):
@@ -17,14 +76,19 @@ def create_keyspace(session):
 
 
 def create_table(session):
+    session.execute("DROP TABLE IF EXISTS spark_streams.created_users")
     session.execute("""
-    CREATE TABLE IF NOT EXISTS spark_streams.created_users (
-        id UUID PRIMARY KEY,
-        url TEXT,
-        label TEXT,
+        CREATE TABLE IF NOT EXISTS spark_streams.created_users (
+            id UUID PRIMARY KEY,
+            url TEXT,
+            label TEXT,
+            video_feat LIST<FLOAT>,
+            audio_feat LIST<FLOAT>,
+            text_feat LIST<FLOAT>
+        );
     """)
-
     print("Table created successfully!")
+
 
 def insert_data(session, **kwargs):
     print("inserting data...")
@@ -48,12 +112,13 @@ def create_spark_connection():
     try:    
         s_conn = SparkSession.builder \
             .appName("SparkVideoStreaming") \
-            .config("spark.jars.packages", "com.datastax.spark:spark-cassandra-connector_2.13:3.4.1,"
-                                            "org.apache.spark:spark-sql-kafka-0-10_2.13:3.4.1") \
+            .config("spark.jars.packages", "com.datastax.spark:spark-cassandra-connector_2.12:3.4.1,"
+                               "org.apache.spark:spark-sql-kafka-0-10_2.12:3.4.1") \
             .config("spark.cassandra.connection.host", "localhost") \
             .getOrCreate()
 
         s_conn.sparkContext.setLogLevel("ERROR")
+        s_conn.sparkContext.addPyFile("/home/anhkhoa/spark_video_streaming/pipeline/feature_extractor.py")
         logging.info("Spark connection created successfully.")
     except Exception as e:
         logging.error(f"Failed to create Spark connection: {e}")
@@ -89,32 +154,73 @@ def connect_to_kafka(spark_conn):
 
     return spark_df
 
+from pyspark.sql.functions import udf
+from pyspark.sql.types import StringType
+import uuid
+
 def create_selection_df_from_kafka(spark_df):
     if spark_df is not None:
-        # Define the schema for the incoming Kafka data
+        # Define the schema for incoming Kafka JSON
         schema = StructType([
-            StructField("id", StringType()),
+            StructField("idx", StringType()),
             StructField("url", StringType()),
             StructField("label", StringType())
         ])
 
-        # Parse the JSON data from Kafka
+        # Parse Kafka JSON payload
         selection_df = spark_df.selectExpr("CAST(value AS STRING)") \
             .select(from_json(col("value"), schema).alias("data")) \
             .select("data.*")
 
-        logging.info("Selection dataframe created successfully")
+        # UDF to convert idx to UUID safely
+        @udf(StringType())
+        def to_uuid(idx):
+            try:
+                if idx is None or idx.strip() == "":
+                    raise ValueError("empty")
+                return str(uuid.UUID(idx))  # if already valid UUID
+            except:
+                return str(uuid.uuid5(uuid.NAMESPACE_DNS, str(idx)))  # generate UUID from idx
+
+        # Add 'id' column and drop 'idx'
+        selection_df = selection_df.withColumn("id", to_uuid(col("idx"))) \
+                                   .drop("idx")
+        
+        # Optional: Print schema and preview (for debug only)
+        selection_df.printSchema()
+        # selection_df.writeStream.outputMode("append").format("console").start().awaitTermination()
+
+        logging.info("✅ Selection dataframe created successfully with UUID-safe 'id'")
         return selection_df
     else:
-        logging.warning("No valid Kafka dataframe available to create selection dataframe")
+        logging.warning("❌ No valid Kafka dataframe available to create selection dataframe")
         return None
+    
+
+def process_batch(batch_df, batch_id):
+    from pyspark.sql.functions import col
+
+    if not batch_df.rdd.isEmpty():
+        # Trích xuất đặc trưng
+        enriched_df = batch_df \
+            .withColumn("video_feat", extract_video_features(col("url"))) \
+            .withColumn("audio_feat", extract_audio_features(col("url"))) \
+            .withColumn("text_feat", extract_text_embedding(col("url")))
+
+        # Ghi vào Cassandra
+        enriched_df.write \
+            .format("org.apache.spark.sql.cassandra") \
+            .option("keyspace", "spark_streams") \
+            .option("table", "created_users") \
+            .mode("append") \
+            .save()
+        print(f"[Batch ID: {batch_id}] Written to Cassandra.\n")
+
 
 if __name__ == "__main__":
-    # create spark connection
     spark_conn = create_spark_connection()
 
     if spark_conn is not None:
-        # connect to kafka with spark connection
         spark_df = connect_to_kafka(spark_conn)
         selection_df = create_selection_df_from_kafka(spark_df)
         session = create_cassandra_connection()
@@ -123,12 +229,12 @@ if __name__ == "__main__":
             create_keyspace(session)
             create_table(session)
 
-            logging.info("Streaming is being started...")
+            logging.info("⚡ Streaming started with feature extraction...")
 
-            streaming_query = (selection_df.writeStream.format("org.apache.spark.sql.cassandra")
-                               .option('checkpointLocation', '/tmp/checkpoint')
-                               .option('keyspace', 'spark_streams')
-                               .option('table', 'created_users')
+            streaming_query = (selection_df.writeStream
+                               .foreachBatch(process_batch)
+                               .option("checkpointLocation", "/tmp/checkpoint")
                                .start())
 
             streaming_query.awaitTermination()
+

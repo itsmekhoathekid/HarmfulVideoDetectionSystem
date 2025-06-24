@@ -13,7 +13,6 @@ import torch.optim as optim
 from tqdm import tqdm
 from transformers import AutoTokenizer, AutoModel
 import whisper
-from utils import extract_and_save_features
 from vncorenlp import VnCoreNLP
 from transformers import pipeline
 

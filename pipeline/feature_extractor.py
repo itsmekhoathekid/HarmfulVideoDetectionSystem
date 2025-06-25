@@ -1,3 +1,4 @@
+import uuid
 import cv2
 import librosa
 import numpy as np
@@ -15,7 +16,8 @@ from transformers import AutoTokenizer, AutoModel
 import whisper
 from vncorenlp import VnCoreNLP
 from transformers import pipeline
-
+import base64
+import tempfile
 
 
 class PretrainedModelLoader:
@@ -51,13 +53,21 @@ class VideoProcessor:
         # self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.data_configs = data_configs
 
-    def process_video(self, video_path):
+    def process_video_base64(self, base64_string):
         num_frames = self.data_configs.get("num_frames", 30)
         resize = self.data_configs.get("resize", (224, 224))
 
         try:
-            cap = cv2.VideoCapture(video_path)
+            # Giải mã base64
+            video_bytes = base64.b64decode(base64_string)
 
+            # Ghi vào file tạm
+            with tempfile.NamedTemporaryFile(delete=False, suffix=".mp4") as temp_file:
+                temp_file.write(video_bytes)
+                temp_path = temp_file.name
+
+            # Dùng OpenCV để đọc video từ file tạm
+            cap = cv2.VideoCapture(temp_path)
             frames = []
             total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
             interval = max(total_frames // num_frames, 1)
@@ -73,11 +83,13 @@ class VideoProcessor:
                     break
             cap.release()
 
-            # Nếu không đủ số khung hình, thêm các khung hình đen
+            os.remove(temp_path)  # Xóa file tạm
+
+            # Bù khung hình nếu thiếu
             while len(frames) < num_frames:
                 frames.append(np.zeros((resize[0], resize[1], 3), dtype=np.uint8))
 
-            frames = np.array(frames).transpose(0, 3, 1, 2) / 255.0  # Normalize
+            frames = np.array(frames).transpose(0, 3, 1, 2) / 255.0
             frames_tensor = torch.tensor(frames, dtype=torch.float)
 
         except Exception as e:
@@ -86,61 +98,47 @@ class VideoProcessor:
 
         return frames_tensor
 
-
-    def process_audio(self, video_path):
+    def process_audio_base64(self, base64_string):
         n_mfcc = self.data_configs.get("n_mfcc", 40)
         max_length = self.data_configs.get("max_length", 40)
 
+        video_path = f"/tmp/temp_video_{uuid.uuid4().hex}.mp4"
         audio_path = f"/tmp/temp_audio_{uuid.uuid4().hex}.wav"
+
         try:
+            # Lưu chuỗi base64 thành video file tạm
+            with open(video_path, "wb") as f:
+                f.write(base64.b64decode(base64_string))
+
+            # Dùng moviepy trích xuất audio
             video = VideoFileClip(video_path)
             audio = video.audio
             if audio is not None:
                 audio.write_audiofile(audio_path, logger=None)
                 y, sr = librosa.load(audio_path, sr=None)
                 mfcc = librosa.feature.mfcc(y=y, sr=sr, n_mfcc=n_mfcc)
-            
+
+                # Cắt hoặc padding để chuẩn hóa kích thước
                 if mfcc.shape[1] < max_length:
                     pad_width = max_length - mfcc.shape[1]
                     mfcc = np.pad(mfcc, pad_width=((0, 0), (0, pad_width)), mode='constant')
                 else:
                     mfcc = mfcc[:, :max_length]
+
                 mfcc_tensor = torch.tensor(mfcc, dtype=torch.float)
+            else:
+                raise ValueError("No audio track found in video")
 
         except Exception as e:
-            print(f"Error processing audio: {e}")
+            print(f"Error processing audio from base64: {e}")
             mfcc_tensor = torch.zeros(n_mfcc, max_length)
 
         finally:
-            # Xóa file audio tạm
+            # Xóa file tạm
+            if os.path.exists(video_path):
+                os.remove(video_path)
             if os.path.exists(audio_path):
                 os.remove(audio_path)
+
         return mfcc_tensor
-    
-    # def process_text(self, audio_path):
-    #     try:
-    #         result = self.transcriber(audio_path)
-    #         text = result["text"]
 
-    #         if text.strip() != "":
-    #             segmented_sentences = self.rdrsegmenter.tokenize(text)
-    #             segmented_text = " ".join(["_".join(sent) for sent in segmented_sentences])
-    #             inputs = self.tokenizer(
-    #                 segmented_text, 
-    #                 return_tensors="pt", 
-    #                 padding='max_length', 
-    #                 truncation=True, 
-    #                 max_length=128
-    #             )
-    #             inputs = {k: v.to(self.device) for k, v in inputs.items()}
-
-    #             with torch.no_grad():
-    #                 text_output = self.text_model(**inputs)
-    #                 text_embedding = text_output.last_hidden_state[:, 0, :]
-    #         else:
-    #             text_embedding = torch.zeros(1, 768).to(self.device)
-
-    #         return text_embedding.squeeze(0).cpu()
-    #     except Exception as e:
-    #         print(f"Error processing text: {e}")
-    #         return torch.zeros(768)

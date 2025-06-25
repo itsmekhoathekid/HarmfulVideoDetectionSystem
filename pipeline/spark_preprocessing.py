@@ -11,6 +11,20 @@ import torch
 from feature_extractor import VideoProcessor
 import pandas as pd
 import uuid
+import os
+import base64
+
+import logging
+
+# Ghi log vào file
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(message)s",
+    handlers=[
+        logging.FileHandler("/home/anhkhoa/spark_video_streaming/logs/spark.log"),
+        logging.StreamHandler()  # vẫn hiển thị ra console
+    ]
+)
 
 video_processor = VideoProcessor({
     "num_frames": 10,
@@ -20,49 +34,36 @@ video_processor = VideoProcessor({
 })
 
 @pandas_udf(ArrayType(FloatType()))
-def extract_video_features(video_paths: pd.Series) -> pd.Series:
+def extract_video_features(video_strings: pd.Series) -> pd.Series:
     
     results = []
-    for path in video_paths:
+    for video_string in video_strings:
         try:
-            tensor = video_processor.process_video(path)
+            tensor = video_processor.process_video_base64(video_string)
             flat = tensor.flatten().tolist()
         except Exception as e:
             print(e)
             flat = [0.0] * (3 * 30 * 224 * 224)
         results.append(flat)
-    print(f"✅ Processing video: {video_paths}")
+    print(f"✅ Processing video: {video_strings}")
     return pd.Series(results)
 
 @pandas_udf(ArrayType(FloatType()))
-def extract_audio_features(video_paths: pd.Series) -> pd.Series:
+def extract_audio_features(video_strings: pd.Series) -> pd.Series:
 
     results = []
-    for path in video_paths:
+    for video_string in video_strings:
         try:
-            tensor = video_processor.process_audio(path)
+            tensor = video_processor.process_audio_base64(video_string)
             flat = tensor.flatten().tolist()
         except Exception as e:
             print(e)
             flat = [0.0] * (40 * 40)
         results.append(flat)
-    print(f"✅ Processing video: {video_paths}")
+    print(f"✅ Processing video: {video_strings}")
     return pd.Series(results)
 
-# @pandas_udf(ArrayType(FloatType()))
-# def extract_text_embedding(video_paths: pd.Series) -> pd.Series:
-#     init_model_once({})
-    
-#     results = []
-#     for path in video_paths:
-#         try:
-#             emb = video_processor.process_text(path)  # path to audio
-#             flat = emb.cpu().numpy().tolist()
-#         except Exception as e:
-#             print(e)
-#             flat = [0.0] * 768
-#         results.append(flat)
-#     return pd.Series(results)
+
 
 
 def create_keyspace(session):
@@ -83,27 +84,32 @@ def create_table(session):
             label TEXT,
             video_feat LIST<FLOAT>,
             audio_feat LIST<FLOAT>,
+            text_embedding LIST<FLOAT>,
+            split TEXT
         );
     """)
     print("Table created successfully!")
 
 
-def insert_data(session, **kwargs):
-    print("inserting data...")
 
-    idx = kwargs.get('idx')
-    url = kwargs.get('url')
-    label = kwargs.get('label')
+# def insert_data(session, **kwargs):
+#     print("inserting data...")
 
-    try:
-        session.execute("""
-            INSERT INTO spark_streams.created_users(id, url, label)
-                VALUES (%s, %s, %s)
-        """, (idx, url, label))
-        logging.info(f"Data inserted for id : {idx}")
+#     idx = kwargs.get('idx')
+#     url = kwargs.get('url')
+#     label = kwargs.get('label')
+#     video_encoded = kwargs.get('video_encoded')
+#     text_embedding = kwargs.get('text_embedding')
 
-    except Exception as e:
-        logging.error(f'could not insert data due to {e}')
+#     try:
+#         session.execute("""
+#             INSERT INTO spark_streams.created_users(id, url, label, video_encoded, text_embedding)
+#                 VALUES (%s, %s, %s, %s, %s)
+#         """, (idx, url, label, video_encoded, text_embedding))
+#         logging.info(f"Data inserted for id : {idx}")
+
+#     except Exception as e:
+#         logging.error(f'could not insert data due to {e}')
 
 def create_spark_connection():
     s_conn = None
@@ -154,7 +160,7 @@ def connect_to_kafka(spark_conn):
     return spark_df
 
 from pyspark.sql.functions import udf
-from pyspark.sql.types import StringType
+from pyspark.sql.types import StringType, ArrayType, FloatType
 
 
 
@@ -164,77 +170,40 @@ def create_selection_df_from_kafka(spark_df):
         schema = StructType([
             StructField("idx", StringType()),
             StructField("url", StringType()),
-            StructField("label", StringType())
+            StructField("label", StringType()),
+            StructField("video_encoded", StringType()),
+            StructField("text_embedding", ArrayType(FloatType())),
+            StructField("split", StringType())
         ])
 
         selection_df = spark_df.selectExpr("CAST(value AS STRING)") \
             .select(from_json(col("value"), schema).alias("data")) \
             .select("data.*")
 
-        
+        selection_df.printSchema()
 
-        selection_df = selection_df.withColumn("id", col("idx")) \
-                                   .drop("idx")
+        selection_df = selection_df.withColumn("id", col("idx"))  # tạo id
 
-        # 💡 Thêm các đặc trưng ngay tại đây
         selection_df = selection_df \
-            .withColumn("video_feat", extract_video_features(col("url"))) \
-            .withColumn("audio_feat", extract_audio_features(col("url"))) \
+            .withColumn("video_feat", extract_video_features(col("video_encoded"))) \
+            .withColumn("audio_feat", extract_audio_features(col("video_encoded")))
 
-        logging.info("✅ Selection dataframe with features created successfully")
-        return selection_df
+        return selection_df.select("id", "url", "label", "video_feat", "audio_feat")  # ✅ chỉ giữ cần thiết
     else:
         logging.warning("❌ No valid Kafka dataframe available")
         return None
 
 
-def extract_features_udf(batch_iter):
-    # model_loader = PretrainedModelLoader()
-    video_processor = VideoProcessor({
-        "num_frames": 30,
-        "resize": (224, 224),
-        "n_mfcc": 40,
-        "max_length": 40
-    })
 
-    for pdf in batch_iter:
-        video_feats, audio_feats, text_feats = [], [], []
-        for path in pdf["url"]:
-            try:
-                video_tensor = video_processor.process_video(path)
-                video_feats.append(video_tensor.flatten().tolist())
-            except:
-                video_feats.append([0.0] * (3 * 30 * 224 * 224))
-
-            try:
-                audio_tensor = video_processor.process_audio(path)
-                audio_feats.append(audio_tensor.flatten().tolist())
-            except:
-                audio_feats.append([0.0] * (40 * 40))
-
-            # try:
-            #     text_tensor = video_processor.process_text(path)
-            #     text_feats.append(text_tensor.cpu().numpy().tolist())
-            # except:
-            #     text_feats.append([0.0] * 768)
-
-        pdf["video_feat"] = video_feats
-        pdf["audio_feat"] = audio_feats
-        # pdf["text_feat"] = text_feats
-        yield pdf
 
 def process_batch(batch_df, batch_id):
     from pyspark.sql.functions import col
 
     if not batch_df.rdd.isEmpty():
-        # Trích xuất đặc trưng
-        enriched_df = batch_df \
-            .withColumn("video_feat", extract_video_features(col("url"))) \
-            .withColumn("audio_feat", extract_audio_features(col("url"))) \
-            # .withColumn("text_feat", extract_text_embedding(col("url")))
+
 
         # Ghi vào Cassandra
-        enriched_df.write \
+        batch_df.write \
             .format("org.apache.spark.sql.cassandra") \
             .option("keyspace", "spark_streams") \
             .option("table", "created_users") \

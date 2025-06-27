@@ -1,56 +1,306 @@
-2025-06-25 16:57:56,419 [INFO] Spark connection created successfully.
-2025-06-25 16:57:58,278 [INFO] kafka dataframe created successfully
-2025-06-25 16:57:58,756 [WARNING] Cluster.__init__ called with contact_points specified, but no load_balancing_policy. In the next major version, this will raise an error; please specify a load-balancing policy. (contact_points = ['localhost'], lbp = None)
-2025-06-25 16:58:03,959 [WARNING] [control connection] Error connecting to 127.0.0.1:9042:
+2025-06-27 15:59:30,199 [INFO] ✅ Spark connection created successfully.
+2025-06-27 15:59:31,950 [INFO] kafka dataframe created successfully
+2025-06-27 15:59:32,424 [WARNING] Cluster.__init__ called with contact_points specified, but no load_balancing_policy. In the next major version, this will raise an error; please specify a load-balancing policy. (contact_points = ['localhost'], lbp = None)
+2025-06-27 15:59:32,760 [INFO] Using datacenter 'datacenter1' for DCAwareRoundRobinPolicy (via host '127.0.0.1:9042'); if incorrect, please specify a local_dc to the constructor, or limit contact points to local cluster nodes
+2025-06-27 15:59:33,077 [INFO] ⚡ Streaming started with feature extraction...
+2025-06-27 16:00:42,887 [INFO] Error while receiving.
 Traceback (most recent call last):
-  File "cassandra/cluster.py", line 3577, in cassandra.cluster.ControlConnection._reconnect_internal
-  File "cassandra/cluster.py", line 3599, in cassandra.cluster.ControlConnection._try_connect
-  File "cassandra/cluster.py", line 1670, in cassandra.cluster.Cluster.connection_factory
-  File "cassandra/connection.py", line 855, in cassandra.connection.Connection.factory
-cassandra.OperationTimedOut: errors=Timed out creating connection (5 seconds), last_host=None
-2025-06-25 16:58:03,961 [ERROR] Control connection failed to connect, shutting down Cluster:
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 511, in send_command
+    answer = smart_decode(self.stream.readline()[:-1])
+RuntimeError: reentrant call inside <_io.BufferedReader name=4>
+2025-06-27 16:00:42,891 [INFO] Closing down clientserver connection
+2025-06-27 16:00:42,891 [ERROR] Exception while sending command.
 Traceback (most recent call last):
-  File "cassandra/cluster.py", line 1740, in cassandra.cluster.Cluster.connect
-  File "cassandra/cluster.py", line 3543, in cassandra.cluster.ControlConnection.connect
-  File "cassandra/cluster.py", line 3588, in cassandra.cluster.ControlConnection._reconnect_internal
-cassandra.cluster.NoHostAvailable: ('Unable to connect to any servers', {'127.0.0.1:9042': OperationTimedOut('errors=Timed out creating connection (5 seconds), last_host=None')})
-2025-06-25 16:58:03,962 [ERROR] Could not create cassandra connection due to ('Unable to connect to any servers', {'127.0.0.1:9042': OperationTimedOut('errors=Timed out creating connection (5 seconds), last_host=None')})
-2025-06-25 16:58:03,962 [INFO] ⚡ Streaming started with feature extraction...
-2025-06-25 16:58:03,985 [INFO] Callback Server Starting
-2025-06-25 16:58:03,986 [INFO] Socket listening on ('127.0.0.1', 34969)
-2025-06-25 16:58:05,928 [INFO] Python Server ready to receive messages
-2025-06-25 16:58:05,929 [INFO] Received command c on object id p0
-2025-06-25 17:00:49,222 [ERROR] There was an exception while executing the Python Proxy on the Python Side.
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 511, in send_command
+    answer = smart_decode(self.stream.readline()[:-1])
+RuntimeError: reentrant call inside <_io.BufferedReader name=4>
+
+During handling of the above exception, another exception occurred:
+
 Traceback (most recent call last):
-  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 617, in _call_proxy
-    return_value = getattr(self.pool[obj_id], method)(*params)
-  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/sql/utils.py", line 120, in call
-    raise e
-  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/sql/utils.py", line 117, in call
-    self.func(DataFrame(jdf, wrapped_session_jdf), batch_id)
-  File "/home/anhkhoa/spark_video_streaming/pipeline/spark_preprocessing.py", line 211, in process_batch
-    .save()
-  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/sql/readwriter.py", line 1461, in save
-    self._jwrite.save()
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/java_gateway.py", line 1038, in send_command
+    response = connection.send_command(command)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 539, in send_command
+    raise Py4JNetworkError(
+py4j.protocol.Py4JNetworkError: Error while sending or receiving
+2025-06-27 16:00:42,892 [INFO] Error while receiving.
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 511, in send_command
+    answer = smart_decode(self.stream.readline()[:-1])
+  File "/usr/lib/python3.10/socket.py", line 705, in readinto
+    return self._sock.recv_into(b)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/context.py", line 381, in signal_handler
+    self.cancelAllJobs()
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/context.py", line 2446, in cancelAllJobs
+    self._jsc.sc().cancelAllJobs()
   File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/java_gateway.py", line 1322, in __call__
     return_value = get_return_value(
-  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/errors/exceptions/captured.py", line 185, in deco
-    raise converted from None
-pyspark.errors.exceptions.captured.AnalysisException: Couldn't find spark_streams or any similarly named keyspaces
-2025-06-25 17:00:49,503 [INFO] Closing down clientserver connection
-2025-06-25 17:02:12,335 [INFO] Spark connection created successfully.
-2025-06-25 17:02:14,391 [INFO] kafka dataframe created successfully
-2025-06-25 17:02:14,887 [WARNING] Cluster.__init__ called with contact_points specified, but no load_balancing_policy. In the next major version, this will raise an error; please specify a load-balancing policy. (contact_points = ['localhost'], lbp = None)
-2025-06-25 17:02:15,085 [INFO] Using datacenter 'datacenter1' for DCAwareRoundRobinPolicy (via host '127.0.0.1:9042'); if incorrect, please specify a local_dc to the constructor, or limit contact points to local cluster nodes
-2025-06-25 17:02:16,157 [INFO] ⚡ Streaming started with feature extraction...
-2025-06-25 17:02:16,177 [INFO] Callback Server Starting
-2025-06-25 17:02:16,178 [INFO] Socket listening on ('127.0.0.1', 45997)
-2025-06-25 17:02:18,014 [INFO] Python Server ready to receive messages
-2025-06-25 17:02:18,014 [INFO] Received command c on object id p0
-2025-06-25 17:02:59,296 [INFO] Received command c on object id p0
-2025-06-25 17:12:00,791 [INFO] Received command c on object id p0
-2025-06-25 17:13:03,863 [INFO] Received command c on object id p0
-2025-06-25 17:13:27,413 [WARNING] [control connection] Error connecting to 127.0.0.1:9042:
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/errors/exceptions/captured.py", line 179, in deco
+    return f(*a, **kw)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/protocol.py", line 334, in get_return_value
+    raise Py4JError(
+py4j.protocol.Py4JError: An error occurred while calling o30.sc
+2025-06-27 16:00:42,895 [INFO] Closing down clientserver connection
+2025-06-27 16:00:42,895 [ERROR] Exception while sending command.
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 511, in send_command
+    answer = smart_decode(self.stream.readline()[:-1])
+  File "/usr/lib/python3.10/socket.py", line 705, in readinto
+    return self._sock.recv_into(b)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/context.py", line 381, in signal_handler
+    self.cancelAllJobs()
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/context.py", line 2446, in cancelAllJobs
+    self._jsc.sc().cancelAllJobs()
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/java_gateway.py", line 1322, in __call__
+    return_value = get_return_value(
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/errors/exceptions/captured.py", line 179, in deco
+    return f(*a, **kw)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/protocol.py", line 334, in get_return_value
+    raise Py4JError(
+py4j.protocol.Py4JError: An error occurred while calling o30.sc
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/java_gateway.py", line 1038, in send_command
+    response = connection.send_command(command)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 539, in send_command
+    raise Py4JNetworkError(
+py4j.protocol.Py4JNetworkError: Error while sending or receiving
+2025-06-27 16:00:42,895 [INFO] Closing down clientserver connection
+2025-06-27 16:00:42,922 [INFO] Closing down clientserver connection
+2025-06-27 16:01:04,498 [INFO] ✅ Spark connection created successfully.
+2025-06-27 16:01:06,206 [INFO] kafka dataframe created successfully
+2025-06-27 16:01:06,841 [WARNING] Cluster.__init__ called with contact_points specified, but no load_balancing_policy. In the next major version, this will raise an error; please specify a load-balancing policy. (contact_points = ['localhost'], lbp = None)
+2025-06-27 16:01:07,073 [INFO] Using datacenter 'datacenter1' for DCAwareRoundRobinPolicy (via host '127.0.0.1:9042'); if incorrect, please specify a local_dc to the constructor, or limit contact points to local cluster nodes
+2025-06-27 16:01:08,149 [INFO] ⚡ Streaming started with feature extraction...
+2025-06-27 16:01:08,173 [INFO] Callback Server Starting
+2025-06-27 16:01:08,173 [INFO] Socket listening on ('127.0.0.1', 32861)
+2025-06-27 16:01:09,889 [INFO] Python Server ready to receive messages
+2025-06-27 16:01:09,889 [INFO] Received command c on object id p0
+2025-06-27 16:01:31,188 [INFO] [Batch ID: 1] ✅ Written to Cassandra using safe insert per row.
+2025-06-27 16:01:31,485 [INFO] Received command c on object id p0
+2025-06-27 16:06:48,178 [INFO] Error while receiving.
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 511, in send_command
+    answer = smart_decode(self.stream.readline()[:-1])
+RuntimeError: reentrant call inside <_io.BufferedReader name=4>
+2025-06-27 16:06:48,191 [INFO] Closing down clientserver connection
+2025-06-27 16:06:48,192 [ERROR] Exception while sending command.
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 511, in send_command
+    answer = smart_decode(self.stream.readline()[:-1])
+RuntimeError: reentrant call inside <_io.BufferedReader name=4>
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/java_gateway.py", line 1038, in send_command
+    response = connection.send_command(command)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 539, in send_command
+    raise Py4JNetworkError(
+py4j.protocol.Py4JNetworkError: Error while sending or receiving
+2025-06-27 16:06:48,195 [INFO] Error while receiving.
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 511, in send_command
+    answer = smart_decode(self.stream.readline()[:-1])
+  File "/usr/lib/python3.10/socket.py", line 705, in readinto
+    return self._sock.recv_into(b)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/context.py", line 381, in signal_handler
+    self.cancelAllJobs()
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/context.py", line 2446, in cancelAllJobs
+    self._jsc.sc().cancelAllJobs()
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/java_gateway.py", line 1322, in __call__
+    return_value = get_return_value(
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/errors/exceptions/captured.py", line 179, in deco
+    return f(*a, **kw)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/protocol.py", line 334, in get_return_value
+    raise Py4JError(
+py4j.protocol.Py4JError: An error occurred while calling o30.sc
+2025-06-27 16:06:48,198 [INFO] Closing down clientserver connection
+2025-06-27 16:06:48,198 [ERROR] Exception while sending command.
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 511, in send_command
+    answer = smart_decode(self.stream.readline()[:-1])
+  File "/usr/lib/python3.10/socket.py", line 705, in readinto
+    return self._sock.recv_into(b)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/context.py", line 381, in signal_handler
+    self.cancelAllJobs()
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/context.py", line 2446, in cancelAllJobs
+    self._jsc.sc().cancelAllJobs()
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/java_gateway.py", line 1322, in __call__
+    return_value = get_return_value(
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/errors/exceptions/captured.py", line 179, in deco
+    return f(*a, **kw)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/protocol.py", line 334, in get_return_value
+    raise Py4JError(
+py4j.protocol.Py4JError: An error occurred while calling o30.sc
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/java_gateway.py", line 1038, in send_command
+    response = connection.send_command(command)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 539, in send_command
+    raise Py4JNetworkError(
+py4j.protocol.Py4JNetworkError: Error while sending or receiving
+2025-06-27 16:06:48,198 [INFO] Closing down clientserver connection
+2025-06-27 16:06:48,303 [INFO] Closing down clientserver connection
+2025-06-27 16:07:14,653 [INFO] ✅ Spark connection created successfully.
+2025-06-27 16:07:16,213 [INFO] kafka dataframe created successfully
+2025-06-27 16:07:16,631 [WARNING] Cluster.__init__ called with contact_points specified, but no load_balancing_policy. In the next major version, this will raise an error; please specify a load-balancing policy. (contact_points = ['localhost'], lbp = None)
+2025-06-27 16:07:16,807 [INFO] Using datacenter 'datacenter1' for DCAwareRoundRobinPolicy (via host '127.0.0.1:9042'); if incorrect, please specify a local_dc to the constructor, or limit contact points to local cluster nodes
+2025-06-27 16:07:18,078 [INFO] ⚡ Streaming started with feature extraction...
+2025-06-27 16:10:34,418 [INFO] Error while receiving.
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 511, in send_command
+    answer = smart_decode(self.stream.readline()[:-1])
+RuntimeError: reentrant call inside <_io.BufferedReader name=4>
+2025-06-27 16:10:34,428 [INFO] Closing down clientserver connection
+2025-06-27 16:10:34,428 [ERROR] Exception while sending command.
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 511, in send_command
+    answer = smart_decode(self.stream.readline()[:-1])
+RuntimeError: reentrant call inside <_io.BufferedReader name=4>
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/java_gateway.py", line 1038, in send_command
+    response = connection.send_command(command)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 539, in send_command
+    raise Py4JNetworkError(
+py4j.protocol.Py4JNetworkError: Error while sending or receiving
+2025-06-27 16:10:34,431 [INFO] Error while receiving.
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 511, in send_command
+    answer = smart_decode(self.stream.readline()[:-1])
+  File "/usr/lib/python3.10/socket.py", line 705, in readinto
+    return self._sock.recv_into(b)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/context.py", line 381, in signal_handler
+    self.cancelAllJobs()
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/context.py", line 2446, in cancelAllJobs
+    self._jsc.sc().cancelAllJobs()
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/java_gateway.py", line 1322, in __call__
+    return_value = get_return_value(
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/errors/exceptions/captured.py", line 179, in deco
+    return f(*a, **kw)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/protocol.py", line 334, in get_return_value
+    raise Py4JError(
+py4j.protocol.Py4JError: An error occurred while calling o30.sc
+2025-06-27 16:10:34,437 [INFO] Closing down clientserver connection
+2025-06-27 16:10:34,437 [ERROR] Exception while sending command.
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 511, in send_command
+    answer = smart_decode(self.stream.readline()[:-1])
+  File "/usr/lib/python3.10/socket.py", line 705, in readinto
+    return self._sock.recv_into(b)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/context.py", line 381, in signal_handler
+    self.cancelAllJobs()
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/context.py", line 2446, in cancelAllJobs
+    self._jsc.sc().cancelAllJobs()
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/java_gateway.py", line 1322, in __call__
+    return_value = get_return_value(
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/errors/exceptions/captured.py", line 179, in deco
+    return f(*a, **kw)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/protocol.py", line 334, in get_return_value
+    raise Py4JError(
+py4j.protocol.Py4JError: An error occurred while calling o30.sc
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/java_gateway.py", line 1038, in send_command
+    response = connection.send_command(command)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 539, in send_command
+    raise Py4JNetworkError(
+py4j.protocol.Py4JNetworkError: Error while sending or receiving
+2025-06-27 16:10:34,438 [INFO] Closing down clientserver connection
+2025-06-27 16:10:34,492 [INFO] Closing down clientserver connection
+2025-06-27 16:11:00,685 [INFO] ✅ Spark connection created successfully.
+2025-06-27 16:11:02,306 [INFO] kafka dataframe created successfully
+2025-06-27 16:11:02,856 [WARNING] Cluster.__init__ called with contact_points specified, but no load_balancing_policy. In the next major version, this will raise an error; please specify a load-balancing policy. (contact_points = ['localhost'], lbp = None)
+2025-06-27 16:11:03,031 [INFO] Using datacenter 'datacenter1' for DCAwareRoundRobinPolicy (via host '127.0.0.1:9042'); if incorrect, please specify a local_dc to the constructor, or limit contact points to local cluster nodes
+2025-06-27 16:11:03,903 [INFO] ⚡ Streaming started with feature extraction...
+2025-06-27 16:11:03,924 [INFO] Callback Server Starting
+2025-06-27 16:11:03,924 [INFO] Socket listening on ('127.0.0.1', 46401)
+2025-06-27 16:11:05,528 [INFO] Python Server ready to receive messages
+2025-06-27 16:11:05,529 [INFO] Received command c on object id p0
+2025-06-27 16:18:01,786 [WARNING] Heartbeat failed for connection (140181347213872) to 127.0.0.1:9042
+2025-06-27 16:19:29,315 [INFO] Error while receiving.
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 511, in send_command
+    answer = smart_decode(self.stream.readline()[:-1])
+RuntimeError: reentrant call inside <_io.BufferedReader name=4>
+2025-06-27 16:19:29,464 [INFO] Closing down clientserver connection
+2025-06-27 16:19:29,496 [ERROR] Exception while sending command.
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 511, in send_command
+    answer = smart_decode(self.stream.readline()[:-1])
+RuntimeError: reentrant call inside <_io.BufferedReader name=4>
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/java_gateway.py", line 1038, in send_command
+    response = connection.send_command(command)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 539, in send_command
+    raise Py4JNetworkError(
+py4j.protocol.Py4JNetworkError: Error while sending or receiving
+2025-06-27 16:19:29,515 [INFO] Error while receiving.
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 511, in send_command
+    answer = smart_decode(self.stream.readline()[:-1])
+  File "/usr/lib/python3.10/socket.py", line 705, in readinto
+    return self._sock.recv_into(b)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/context.py", line 381, in signal_handler
+    self.cancelAllJobs()
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/context.py", line 2446, in cancelAllJobs
+    self._jsc.sc().cancelAllJobs()
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/java_gateway.py", line 1322, in __call__
+    return_value = get_return_value(
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/errors/exceptions/captured.py", line 179, in deco
+    return f(*a, **kw)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/protocol.py", line 334, in get_return_value
+    raise Py4JError(
+py4j.protocol.Py4JError: An error occurred while calling o30.sc
+2025-06-27 16:19:29,529 [INFO] Closing down clientserver connection
+2025-06-27 16:19:29,529 [ERROR] Exception while sending command.
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 511, in send_command
+    answer = smart_decode(self.stream.readline()[:-1])
+  File "/usr/lib/python3.10/socket.py", line 705, in readinto
+    return self._sock.recv_into(b)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/context.py", line 381, in signal_handler
+    self.cancelAllJobs()
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/context.py", line 2446, in cancelAllJobs
+    self._jsc.sc().cancelAllJobs()
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/java_gateway.py", line 1322, in __call__
+    return_value = get_return_value(
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/errors/exceptions/captured.py", line 179, in deco
+    return f(*a, **kw)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/protocol.py", line 334, in get_return_value
+    raise Py4JError(
+py4j.protocol.Py4JError: An error occurred while calling o30.sc
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/java_gateway.py", line 1038, in send_command
+    response = connection.send_command(command)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 539, in send_command
+    raise Py4JNetworkError(
+py4j.protocol.Py4JNetworkError: Error while sending or receiving
+2025-06-27 16:19:29,529 [INFO] Closing down clientserver connection
+2025-06-27 16:19:30,066 [INFO] Closing down clientserver connection
+2025-06-27 16:26:47,615 [INFO] ✅ Spark connection created successfully.
+2025-06-27 16:26:49,219 [INFO] kafka dataframe created successfully
+2025-06-27 16:26:49,607 [INFO] ✅ Selection dataframe created from Kafka stream
+2025-06-27 16:26:47,603 [WARNING] Cluster.__init__ called with contact_points specified, but no load_balancing_policy. In the next major version, this will raise an error; please specify a load-balancing policy. (contact_points = ['localhost'], lbp = None)
+2025-06-27 16:26:47,840 [INFO] Using datacenter 'datacenter1' for DCAwareRoundRobinPolicy (via host '127.0.0.1:9042'); if incorrect, please specify a local_dc to the constructor, or limit contact points to local cluster nodes
+2025-06-27 16:26:48,210 [INFO] ⚡ Streaming started with feature extraction...
+2025-06-27 16:29:38,262 [WARNING] Host 127.0.0.1:9042 has been marked down
+2025-06-27 16:29:38,278 [WARNING] [control connection] Error connecting to 127.0.0.1:9042:
 Traceback (most recent call last):
   File "cassandra/cluster.py", line 3577, in cassandra.cluster.ControlConnection._reconnect_internal
   File "cassandra/cluster.py", line 3599, in cassandra.cluster.ControlConnection._try_connect
@@ -60,22 +310,20 @@ Traceback (most recent call last):
     self._connect_socket()
   File "cassandra/connection.py", line 951, in cassandra.connection.Connection._connect_socket
 ConnectionRefusedError: [Errno 111] Tried connecting to [('127.0.0.1', 9042)]. Last error: Connection refused
-2025-06-25 17:13:27,354 [WARNING] Host 127.0.0.1:9042 has been marked down
-2025-06-25 17:13:26,132 [WARNING] Error attempting to reconnect to 127.0.0.1:9042, scheduling retry in 1.86 seconds: [Errno 111] Tried connecting to [('127.0.0.1', 9042)]. Last error: Connection refused
-2025-06-25 17:13:28,046 [WARNING] Error attempting to reconnect to 127.0.0.1:9042, scheduling retry in 3.8 seconds: [Errno 111] Tried connecting to [('127.0.0.1', 9042)]. Last error: Connection refused
-2025-06-25 17:13:31,905 [WARNING] Error attempting to reconnect to 127.0.0.1:9042, scheduling retry in 9.04 seconds: [Errno 111] Tried connecting to [('127.0.0.1', 9042)]. Last error: Connection refused
-2025-06-25 17:13:40,992 [WARNING] Error attempting to reconnect to 127.0.0.1:9042, scheduling retry in 14.88 seconds: [Errno 111] Tried connecting to [('127.0.0.1', 9042)]. Last error: Connection refused
-2025-06-25 17:13:55,903 [WARNING] Error attempting to reconnect to 127.0.0.1:9042, scheduling retry in 27.84 seconds: [Errno 111] Tried connecting to [('127.0.0.1', 9042)]. Last error: Connection refused
-2025-06-25 17:14:23,832 [WARNING] Error attempting to reconnect to 127.0.0.1:9042, scheduling retry in 58.88 seconds: [Errno 111] Tried connecting to [('127.0.0.1', 9042)]. Last error: Connection refused
-2025-06-25 17:15:22,760 [WARNING] Error attempting to reconnect to 127.0.0.1:9042, scheduling retry in 112.64 seconds: [Errno 111] Tried connecting to [('127.0.0.1', 9042)]. Last error: Connection refused
-2025-06-25 17:17:15,443 [WARNING] Error attempting to reconnect to 127.0.0.1:9042, scheduling retry in 284.16 seconds: [Errno 111] Tried connecting to [('127.0.0.1', 9042)]. Last error: Connection refused
-2025-06-25 17:18:07,621 [INFO] Error while receiving.
+2025-06-27 16:29:39,412 [WARNING] Error attempting to reconnect to 127.0.0.1:9042, scheduling retry in 2.26 seconds: [Errno 111] Tried connecting to [('127.0.0.1', 9042)]. Last error: Connection refused
+2025-06-27 16:29:41,726 [WARNING] Error attempting to reconnect to 127.0.0.1:9042, scheduling retry in 3.8 seconds: [Errno 111] Tried connecting to [('127.0.0.1', 9042)]. Last error: Connection refused
+2025-06-27 16:29:45,643 [WARNING] Error attempting to reconnect to 127.0.0.1:9042, scheduling retry in 8.96 seconds: [Errno 111] Tried connecting to [('127.0.0.1', 9042)]. Last error: Connection refused
+2025-06-27 16:29:54,670 [WARNING] Error attempting to reconnect to 127.0.0.1:9042, scheduling retry in 17.28 seconds: [Errno 111] Tried connecting to [('127.0.0.1', 9042)]. Last error: Connection refused
+2025-06-27 16:30:11,959 [WARNING] Error attempting to reconnect to 127.0.0.1:9042, scheduling retry in 35.52 seconds: [Errno 111] Tried connecting to [('127.0.0.1', 9042)]. Last error: Connection refused
+2025-06-27 16:30:47,514 [WARNING] Error attempting to reconnect to 127.0.0.1:9042, scheduling retry in 57.6 seconds: [Errno 111] Tried connecting to [('127.0.0.1', 9042)]. Last error: Connection refused
+2025-06-27 16:31:45,166 [WARNING] Error attempting to reconnect to 127.0.0.1:9042, scheduling retry in 133.12 seconds: [Errno 111] Tried connecting to [('127.0.0.1', 9042)]. Last error: Connection refused
+2025-06-27 16:32:15,287 [INFO] Error while receiving.
 Traceback (most recent call last):
   File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 511, in send_command
     answer = smart_decode(self.stream.readline()[:-1])
 RuntimeError: reentrant call inside <_io.BufferedReader name=4>
-2025-06-25 17:18:07,636 [INFO] Closing down clientserver connection
-2025-06-25 17:18:07,640 [ERROR] Exception while sending command.
+2025-06-27 16:32:15,295 [INFO] Closing down clientserver connection
+2025-06-27 16:32:15,295 [ERROR] Exception while sending command.
 Traceback (most recent call last):
   File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 511, in send_command
     answer = smart_decode(self.stream.readline()[:-1])
@@ -89,7 +337,7 @@ Traceback (most recent call last):
   File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 539, in send_command
     raise Py4JNetworkError(
 py4j.protocol.Py4JNetworkError: Error while sending or receiving
-2025-06-25 17:18:07,647 [INFO] Error while receiving.
+2025-06-27 16:32:15,304 [INFO] Error while receiving.
 Traceback (most recent call last):
   File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 511, in send_command
     answer = smart_decode(self.stream.readline()[:-1])
@@ -105,9 +353,9 @@ Traceback (most recent call last):
     return f(*a, **kw)
   File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/protocol.py", line 334, in get_return_value
     raise Py4JError(
-py4j.protocol.Py4JError: An error occurred while calling o20.sc
-2025-06-25 17:18:07,655 [INFO] Closing down clientserver connection
-2025-06-25 17:18:07,655 [ERROR] Exception while sending command.
+py4j.protocol.Py4JError: An error occurred while calling o30.sc
+2025-06-27 16:32:15,310 [INFO] Closing down clientserver connection
+2025-06-27 16:32:15,310 [ERROR] Exception while sending command.
 Traceback (most recent call last):
   File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 511, in send_command
     answer = smart_decode(self.stream.readline()[:-1])
@@ -123,7 +371,7 @@ Traceback (most recent call last):
     return f(*a, **kw)
   File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/protocol.py", line 334, in get_return_value
     raise Py4JError(
-py4j.protocol.Py4JError: An error occurred while calling o20.sc
+py4j.protocol.Py4JError: An error occurred while calling o30.sc
 
 During handling of the above exception, another exception occurred:
 
@@ -133,5 +381,1589 @@ Traceback (most recent call last):
   File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 539, in send_command
     raise Py4JNetworkError(
 py4j.protocol.Py4JNetworkError: Error while sending or receiving
-2025-06-25 17:18:07,658 [INFO] Closing down clientserver connection
-2025-06-25 17:18:08,259 [INFO] Closing down clientserver connection
+2025-06-27 16:32:15,311 [INFO] Closing down clientserver connection
+2025-06-27 16:32:15,778 [INFO] Closing down clientserver connection
+2025-06-27 16:37:02,022 [INFO] ✅ Spark connection created successfully.
+2025-06-27 16:37:03,723 [INFO] kafka dataframe created successfully
+2025-06-27 16:37:04,146 [INFO] ✅ Selection dataframe created from Kafka stream
+2025-06-27 16:37:04,174 [WARNING] Cluster.__init__ called with contact_points specified, but no load_balancing_policy. In the next major version, this will raise an error; please specify a load-balancing policy. (contact_points = ['localhost'], lbp = None)
+2025-06-27 16:37:04,352 [WARNING] [control connection] Error connecting to 127.0.0.1:9042:
+Traceback (most recent call last):
+  File "cassandra/cluster.py", line 3577, in cassandra.cluster.ControlConnection._reconnect_internal
+  File "cassandra/cluster.py", line 3599, in cassandra.cluster.ControlConnection._try_connect
+  File "cassandra/cluster.py", line 1670, in cassandra.cluster.Cluster.connection_factory
+  File "cassandra/connection.py", line 846, in cassandra.connection.Connection.factory
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/cassandra/io/libevreactor.py", line 267, in __init__
+    self._connect_socket()
+  File "cassandra/connection.py", line 951, in cassandra.connection.Connection._connect_socket
+ConnectionRefusedError: [Errno 111] Tried connecting to [('127.0.0.1', 9042)]. Last error: Connection refused
+2025-06-27 16:37:04,355 [ERROR] Control connection failed to connect, shutting down Cluster:
+Traceback (most recent call last):
+  File "cassandra/cluster.py", line 1740, in cassandra.cluster.Cluster.connect
+  File "cassandra/cluster.py", line 3543, in cassandra.cluster.ControlConnection.connect
+  File "cassandra/cluster.py", line 3588, in cassandra.cluster.ControlConnection._reconnect_internal
+cassandra.cluster.NoHostAvailable: ('Unable to connect to any servers', {'127.0.0.1:9042': ConnectionRefusedError(111, "Tried connecting to [('127.0.0.1', 9042)]. Last error: Connection refused")})
+2025-06-27 16:37:04,356 [ERROR] Could not create cassandra connection due to ('Unable to connect to any servers', {'127.0.0.1:9042': ConnectionRefusedError(111, "Tried connecting to [('127.0.0.1', 9042)]. Last error: Connection refused")})
+2025-06-27 16:37:04,356 [INFO] ⚡ Streaming started with feature extraction...
+2025-06-27 16:38:24,003 [INFO] Error while receiving.
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 511, in send_command
+    answer = smart_decode(self.stream.readline()[:-1])
+RuntimeError: reentrant call inside <_io.BufferedReader name=4>
+2025-06-27 16:38:24,008 [INFO] Closing down clientserver connection
+2025-06-27 16:38:24,009 [ERROR] Exception while sending command.
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 511, in send_command
+    answer = smart_decode(self.stream.readline()[:-1])
+RuntimeError: reentrant call inside <_io.BufferedReader name=4>
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/java_gateway.py", line 1038, in send_command
+    response = connection.send_command(command)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 539, in send_command
+    raise Py4JNetworkError(
+py4j.protocol.Py4JNetworkError: Error while sending or receiving
+2025-06-27 16:38:24,012 [INFO] Error while receiving.
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 511, in send_command
+    answer = smart_decode(self.stream.readline()[:-1])
+  File "/usr/lib/python3.10/socket.py", line 705, in readinto
+    return self._sock.recv_into(b)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/context.py", line 381, in signal_handler
+    self.cancelAllJobs()
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/context.py", line 2446, in cancelAllJobs
+    self._jsc.sc().cancelAllJobs()
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/java_gateway.py", line 1322, in __call__
+    return_value = get_return_value(
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/errors/exceptions/captured.py", line 179, in deco
+    return f(*a, **kw)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/protocol.py", line 334, in get_return_value
+    raise Py4JError(
+py4j.protocol.Py4JError: An error occurred while calling o30.sc
+2025-06-27 16:38:24,019 [INFO] Closing down clientserver connection
+2025-06-27 16:38:24,019 [ERROR] Exception while sending command.
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 511, in send_command
+    answer = smart_decode(self.stream.readline()[:-1])
+  File "/usr/lib/python3.10/socket.py", line 705, in readinto
+    return self._sock.recv_into(b)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/context.py", line 381, in signal_handler
+    self.cancelAllJobs()
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/context.py", line 2446, in cancelAllJobs
+    self._jsc.sc().cancelAllJobs()
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/java_gateway.py", line 1322, in __call__
+    return_value = get_return_value(
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/errors/exceptions/captured.py", line 179, in deco
+    return f(*a, **kw)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/protocol.py", line 334, in get_return_value
+    raise Py4JError(
+py4j.protocol.Py4JError: An error occurred while calling o30.sc
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/java_gateway.py", line 1038, in send_command
+    response = connection.send_command(command)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 539, in send_command
+    raise Py4JNetworkError(
+py4j.protocol.Py4JNetworkError: Error while sending or receiving
+2025-06-27 16:38:24,019 [INFO] Closing down clientserver connection
+2025-06-27 16:38:24,045 [INFO] Closing down clientserver connection
+2025-06-27 16:38:47,000 [INFO] ✅ Spark connection created successfully.
+2025-06-27 16:38:48,534 [INFO] kafka dataframe created successfully
+2025-06-27 16:38:48,939 [INFO] ✅ Selection dataframe created from Kafka stream
+2025-06-27 16:38:48,964 [WARNING] Cluster.__init__ called with contact_points specified, but no load_balancing_policy. In the next major version, this will raise an error; please specify a load-balancing policy. (contact_points = ['localhost'], lbp = None)
+2025-06-27 16:38:49,192 [WARNING] [control connection] Error connecting to 127.0.0.1:9042:
+Traceback (most recent call last):
+  File "cassandra/cluster.py", line 3577, in cassandra.cluster.ControlConnection._reconnect_internal
+  File "cassandra/cluster.py", line 3599, in cassandra.cluster.ControlConnection._try_connect
+  File "cassandra/cluster.py", line 1670, in cassandra.cluster.Cluster.connection_factory
+  File "cassandra/connection.py", line 846, in cassandra.connection.Connection.factory
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/cassandra/io/libevreactor.py", line 267, in __init__
+    self._connect_socket()
+  File "cassandra/connection.py", line 951, in cassandra.connection.Connection._connect_socket
+ConnectionRefusedError: [Errno 111] Tried connecting to [('127.0.0.1', 9042)]. Last error: Connection refused
+2025-06-27 16:38:49,196 [ERROR] Control connection failed to connect, shutting down Cluster:
+Traceback (most recent call last):
+  File "cassandra/cluster.py", line 1740, in cassandra.cluster.Cluster.connect
+  File "cassandra/cluster.py", line 3543, in cassandra.cluster.ControlConnection.connect
+  File "cassandra/cluster.py", line 3588, in cassandra.cluster.ControlConnection._reconnect_internal
+cassandra.cluster.NoHostAvailable: ('Unable to connect to any servers', {'127.0.0.1:9042': ConnectionRefusedError(111, "Tried connecting to [('127.0.0.1', 9042)]. Last error: Connection refused")})
+2025-06-27 16:38:49,196 [ERROR] Could not create cassandra connection due to ('Unable to connect to any servers', {'127.0.0.1:9042': ConnectionRefusedError(111, "Tried connecting to [('127.0.0.1', 9042)]. Last error: Connection refused")})
+2025-06-27 16:38:49,196 [INFO] ⚡ Streaming started with feature extraction...
+2025-06-27 16:38:49,478 [INFO] Callback Server Starting
+2025-06-27 16:38:49,479 [INFO] Socket listening on ('127.0.0.1', 35993)
+2025-06-27 16:38:50,854 [INFO] Python Server ready to receive messages
+2025-06-27 16:38:50,854 [INFO] Received command c on object id p0
+2025-06-27 16:41:33,415 [INFO] Error while receiving.
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 511, in send_command
+    answer = smart_decode(self.stream.readline()[:-1])
+RuntimeError: reentrant call inside <_io.BufferedReader name=4>
+2025-06-27 16:41:33,419 [INFO] Closing down clientserver connection
+2025-06-27 16:41:33,419 [ERROR] Exception while sending command.
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 511, in send_command
+    answer = smart_decode(self.stream.readline()[:-1])
+RuntimeError: reentrant call inside <_io.BufferedReader name=4>
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/java_gateway.py", line 1038, in send_command
+    response = connection.send_command(command)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 539, in send_command
+    raise Py4JNetworkError(
+py4j.protocol.Py4JNetworkError: Error while sending or receiving
+2025-06-27 16:41:33,424 [INFO] Error while receiving.
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 511, in send_command
+    answer = smart_decode(self.stream.readline()[:-1])
+  File "/usr/lib/python3.10/socket.py", line 705, in readinto
+    return self._sock.recv_into(b)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/context.py", line 381, in signal_handler
+    self.cancelAllJobs()
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/context.py", line 2446, in cancelAllJobs
+    self._jsc.sc().cancelAllJobs()
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/java_gateway.py", line 1322, in __call__
+    return_value = get_return_value(
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/errors/exceptions/captured.py", line 179, in deco
+    return f(*a, **kw)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/protocol.py", line 334, in get_return_value
+    raise Py4JError(
+py4j.protocol.Py4JError: An error occurred while calling o30.sc
+2025-06-27 16:41:33,433 [INFO] Closing down clientserver connection
+2025-06-27 16:41:33,433 [ERROR] Exception while sending command.
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 511, in send_command
+    answer = smart_decode(self.stream.readline()[:-1])
+  File "/usr/lib/python3.10/socket.py", line 705, in readinto
+    return self._sock.recv_into(b)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/context.py", line 381, in signal_handler
+    self.cancelAllJobs()
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/context.py", line 2446, in cancelAllJobs
+    self._jsc.sc().cancelAllJobs()
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/java_gateway.py", line 1322, in __call__
+    return_value = get_return_value(
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/errors/exceptions/captured.py", line 179, in deco
+    return f(*a, **kw)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/protocol.py", line 334, in get_return_value
+    raise Py4JError(
+py4j.protocol.Py4JError: An error occurred while calling o30.sc
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/java_gateway.py", line 1038, in send_command
+    response = connection.send_command(command)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 539, in send_command
+    raise Py4JNetworkError(
+py4j.protocol.Py4JNetworkError: Error while sending or receiving
+2025-06-27 16:41:33,434 [INFO] Closing down clientserver connection
+2025-06-27 16:41:33,462 [INFO] Closing down clientserver connection
+2025-06-27 16:42:34,039 [INFO] ✅ Spark connection created successfully.
+2025-06-27 16:42:35,606 [INFO] kafka dataframe created successfully
+2025-06-27 16:42:36,000 [INFO] ✅ Selection dataframe created from Kafka stream
+2025-06-27 16:42:36,027 [WARNING] Cluster.__init__ called with contact_points specified, but no load_balancing_policy. In the next major version, this will raise an error; please specify a load-balancing policy. (contact_points = ['localhost'], lbp = None)
+2025-06-27 16:42:36,198 [WARNING] [control connection] Error connecting to 127.0.0.1:9042:
+Traceback (most recent call last):
+  File "cassandra/cluster.py", line 3577, in cassandra.cluster.ControlConnection._reconnect_internal
+  File "cassandra/cluster.py", line 3599, in cassandra.cluster.ControlConnection._try_connect
+  File "cassandra/cluster.py", line 1670, in cassandra.cluster.Cluster.connection_factory
+  File "cassandra/connection.py", line 846, in cassandra.connection.Connection.factory
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/cassandra/io/libevreactor.py", line 267, in __init__
+    self._connect_socket()
+  File "cassandra/connection.py", line 951, in cassandra.connection.Connection._connect_socket
+ConnectionRefusedError: [Errno 111] Tried connecting to [('127.0.0.1', 9042)]. Last error: Connection refused
+2025-06-27 16:42:36,200 [ERROR] Control connection failed to connect, shutting down Cluster:
+Traceback (most recent call last):
+  File "cassandra/cluster.py", line 1740, in cassandra.cluster.Cluster.connect
+  File "cassandra/cluster.py", line 3543, in cassandra.cluster.ControlConnection.connect
+  File "cassandra/cluster.py", line 3588, in cassandra.cluster.ControlConnection._reconnect_internal
+cassandra.cluster.NoHostAvailable: ('Unable to connect to any servers', {'127.0.0.1:9042': ConnectionRefusedError(111, "Tried connecting to [('127.0.0.1', 9042)]. Last error: Connection refused")})
+2025-06-27 16:42:36,200 [ERROR] Could not create cassandra connection due to ('Unable to connect to any servers', {'127.0.0.1:9042': ConnectionRefusedError(111, "Tried connecting to [('127.0.0.1', 9042)]. Last error: Connection refused")})
+2025-06-27 16:42:36,201 [INFO] ⚡ Streaming started with feature extraction...
+2025-06-27 16:42:36,217 [INFO] Callback Server Starting
+2025-06-27 16:42:36,217 [INFO] Socket listening on ('127.0.0.1', 42379)
+2025-06-27 16:42:37,902 [INFO] Python Server ready to receive messages
+2025-06-27 16:42:37,902 [INFO] Received command c on object id p0
+2025-06-27 16:50:13,276 [INFO] Error while receiving.
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 511, in send_command
+    answer = smart_decode(self.stream.readline()[:-1])
+RuntimeError: reentrant call inside <_io.BufferedReader name=4>
+2025-06-27 16:50:13,285 [INFO] Closing down clientserver connection
+2025-06-27 16:50:13,285 [ERROR] Exception while sending command.
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 511, in send_command
+    answer = smart_decode(self.stream.readline()[:-1])
+RuntimeError: reentrant call inside <_io.BufferedReader name=4>
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/java_gateway.py", line 1038, in send_command
+    response = connection.send_command(command)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 539, in send_command
+    raise Py4JNetworkError(
+py4j.protocol.Py4JNetworkError: Error while sending or receiving
+2025-06-27 16:50:13,288 [INFO] Error while receiving.
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 511, in send_command
+    answer = smart_decode(self.stream.readline()[:-1])
+  File "/usr/lib/python3.10/socket.py", line 705, in readinto
+    return self._sock.recv_into(b)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/context.py", line 381, in signal_handler
+    self.cancelAllJobs()
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/context.py", line 2446, in cancelAllJobs
+    self._jsc.sc().cancelAllJobs()
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/java_gateway.py", line 1322, in __call__
+    return_value = get_return_value(
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/errors/exceptions/captured.py", line 179, in deco
+    return f(*a, **kw)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/protocol.py", line 334, in get_return_value
+    raise Py4JError(
+py4j.protocol.Py4JError: An error occurred while calling o30.sc
+2025-06-27 16:50:13,294 [INFO] Closing down clientserver connection
+2025-06-27 16:50:13,294 [ERROR] Exception while sending command.
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 511, in send_command
+    answer = smart_decode(self.stream.readline()[:-1])
+  File "/usr/lib/python3.10/socket.py", line 705, in readinto
+    return self._sock.recv_into(b)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/context.py", line 381, in signal_handler
+    self.cancelAllJobs()
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/context.py", line 2446, in cancelAllJobs
+    self._jsc.sc().cancelAllJobs()
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/java_gateway.py", line 1322, in __call__
+    return_value = get_return_value(
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/errors/exceptions/captured.py", line 179, in deco
+    return f(*a, **kw)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/protocol.py", line 334, in get_return_value
+    raise Py4JError(
+py4j.protocol.Py4JError: An error occurred while calling o30.sc
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/java_gateway.py", line 1038, in send_command
+    response = connection.send_command(command)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 539, in send_command
+    raise Py4JNetworkError(
+py4j.protocol.Py4JNetworkError: Error while sending or receiving
+2025-06-27 16:50:13,294 [INFO] Closing down clientserver connection
+2025-06-27 16:50:13,353 [INFO] Closing down clientserver connection
+2025-06-27 16:51:20,589 [INFO] ✅ Spark connection created successfully.
+2025-06-27 16:51:22,203 [INFO] kafka dataframe created successfully
+2025-06-27 16:51:22,599 [INFO] ✅ Selection dataframe created from Kafka stream
+2025-06-27 16:51:22,629 [WARNING] Cluster.__init__ called with contact_points specified, but no load_balancing_policy. In the next major version, this will raise an error; please specify a load-balancing policy. (contact_points = ['localhost'], lbp = None)
+2025-06-27 16:51:22,806 [WARNING] [control connection] Error connecting to 127.0.0.1:9042:
+Traceback (most recent call last):
+  File "cassandra/cluster.py", line 3577, in cassandra.cluster.ControlConnection._reconnect_internal
+  File "cassandra/cluster.py", line 3599, in cassandra.cluster.ControlConnection._try_connect
+  File "cassandra/cluster.py", line 1670, in cassandra.cluster.Cluster.connection_factory
+  File "cassandra/connection.py", line 852, in cassandra.connection.Connection.factory
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/cassandra/io/libevreactor.py", line 350, in handle_read
+    buf = self._socket.recv(self.in_buffer_size)
+ConnectionResetError: [Errno 104] Connection reset by peer
+2025-06-27 16:51:22,808 [ERROR] Control connection failed to connect, shutting down Cluster:
+Traceback (most recent call last):
+  File "cassandra/cluster.py", line 1740, in cassandra.cluster.Cluster.connect
+  File "cassandra/cluster.py", line 3543, in cassandra.cluster.ControlConnection.connect
+  File "cassandra/cluster.py", line 3588, in cassandra.cluster.ControlConnection._reconnect_internal
+cassandra.cluster.NoHostAvailable: ('Unable to connect to any servers', {'127.0.0.1:9042': ConnectionResetError(104, 'Connection reset by peer')})
+2025-06-27 16:51:22,808 [ERROR] Could not create cassandra connection due to ('Unable to connect to any servers', {'127.0.0.1:9042': ConnectionResetError(104, 'Connection reset by peer')})
+2025-06-27 16:51:22,808 [INFO] ⚡ Streaming started with feature extraction...
+2025-06-27 16:51:22,825 [INFO] Callback Server Starting
+2025-06-27 16:51:22,825 [INFO] Socket listening on ('127.0.0.1', 34839)
+2025-06-27 16:51:24,386 [INFO] Python Server ready to receive messages
+2025-06-27 16:51:24,386 [INFO] Received command c on object id p0
+2025-06-27 16:51:38,949 [INFO] Received command c on object id p0
+2025-06-27 16:53:46,006 [INFO] Error while receiving.
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 511, in send_command
+    answer = smart_decode(self.stream.readline()[:-1])
+RuntimeError: reentrant call inside <_io.BufferedReader name=4>
+2025-06-27 16:53:46,009 [INFO] Closing down clientserver connection
+2025-06-27 16:53:46,010 [ERROR] Exception while sending command.
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 511, in send_command
+    answer = smart_decode(self.stream.readline()[:-1])
+RuntimeError: reentrant call inside <_io.BufferedReader name=4>
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/java_gateway.py", line 1038, in send_command
+    response = connection.send_command(command)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 539, in send_command
+    raise Py4JNetworkError(
+py4j.protocol.Py4JNetworkError: Error while sending or receiving
+2025-06-27 16:53:46,014 [INFO] Error while receiving.
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 511, in send_command
+    answer = smart_decode(self.stream.readline()[:-1])
+  File "/usr/lib/python3.10/socket.py", line 705, in readinto
+    return self._sock.recv_into(b)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/context.py", line 381, in signal_handler
+    self.cancelAllJobs()
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/context.py", line 2446, in cancelAllJobs
+    self._jsc.sc().cancelAllJobs()
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/java_gateway.py", line 1322, in __call__
+    return_value = get_return_value(
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/errors/exceptions/captured.py", line 179, in deco
+    return f(*a, **kw)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/protocol.py", line 334, in get_return_value
+    raise Py4JError(
+py4j.protocol.Py4JError: An error occurred while calling o30.sc
+2025-06-27 16:53:46,020 [INFO] Closing down clientserver connection
+2025-06-27 16:53:46,020 [ERROR] Exception while sending command.
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 511, in send_command
+    answer = smart_decode(self.stream.readline()[:-1])
+  File "/usr/lib/python3.10/socket.py", line 705, in readinto
+    return self._sock.recv_into(b)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/context.py", line 381, in signal_handler
+    self.cancelAllJobs()
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/context.py", line 2446, in cancelAllJobs
+    self._jsc.sc().cancelAllJobs()
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/java_gateway.py", line 1322, in __call__
+    return_value = get_return_value(
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/errors/exceptions/captured.py", line 179, in deco
+    return f(*a, **kw)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/protocol.py", line 334, in get_return_value
+    raise Py4JError(
+py4j.protocol.Py4JError: An error occurred while calling o30.sc
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/java_gateway.py", line 1038, in send_command
+    response = connection.send_command(command)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 539, in send_command
+    raise Py4JNetworkError(
+py4j.protocol.Py4JNetworkError: Error while sending or receiving
+2025-06-27 16:53:46,021 [INFO] Closing down clientserver connection
+2025-06-27 16:53:46,048 [INFO] Closing down clientserver connection
+2025-06-27 16:54:26,291 [INFO] ✅ Spark connection created successfully.
+2025-06-27 16:54:27,805 [INFO] kafka dataframe created successfully
+2025-06-27 16:54:28,211 [INFO] ✅ Selection dataframe created from Kafka stream
+2025-06-27 16:54:28,233 [WARNING] Cluster.__init__ called with contact_points specified, but no load_balancing_policy. In the next major version, this will raise an error; please specify a load-balancing policy. (contact_points = ['localhost'], lbp = None)
+2025-06-27 16:54:28,417 [INFO] Using datacenter 'datacenter1' for DCAwareRoundRobinPolicy (via host '127.0.0.1:9042'); if incorrect, please specify a local_dc to the constructor, or limit contact points to local cluster nodes
+2025-06-27 16:54:28,688 [INFO] ⚡ Streaming started with feature extraction...
+2025-06-27 16:54:28,706 [INFO] Callback Server Starting
+2025-06-27 16:54:28,706 [INFO] Socket listening on ('127.0.0.1', 43383)
+2025-06-27 16:55:13,555 [INFO] Python Server ready to receive messages
+2025-06-27 16:55:13,556 [INFO] Received command c on object id p0
+2025-06-27 16:55:44,945 [INFO] [Batch ID: 4] ✅ Written to Cassandra using safe insert per row.
+2025-06-27 16:55:45,123 [INFO] Received command c on object id p0
+2025-06-27 17:00:54,181 [WARNING] Heartbeat failed for connection (140677089221632) to 127.0.0.1:9042
+2025-06-27 17:01:53,596 [INFO] Error while receiving.
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 511, in send_command
+    answer = smart_decode(self.stream.readline()[:-1])
+RuntimeError: reentrant call inside <_io.BufferedReader name=4>
+2025-06-27 17:01:53,658 [INFO] Closing down clientserver connection
+2025-06-27 17:01:53,660 [ERROR] Exception while sending command.
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 511, in send_command
+    answer = smart_decode(self.stream.readline()[:-1])
+RuntimeError: reentrant call inside <_io.BufferedReader name=4>
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/java_gateway.py", line 1038, in send_command
+    response = connection.send_command(command)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 539, in send_command
+    raise Py4JNetworkError(
+py4j.protocol.Py4JNetworkError: Error while sending or receiving
+2025-06-27 17:01:53,679 [INFO] Error while receiving.
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 511, in send_command
+    answer = smart_decode(self.stream.readline()[:-1])
+  File "/usr/lib/python3.10/socket.py", line 705, in readinto
+    return self._sock.recv_into(b)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/context.py", line 381, in signal_handler
+    self.cancelAllJobs()
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/context.py", line 2446, in cancelAllJobs
+    self._jsc.sc().cancelAllJobs()
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/java_gateway.py", line 1322, in __call__
+    return_value = get_return_value(
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/errors/exceptions/captured.py", line 179, in deco
+    return f(*a, **kw)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/protocol.py", line 334, in get_return_value
+    raise Py4JError(
+py4j.protocol.Py4JError: An error occurred while calling o30.sc
+2025-06-27 17:01:53,686 [INFO] Closing down clientserver connection
+2025-06-27 17:01:53,686 [ERROR] Exception while sending command.
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 511, in send_command
+    answer = smart_decode(self.stream.readline()[:-1])
+  File "/usr/lib/python3.10/socket.py", line 705, in readinto
+    return self._sock.recv_into(b)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/context.py", line 381, in signal_handler
+    self.cancelAllJobs()
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/context.py", line 2446, in cancelAllJobs
+    self._jsc.sc().cancelAllJobs()
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/java_gateway.py", line 1322, in __call__
+    return_value = get_return_value(
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/errors/exceptions/captured.py", line 179, in deco
+    return f(*a, **kw)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/protocol.py", line 334, in get_return_value
+    raise Py4JError(
+py4j.protocol.Py4JError: An error occurred while calling o30.sc
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/java_gateway.py", line 1038, in send_command
+    response = connection.send_command(command)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 539, in send_command
+    raise Py4JNetworkError(
+py4j.protocol.Py4JNetworkError: Error while sending or receiving
+2025-06-27 17:01:53,686 [INFO] Closing down clientserver connection
+2025-06-27 17:01:54,436 [INFO] Closing down clientserver connection
+2025-06-27 17:04:23,730 [INFO] ✅ Spark connection created successfully.
+2025-06-27 17:04:25,687 [INFO] ✅ Selection dataframe created from Kafka stream
+2025-06-27 17:04:25,711 [WARNING] Cluster.__init__ called with contact_points specified, but no load_balancing_policy. In the next major version, this will raise an error; please specify a load-balancing policy. (contact_points = ['localhost'], lbp = None)
+2025-06-27 17:04:25,902 [INFO] Using datacenter 'datacenter1' for DCAwareRoundRobinPolicy (via host '127.0.0.1:9042'); if incorrect, please specify a local_dc to the constructor, or limit contact points to local cluster nodes
+2025-06-27 17:04:26,329 [INFO] ⚡ Streaming started with feature extraction...
+2025-06-27 17:04:26,352 [INFO] Callback Server Starting
+2025-06-27 17:04:26,353 [INFO] Socket listening on ('127.0.0.1', 36159)
+2025-06-27 17:04:28,042 [INFO] Python Server ready to receive messages
+2025-06-27 17:04:28,042 [INFO] Received command c on object id p0
+2025-06-27 17:07:14,711 [WARNING] Host 127.0.0.1:9042 has been marked down
+2025-06-27 17:07:14,720 [WARNING] [control connection] Error connecting to 127.0.0.1:9042:
+Traceback (most recent call last):
+  File "cassandra/cluster.py", line 3577, in cassandra.cluster.ControlConnection._reconnect_internal
+  File "cassandra/cluster.py", line 3599, in cassandra.cluster.ControlConnection._try_connect
+  File "cassandra/cluster.py", line 1670, in cassandra.cluster.Cluster.connection_factory
+  File "cassandra/connection.py", line 846, in cassandra.connection.Connection.factory
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/cassandra/io/libevreactor.py", line 267, in __init__
+    self._connect_socket()
+  File "cassandra/connection.py", line 951, in cassandra.connection.Connection._connect_socket
+ConnectionRefusedError: [Errno 111] Tried connecting to [('127.0.0.1', 9042)]. Last error: Connection refused
+2025-06-27 17:07:15,825 [WARNING] Error attempting to reconnect to 127.0.0.1:9042, scheduling retry in 1.7 seconds: [Errno 111] Tried connecting to [('127.0.0.1', 9042)]. Last error: Connection refused
+2025-06-27 17:07:17,536 [WARNING] Error attempting to reconnect to 127.0.0.1:9042, scheduling retry in 3.48 seconds: [Errno 111] Tried connecting to [('127.0.0.1', 9042)]. Last error: Connection refused
+2025-06-27 17:07:21,059 [WARNING] Error attempting to reconnect to 127.0.0.1:9042, scheduling retry in 8.88 seconds: [Errno 111] Tried connecting to [('127.0.0.1', 9042)]. Last error: Connection refused
+2025-06-27 17:07:29,986 [WARNING] Error attempting to reconnect to 127.0.0.1:9042, scheduling retry in 16.48 seconds: [Errno 111] Tried connecting to [('127.0.0.1', 9042)]. Last error: Connection refused
+2025-06-27 17:07:32,931 [INFO] Error while receiving.
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 511, in send_command
+    answer = smart_decode(self.stream.readline()[:-1])
+RuntimeError: reentrant call inside <_io.BufferedReader name=4>
+2025-06-27 17:07:32,932 [INFO] Closing down clientserver connection
+2025-06-27 17:07:32,932 [ERROR] Exception while sending command.
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 511, in send_command
+    answer = smart_decode(self.stream.readline()[:-1])
+RuntimeError: reentrant call inside <_io.BufferedReader name=4>
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/java_gateway.py", line 1038, in send_command
+    response = connection.send_command(command)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 539, in send_command
+    raise Py4JNetworkError(
+py4j.protocol.Py4JNetworkError: Error while sending or receiving
+2025-06-27 17:07:32,934 [INFO] Error while receiving.
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 511, in send_command
+    answer = smart_decode(self.stream.readline()[:-1])
+  File "/usr/lib/python3.10/socket.py", line 705, in readinto
+    return self._sock.recv_into(b)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/context.py", line 381, in signal_handler
+    self.cancelAllJobs()
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/context.py", line 2446, in cancelAllJobs
+    self._jsc.sc().cancelAllJobs()
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/java_gateway.py", line 1322, in __call__
+    return_value = get_return_value(
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/errors/exceptions/captured.py", line 179, in deco
+    return f(*a, **kw)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/protocol.py", line 334, in get_return_value
+    raise Py4JError(
+py4j.protocol.Py4JError: An error occurred while calling o30.sc
+2025-06-27 17:07:32,937 [INFO] Closing down clientserver connection
+2025-06-27 17:07:32,937 [ERROR] Exception while sending command.
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 511, in send_command
+    answer = smart_decode(self.stream.readline()[:-1])
+  File "/usr/lib/python3.10/socket.py", line 705, in readinto
+    return self._sock.recv_into(b)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/context.py", line 381, in signal_handler
+    self.cancelAllJobs()
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/context.py", line 2446, in cancelAllJobs
+    self._jsc.sc().cancelAllJobs()
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/java_gateway.py", line 1322, in __call__
+    return_value = get_return_value(
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/errors/exceptions/captured.py", line 179, in deco
+    return f(*a, **kw)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/protocol.py", line 334, in get_return_value
+    raise Py4JError(
+py4j.protocol.Py4JError: An error occurred while calling o30.sc
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/java_gateway.py", line 1038, in send_command
+    response = connection.send_command(command)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 539, in send_command
+    raise Py4JNetworkError(
+py4j.protocol.Py4JNetworkError: Error while sending or receiving
+2025-06-27 17:07:32,937 [INFO] Closing down clientserver connection
+2025-06-27 17:07:33,004 [INFO] Closing down clientserver connection
+2025-06-27 17:10:19,372 [INFO] ✅ Spark connection created successfully.
+2025-06-27 17:10:21,669 [INFO] ✅ Selection dataframe created from Kafka stream
+2025-06-27 17:10:21,703 [WARNING] Cluster.__init__ called with contact_points specified, but no load_balancing_policy. In the next major version, this will raise an error; please specify a load-balancing policy. (contact_points = ['localhost'], lbp = None)
+2025-06-27 17:10:21,917 [INFO] Using datacenter 'datacenter1' for DCAwareRoundRobinPolicy (via host '127.0.0.1:9042'); if incorrect, please specify a local_dc to the constructor, or limit contact points to local cluster nodes
+2025-06-27 17:10:22,205 [INFO] ⚡ Streaming started with feature extraction...
+2025-06-27 17:10:22,228 [INFO] Callback Server Starting
+2025-06-27 17:10:22,228 [INFO] Socket listening on ('127.0.0.1', 39323)
+2025-06-27 17:10:23,932 [INFO] Python Server ready to receive messages
+2025-06-27 17:10:23,932 [INFO] Received command c on object id p0
+2025-06-27 17:10:26,357 [ERROR] There was an exception while executing the Python Proxy on the Python Side.
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 617, in _call_proxy
+    return_value = getattr(self.pool[obj_id], method)(*params)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/sql/utils.py", line 120, in call
+    raise e
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/sql/utils.py", line 117, in call
+    self.func(DataFrame(jdf, wrapped_session_jdf), batch_id)
+  File "/home/anhkhoa/spark_video_streaming/pipeline/spark_preprocessing.py", line 279, in process_batch
+    if batch_df.rdd.isEmpty():
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/rdd.py", line 2920, in isEmpty
+    return self.getNumPartitions() == 0 or len(self.take(1)) == 0
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/rdd.py", line 2855, in take
+    res = self.context.runJob(self, takeUpToNumLeft, p)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/context.py", line 2510, in runJob
+    sock_info = self._jvm.PythonRDD.runJob(self._jsc.sc(), mappedRDD._jrdd, partitions)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/java_gateway.py", line 1322, in __call__
+    return_value = get_return_value(
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/errors/exceptions/captured.py", line 179, in deco
+    return f(*a, **kw)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/protocol.py", line 326, in get_return_value
+    raise Py4JJavaError(
+py4j.protocol.Py4JJavaError: An error occurred while calling z:org.apache.spark.api.python.PythonRDD.runJob.
+: org.apache.spark.SparkException: Job aborted due to stage failure: Task 0 in stage 0.0 failed 1 times, most recent failure: Lost task 0.0 in stage 0.0 (TID 0) (10.255.255.254 executor driver): java.lang.IllegalStateException: Cannot fetch offset 1 (GroupId: spark-kafka-source-31650f32-415e-4cea-bdf4-f0dc8f721b03--758195550-executor, TopicPartition: users_created-0). 
+Some data may have been lost because they are not available in Kafka any more; either the
+ data was aged out by Kafka or the topic may have been deleted before all the data in the
+ topic was processed. If you don't want your streaming query to fail on such cases, set the
+ source option "failOnDataLoss" to "false".
+    
+	at org.apache.spark.sql.kafka010.consumer.KafkaDataConsumer$.org$apache$spark$sql$kafka010$consumer$KafkaDataConsumer$$reportDataLoss0(KafkaDataConsumer.scala:677)
+	at org.apache.spark.sql.kafka010.consumer.KafkaDataConsumer.reportDataLoss(KafkaDataConsumer.scala:612)
+	at org.apache.spark.sql.kafka010.consumer.KafkaDataConsumer.$anonfun$get$1(KafkaDataConsumer.scala:333)
+	at org.apache.spark.sql.kafka010.consumer.KafkaDataConsumer.runUninterruptiblyIfPossible(KafkaDataConsumer.scala:621)
+	at org.apache.spark.sql.kafka010.consumer.KafkaDataConsumer.get(KafkaDataConsumer.scala:288)
+	at org.apache.spark.sql.kafka010.KafkaBatchPartitionReader.next(KafkaBatchPartitionReader.scala:64)
+	at org.apache.spark.sql.execution.datasources.v2.PartitionIterator.hasNext(DataSourceRDD.scala:120)
+	at org.apache.spark.sql.execution.datasources.v2.MetricsIterator.hasNext(DataSourceRDD.scala:158)
+	at org.apache.spark.sql.execution.datasources.v2.DataSourceRDD$$anon$1.$anonfun$hasNext$1(DataSourceRDD.scala:63)
+	at org.apache.spark.sql.execution.datasources.v2.DataSourceRDD$$anon$1.$anonfun$hasNext$1$adapted(DataSourceRDD.scala:63)
+	at scala.Option.exists(Option.scala:376)
+	at org.apache.spark.sql.execution.datasources.v2.DataSourceRDD$$anon$1.hasNext(DataSourceRDD.scala:63)
+	at org.apache.spark.sql.execution.datasources.v2.DataSourceRDD$$anon$1.advanceToNextIter(DataSourceRDD.scala:97)
+	at org.apache.spark.sql.execution.datasources.v2.DataSourceRDD$$anon$1.hasNext(DataSourceRDD.scala:63)
+	at org.apache.spark.InterruptibleIterator.hasNext(InterruptibleIterator.scala:37)
+	at scala.collection.Iterator$$anon$10.hasNext(Iterator.scala:460)
+	at scala.collection.Iterator$$anon$10.hasNext(Iterator.scala:460)
+	at scala.collection.Iterator$$anon$10.hasNext(Iterator.scala:460)
+	at org.apache.spark.ContextAwareIterator.hasNext(ContextAwareIterator.scala:39)
+	at scala.collection.Iterator$$anon$10.hasNext(Iterator.scala:460)
+	at org.apache.spark.sql.execution.python.BatchIterator.hasNext(ArrowEvalPythonExec.scala:38)
+	at org.apache.spark.sql.execution.python.BasicPythonArrowInput.writeIteratorToArrowStream(PythonArrowInput.scala:131)
+	at org.apache.spark.sql.execution.python.BasicPythonArrowInput.writeIteratorToArrowStream$(PythonArrowInput.scala:124)
+	at org.apache.spark.sql.execution.python.ArrowPythonRunner.writeIteratorToArrowStream(ArrowPythonRunner.scala:30)
+	at org.apache.spark.sql.execution.python.PythonArrowInput$$anon$1.$anonfun$writeIteratorToStream$1(PythonArrowInput.scala:96)
+	at scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.java:23)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally(SparkErrorUtils.scala:64)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally$(SparkErrorUtils.scala:61)
+	at org.apache.spark.util.Utils$.tryWithSafeFinally(Utils.scala:94)
+	at org.apache.spark.sql.execution.python.PythonArrowInput$$anon$1.writeIteratorToStream(PythonArrowInput.scala:102)
+	at org.apache.spark.api.python.BasePythonRunner$WriterThread.$anonfun$run$1(PythonRunner.scala:451)
+	at org.apache.spark.util.Utils$.logUncaughtExceptions(Utils.scala:1928)
+	at org.apache.spark.api.python.BasePythonRunner$WriterThread.run(PythonRunner.scala:282)
+Caused by: org.apache.kafka.clients.consumer.OffsetOutOfRangeException: Fetch position FetchPosition{offset=1, offsetEpoch=Optional.empty, currentLeader=LeaderAndEpoch{leader=Optional[localhost:9092 (id: 1 rack: null)], epoch=0}} is out of range for partition users_created-0
+	at org.apache.kafka.clients.consumer.internals.Fetcher.handleOffsetOutOfRange(Fetcher.java:1408)
+	at org.apache.kafka.clients.consumer.internals.Fetcher.initializeCompletedFetch(Fetcher.java:1360)
+	at org.apache.kafka.clients.consumer.internals.Fetcher.collectFetch(Fetcher.java:659)
+	at org.apache.kafka.clients.consumer.KafkaConsumer.pollForFetches(KafkaConsumer.java:1318)
+	at org.apache.kafka.clients.consumer.KafkaConsumer.poll(KafkaConsumer.java:1247)
+	at org.apache.kafka.clients.consumer.KafkaConsumer.poll(KafkaConsumer.java:1220)
+	at org.apache.spark.sql.kafka010.consumer.InternalKafkaConsumer.fetch(KafkaDataConsumer.scala:78)
+	at org.apache.spark.sql.kafka010.consumer.KafkaDataConsumer.fetchData(KafkaDataConsumer.scala:551)
+	at org.apache.spark.sql.kafka010.consumer.KafkaDataConsumer.fetchRecord(KafkaDataConsumer.scala:475)
+	at org.apache.spark.sql.kafka010.consumer.KafkaDataConsumer.$anonfun$get$1(KafkaDataConsumer.scala:312)
+	... 30 more
+
+Driver stacktrace:
+	at org.apache.spark.scheduler.DAGScheduler.failJobAndIndependentStages(DAGScheduler.scala:2856)
+	at org.apache.spark.scheduler.DAGScheduler.$anonfun$abortStage$2(DAGScheduler.scala:2792)
+	at org.apache.spark.scheduler.DAGScheduler.$anonfun$abortStage$2$adapted(DAGScheduler.scala:2791)
+	at scala.collection.mutable.ResizableArray.foreach(ResizableArray.scala:62)
+	at scala.collection.mutable.ResizableArray.foreach$(ResizableArray.scala:55)
+	at scala.collection.mutable.ArrayBuffer.foreach(ArrayBuffer.scala:49)
+	at org.apache.spark.scheduler.DAGScheduler.abortStage(DAGScheduler.scala:2791)
+	at org.apache.spark.scheduler.DAGScheduler.$anonfun$handleTaskSetFailed$1(DAGScheduler.scala:1247)
+	at org.apache.spark.scheduler.DAGScheduler.$anonfun$handleTaskSetFailed$1$adapted(DAGScheduler.scala:1247)
+	at scala.Option.foreach(Option.scala:407)
+	at org.apache.spark.scheduler.DAGScheduler.handleTaskSetFailed(DAGScheduler.scala:1247)
+	at org.apache.spark.scheduler.DAGSchedulerEventProcessLoop.doOnReceive(DAGScheduler.scala:3060)
+	at org.apache.spark.scheduler.DAGSchedulerEventProcessLoop.onReceive(DAGScheduler.scala:2994)
+	at org.apache.spark.scheduler.DAGSchedulerEventProcessLoop.onReceive(DAGScheduler.scala:2983)
+	at org.apache.spark.util.EventLoop$$anon$1.run(EventLoop.scala:49)
+	at org.apache.spark.scheduler.DAGScheduler.runJob(DAGScheduler.scala:989)
+	at org.apache.spark.SparkContext.runJob(SparkContext.scala:2393)
+	at org.apache.spark.SparkContext.runJob(SparkContext.scala:2414)
+	at org.apache.spark.SparkContext.runJob(SparkContext.scala:2433)
+	at org.apache.spark.api.python.PythonRDD$.runJob(PythonRDD.scala:181)
+	at org.apache.spark.api.python.PythonRDD.runJob(PythonRDD.scala)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:566)
+	at py4j.reflection.MethodInvoker.invoke(MethodInvoker.java:244)
+	at py4j.reflection.ReflectionEngine.invoke(ReflectionEngine.java:374)
+	at py4j.Gateway.invoke(Gateway.java:282)
+	at py4j.commands.AbstractCommand.invokeMethod(AbstractCommand.java:132)
+	at py4j.commands.CallCommand.execute(CallCommand.java:79)
+	at py4j.ClientServerConnection.sendCommand(ClientServerConnection.java:244)
+	at py4j.CallbackClient.sendCommand(CallbackClient.java:384)
+	at py4j.CallbackClient.sendCommand(CallbackClient.java:356)
+	at py4j.reflection.PythonProxyHandler.invoke(PythonProxyHandler.java:106)
+	at com.sun.proxy.$Proxy30.call(Unknown Source)
+	at org.apache.spark.sql.execution.streaming.sources.PythonForeachBatchHelper$.$anonfun$callForeachBatch$1(ForeachBatchSink.scala:53)
+	at org.apache.spark.sql.execution.streaming.sources.PythonForeachBatchHelper$.$anonfun$callForeachBatch$1$adapted(ForeachBatchSink.scala:53)
+	at org.apache.spark.sql.execution.streaming.sources.ForeachBatchSink.addBatch(ForeachBatchSink.scala:34)
+	at org.apache.spark.sql.execution.streaming.MicroBatchExecution.$anonfun$runBatch$17(MicroBatchExecution.scala:732)
+	at org.apache.spark.sql.execution.SQLExecution$.$anonfun$withNewExecutionId$6(SQLExecution.scala:125)
+	at org.apache.spark.sql.execution.SQLExecution$.withSQLConfPropagated(SQLExecution.scala:201)
+	at org.apache.spark.sql.execution.SQLExecution$.$anonfun$withNewExecutionId$1(SQLExecution.scala:108)
+	at org.apache.spark.sql.SparkSession.withActive(SparkSession.scala:900)
+	at org.apache.spark.sql.execution.SQLExecution$.withNewExecutionId(SQLExecution.scala:66)
+	at org.apache.spark.sql.execution.streaming.MicroBatchExecution.$anonfun$runBatch$16(MicroBatchExecution.scala:729)
+	at org.apache.spark.sql.execution.streaming.ProgressReporter.reportTimeTaken(ProgressReporter.scala:427)
+	at org.apache.spark.sql.execution.streaming.ProgressReporter.reportTimeTaken$(ProgressReporter.scala:425)
+	at org.apache.spark.sql.execution.streaming.StreamExecution.reportTimeTaken(StreamExecution.scala:67)
+	at org.apache.spark.sql.execution.streaming.MicroBatchExecution.runBatch(MicroBatchExecution.scala:729)
+	at org.apache.spark.sql.execution.streaming.MicroBatchExecution.$anonfun$runActivatedStream$2(MicroBatchExecution.scala:286)
+	at scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.java:23)
+	at org.apache.spark.sql.execution.streaming.ProgressReporter.reportTimeTaken(ProgressReporter.scala:427)
+	at org.apache.spark.sql.execution.streaming.ProgressReporter.reportTimeTaken$(ProgressReporter.scala:425)
+	at org.apache.spark.sql.execution.streaming.StreamExecution.reportTimeTaken(StreamExecution.scala:67)
+	at org.apache.spark.sql.execution.streaming.MicroBatchExecution.$anonfun$runActivatedStream$1(MicroBatchExecution.scala:249)
+	at org.apache.spark.sql.execution.streaming.ProcessingTimeExecutor.execute(TriggerExecutor.scala:67)
+	at org.apache.spark.sql.execution.streaming.MicroBatchExecution.runActivatedStream(MicroBatchExecution.scala:239)
+	at org.apache.spark.sql.execution.streaming.StreamExecution.$anonfun$runStream$1(StreamExecution.scala:311)
+	at scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.java:23)
+	at org.apache.spark.sql.SparkSession.withActive(SparkSession.scala:900)
+	at org.apache.spark.sql.execution.streaming.StreamExecution.org$apache$spark$sql$execution$streaming$StreamExecution$$runStream(StreamExecution.scala:289)
+	at org.apache.spark.sql.execution.streaming.StreamExecution$$anon$1.$anonfun$run$1(StreamExecution.scala:211)
+	at scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.java:23)
+	at org.apache.spark.JobArtifactSet$.withActiveJobArtifactState(JobArtifactSet.scala:94)
+	at org.apache.spark.sql.execution.streaming.StreamExecution$$anon$1.run(StreamExecution.scala:211)
+Caused by: java.lang.IllegalStateException: Cannot fetch offset 1 (GroupId: spark-kafka-source-31650f32-415e-4cea-bdf4-f0dc8f721b03--758195550-executor, TopicPartition: users_created-0). 
+Some data may have been lost because they are not available in Kafka any more; either the
+ data was aged out by Kafka or the topic may have been deleted before all the data in the
+ topic was processed. If you don't want your streaming query to fail on such cases, set the
+ source option "failOnDataLoss" to "false".
+    
+	at org.apache.spark.sql.kafka010.consumer.KafkaDataConsumer$.org$apache$spark$sql$kafka010$consumer$KafkaDataConsumer$$reportDataLoss0(KafkaDataConsumer.scala:677)
+	at org.apache.spark.sql.kafka010.consumer.KafkaDataConsumer.reportDataLoss(KafkaDataConsumer.scala:612)
+	at org.apache.spark.sql.kafka010.consumer.KafkaDataConsumer.$anonfun$get$1(KafkaDataConsumer.scala:333)
+	at org.apache.spark.sql.kafka010.consumer.KafkaDataConsumer.runUninterruptiblyIfPossible(KafkaDataConsumer.scala:621)
+	at org.apache.spark.sql.kafka010.consumer.KafkaDataConsumer.get(KafkaDataConsumer.scala:288)
+	at org.apache.spark.sql.kafka010.KafkaBatchPartitionReader.next(KafkaBatchPartitionReader.scala:64)
+	at org.apache.spark.sql.execution.datasources.v2.PartitionIterator.hasNext(DataSourceRDD.scala:120)
+	at org.apache.spark.sql.execution.datasources.v2.MetricsIterator.hasNext(DataSourceRDD.scala:158)
+	at org.apache.spark.sql.execution.datasources.v2.DataSourceRDD$$anon$1.$anonfun$hasNext$1(DataSourceRDD.scala:63)
+	at org.apache.spark.sql.execution.datasources.v2.DataSourceRDD$$anon$1.$anonfun$hasNext$1$adapted(DataSourceRDD.scala:63)
+	at scala.Option.exists(Option.scala:376)
+	at org.apache.spark.sql.execution.datasources.v2.DataSourceRDD$$anon$1.hasNext(DataSourceRDD.scala:63)
+	at org.apache.spark.sql.execution.datasources.v2.DataSourceRDD$$anon$1.advanceToNextIter(DataSourceRDD.scala:97)
+	at org.apache.spark.sql.execution.datasources.v2.DataSourceRDD$$anon$1.hasNext(DataSourceRDD.scala:63)
+	at org.apache.spark.InterruptibleIterator.hasNext(InterruptibleIterator.scala:37)
+	at scala.collection.Iterator$$anon$10.hasNext(Iterator.scala:460)
+	at scala.collection.Iterator$$anon$10.hasNext(Iterator.scala:460)
+	at scala.collection.Iterator$$anon$10.hasNext(Iterator.scala:460)
+	at org.apache.spark.ContextAwareIterator.hasNext(ContextAwareIterator.scala:39)
+	at scala.collection.Iterator$$anon$10.hasNext(Iterator.scala:460)
+	at org.apache.spark.sql.execution.python.BatchIterator.hasNext(ArrowEvalPythonExec.scala:38)
+	at org.apache.spark.sql.execution.python.BasicPythonArrowInput.writeIteratorToArrowStream(PythonArrowInput.scala:131)
+	at org.apache.spark.sql.execution.python.BasicPythonArrowInput.writeIteratorToArrowStream$(PythonArrowInput.scala:124)
+	at org.apache.spark.sql.execution.python.ArrowPythonRunner.writeIteratorToArrowStream(ArrowPythonRunner.scala:30)
+	at org.apache.spark.sql.execution.python.PythonArrowInput$$anon$1.$anonfun$writeIteratorToStream$1(PythonArrowInput.scala:96)
+	at scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.java:23)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally(SparkErrorUtils.scala:64)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally$(SparkErrorUtils.scala:61)
+	at org.apache.spark.util.Utils$.tryWithSafeFinally(Utils.scala:94)
+	at org.apache.spark.sql.execution.python.PythonArrowInput$$anon$1.writeIteratorToStream(PythonArrowInput.scala:102)
+	at org.apache.spark.api.python.BasePythonRunner$WriterThread.$anonfun$run$1(PythonRunner.scala:451)
+	at org.apache.spark.util.Utils$.logUncaughtExceptions(Utils.scala:1928)
+	at org.apache.spark.api.python.BasePythonRunner$WriterThread.run(PythonRunner.scala:282)
+Caused by: org.apache.kafka.clients.consumer.OffsetOutOfRangeException: Fetch position FetchPosition{offset=1, offsetEpoch=Optional.empty, currentLeader=LeaderAndEpoch{leader=Optional[localhost:9092 (id: 1 rack: null)], epoch=0}} is out of range for partition users_created-0
+	at org.apache.kafka.clients.consumer.internals.Fetcher.handleOffsetOutOfRange(Fetcher.java:1408)
+	at org.apache.kafka.clients.consumer.internals.Fetcher.initializeCompletedFetch(Fetcher.java:1360)
+	at org.apache.kafka.clients.consumer.internals.Fetcher.collectFetch(Fetcher.java:659)
+	at org.apache.kafka.clients.consumer.KafkaConsumer.pollForFetches(KafkaConsumer.java:1318)
+	at org.apache.kafka.clients.consumer.KafkaConsumer.poll(KafkaConsumer.java:1247)
+	at org.apache.kafka.clients.consumer.KafkaConsumer.poll(KafkaConsumer.java:1220)
+	at org.apache.spark.sql.kafka010.consumer.InternalKafkaConsumer.fetch(KafkaDataConsumer.scala:78)
+	at org.apache.spark.sql.kafka010.consumer.KafkaDataConsumer.fetchData(KafkaDataConsumer.scala:551)
+	at org.apache.spark.sql.kafka010.consumer.KafkaDataConsumer.fetchRecord(KafkaDataConsumer.scala:475)
+	at org.apache.spark.sql.kafka010.consumer.KafkaDataConsumer.$anonfun$get$1(KafkaDataConsumer.scala:312)
+	... 30 more
+
+2025-06-27 17:10:26,842 [INFO] Closing down clientserver connection
+2025-06-27 17:11:53,185 [INFO] ✅ Spark connection created successfully.
+2025-06-27 17:11:55,103 [INFO] ✅ Selection dataframe created from Kafka stream
+2025-06-27 17:11:55,128 [WARNING] Cluster.__init__ called with contact_points specified, but no load_balancing_policy. In the next major version, this will raise an error; please specify a load-balancing policy. (contact_points = ['localhost'], lbp = None)
+2025-06-27 17:11:55,351 [INFO] Using datacenter 'datacenter1' for DCAwareRoundRobinPolicy (via host '127.0.0.1:9042'); if incorrect, please specify a local_dc to the constructor, or limit contact points to local cluster nodes
+2025-06-27 17:11:55,998 [INFO] ⚡ Streaming started with feature extraction...
+2025-06-27 17:11:56,019 [INFO] Callback Server Starting
+2025-06-27 17:11:56,020 [INFO] Socket listening on ('127.0.0.1', 39609)
+2025-06-27 17:11:57,610 [INFO] Python Server ready to receive messages
+2025-06-27 17:11:57,610 [INFO] Received command c on object id p0
+2025-06-27 17:11:59,895 [ERROR] There was an exception while executing the Python Proxy on the Python Side.
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 617, in _call_proxy
+    return_value = getattr(self.pool[obj_id], method)(*params)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/sql/utils.py", line 120, in call
+    raise e
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/sql/utils.py", line 117, in call
+    self.func(DataFrame(jdf, wrapped_session_jdf), batch_id)
+  File "/home/anhkhoa/spark_video_streaming/pipeline/spark_preprocessing.py", line 279, in process_batch
+    if batch_df.rdd.isEmpty():
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/rdd.py", line 2920, in isEmpty
+    return self.getNumPartitions() == 0 or len(self.take(1)) == 0
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/rdd.py", line 2855, in take
+    res = self.context.runJob(self, takeUpToNumLeft, p)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/context.py", line 2510, in runJob
+    sock_info = self._jvm.PythonRDD.runJob(self._jsc.sc(), mappedRDD._jrdd, partitions)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/java_gateway.py", line 1322, in __call__
+    return_value = get_return_value(
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/errors/exceptions/captured.py", line 179, in deco
+    return f(*a, **kw)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/protocol.py", line 326, in get_return_value
+    raise Py4JJavaError(
+py4j.protocol.Py4JJavaError: An error occurred while calling z:org.apache.spark.api.python.PythonRDD.runJob.
+: org.apache.spark.SparkException: Job aborted due to stage failure: Task 0 in stage 0.0 failed 1 times, most recent failure: Lost task 0.0 in stage 0.0 (TID 0) (10.255.255.254 executor driver): java.lang.IllegalStateException: Cannot fetch offset 1 (GroupId: spark-kafka-source-9919066e-8766-4fa2-91e2-b71d7eb7e687--758195550-executor, TopicPartition: users_created-0). 
+Some data may have been lost because they are not available in Kafka any more; either the
+ data was aged out by Kafka or the topic may have been deleted before all the data in the
+ topic was processed. If you don't want your streaming query to fail on such cases, set the
+ source option "failOnDataLoss" to "false".
+    
+	at org.apache.spark.sql.kafka010.consumer.KafkaDataConsumer$.org$apache$spark$sql$kafka010$consumer$KafkaDataConsumer$$reportDataLoss0(KafkaDataConsumer.scala:677)
+	at org.apache.spark.sql.kafka010.consumer.KafkaDataConsumer.reportDataLoss(KafkaDataConsumer.scala:612)
+	at org.apache.spark.sql.kafka010.consumer.KafkaDataConsumer.$anonfun$get$1(KafkaDataConsumer.scala:333)
+	at org.apache.spark.sql.kafka010.consumer.KafkaDataConsumer.runUninterruptiblyIfPossible(KafkaDataConsumer.scala:621)
+	at org.apache.spark.sql.kafka010.consumer.KafkaDataConsumer.get(KafkaDataConsumer.scala:288)
+	at org.apache.spark.sql.kafka010.KafkaBatchPartitionReader.next(KafkaBatchPartitionReader.scala:64)
+	at org.apache.spark.sql.execution.datasources.v2.PartitionIterator.hasNext(DataSourceRDD.scala:120)
+	at org.apache.spark.sql.execution.datasources.v2.MetricsIterator.hasNext(DataSourceRDD.scala:158)
+	at org.apache.spark.sql.execution.datasources.v2.DataSourceRDD$$anon$1.$anonfun$hasNext$1(DataSourceRDD.scala:63)
+	at org.apache.spark.sql.execution.datasources.v2.DataSourceRDD$$anon$1.$anonfun$hasNext$1$adapted(DataSourceRDD.scala:63)
+	at scala.Option.exists(Option.scala:376)
+	at org.apache.spark.sql.execution.datasources.v2.DataSourceRDD$$anon$1.hasNext(DataSourceRDD.scala:63)
+	at org.apache.spark.sql.execution.datasources.v2.DataSourceRDD$$anon$1.advanceToNextIter(DataSourceRDD.scala:97)
+	at org.apache.spark.sql.execution.datasources.v2.DataSourceRDD$$anon$1.hasNext(DataSourceRDD.scala:63)
+	at org.apache.spark.InterruptibleIterator.hasNext(InterruptibleIterator.scala:37)
+	at scala.collection.Iterator$$anon$10.hasNext(Iterator.scala:460)
+	at scala.collection.Iterator$$anon$10.hasNext(Iterator.scala:460)
+	at scala.collection.Iterator$$anon$10.hasNext(Iterator.scala:460)
+	at org.apache.spark.ContextAwareIterator.hasNext(ContextAwareIterator.scala:39)
+	at scala.collection.Iterator$$anon$10.hasNext(Iterator.scala:460)
+	at org.apache.spark.sql.execution.python.BatchIterator.hasNext(ArrowEvalPythonExec.scala:38)
+	at org.apache.spark.sql.execution.python.BasicPythonArrowInput.writeIteratorToArrowStream(PythonArrowInput.scala:131)
+	at org.apache.spark.sql.execution.python.BasicPythonArrowInput.writeIteratorToArrowStream$(PythonArrowInput.scala:124)
+	at org.apache.spark.sql.execution.python.ArrowPythonRunner.writeIteratorToArrowStream(ArrowPythonRunner.scala:30)
+	at org.apache.spark.sql.execution.python.PythonArrowInput$$anon$1.$anonfun$writeIteratorToStream$1(PythonArrowInput.scala:96)
+	at scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.java:23)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally(SparkErrorUtils.scala:64)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally$(SparkErrorUtils.scala:61)
+	at org.apache.spark.util.Utils$.tryWithSafeFinally(Utils.scala:94)
+	at org.apache.spark.sql.execution.python.PythonArrowInput$$anon$1.writeIteratorToStream(PythonArrowInput.scala:102)
+	at org.apache.spark.api.python.BasePythonRunner$WriterThread.$anonfun$run$1(PythonRunner.scala:451)
+	at org.apache.spark.util.Utils$.logUncaughtExceptions(Utils.scala:1928)
+	at org.apache.spark.api.python.BasePythonRunner$WriterThread.run(PythonRunner.scala:282)
+Caused by: org.apache.kafka.clients.consumer.OffsetOutOfRangeException: Fetch position FetchPosition{offset=1, offsetEpoch=Optional.empty, currentLeader=LeaderAndEpoch{leader=Optional[localhost:9092 (id: 1 rack: null)], epoch=0}} is out of range for partition users_created-0
+	at org.apache.kafka.clients.consumer.internals.Fetcher.handleOffsetOutOfRange(Fetcher.java:1408)
+	at org.apache.kafka.clients.consumer.internals.Fetcher.initializeCompletedFetch(Fetcher.java:1360)
+	at org.apache.kafka.clients.consumer.internals.Fetcher.collectFetch(Fetcher.java:659)
+	at org.apache.kafka.clients.consumer.KafkaConsumer.pollForFetches(KafkaConsumer.java:1318)
+	at org.apache.kafka.clients.consumer.KafkaConsumer.poll(KafkaConsumer.java:1247)
+	at org.apache.kafka.clients.consumer.KafkaConsumer.poll(KafkaConsumer.java:1220)
+	at org.apache.spark.sql.kafka010.consumer.InternalKafkaConsumer.fetch(KafkaDataConsumer.scala:78)
+	at org.apache.spark.sql.kafka010.consumer.KafkaDataConsumer.fetchData(KafkaDataConsumer.scala:551)
+	at org.apache.spark.sql.kafka010.consumer.KafkaDataConsumer.fetchRecord(KafkaDataConsumer.scala:475)
+	at org.apache.spark.sql.kafka010.consumer.KafkaDataConsumer.$anonfun$get$1(KafkaDataConsumer.scala:312)
+	... 30 more
+
+Driver stacktrace:
+	at org.apache.spark.scheduler.DAGScheduler.failJobAndIndependentStages(DAGScheduler.scala:2856)
+	at org.apache.spark.scheduler.DAGScheduler.$anonfun$abortStage$2(DAGScheduler.scala:2792)
+	at org.apache.spark.scheduler.DAGScheduler.$anonfun$abortStage$2$adapted(DAGScheduler.scala:2791)
+	at scala.collection.mutable.ResizableArray.foreach(ResizableArray.scala:62)
+	at scala.collection.mutable.ResizableArray.foreach$(ResizableArray.scala:55)
+	at scala.collection.mutable.ArrayBuffer.foreach(ArrayBuffer.scala:49)
+	at org.apache.spark.scheduler.DAGScheduler.abortStage(DAGScheduler.scala:2791)
+	at org.apache.spark.scheduler.DAGScheduler.$anonfun$handleTaskSetFailed$1(DAGScheduler.scala:1247)
+	at org.apache.spark.scheduler.DAGScheduler.$anonfun$handleTaskSetFailed$1$adapted(DAGScheduler.scala:1247)
+	at scala.Option.foreach(Option.scala:407)
+	at org.apache.spark.scheduler.DAGScheduler.handleTaskSetFailed(DAGScheduler.scala:1247)
+	at org.apache.spark.scheduler.DAGSchedulerEventProcessLoop.doOnReceive(DAGScheduler.scala:3060)
+	at org.apache.spark.scheduler.DAGSchedulerEventProcessLoop.onReceive(DAGScheduler.scala:2994)
+	at org.apache.spark.scheduler.DAGSchedulerEventProcessLoop.onReceive(DAGScheduler.scala:2983)
+	at org.apache.spark.util.EventLoop$$anon$1.run(EventLoop.scala:49)
+	at org.apache.spark.scheduler.DAGScheduler.runJob(DAGScheduler.scala:989)
+	at org.apache.spark.SparkContext.runJob(SparkContext.scala:2393)
+	at org.apache.spark.SparkContext.runJob(SparkContext.scala:2414)
+	at org.apache.spark.SparkContext.runJob(SparkContext.scala:2433)
+	at org.apache.spark.api.python.PythonRDD$.runJob(PythonRDD.scala:181)
+	at org.apache.spark.api.python.PythonRDD.runJob(PythonRDD.scala)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:566)
+	at py4j.reflection.MethodInvoker.invoke(MethodInvoker.java:244)
+	at py4j.reflection.ReflectionEngine.invoke(ReflectionEngine.java:374)
+	at py4j.Gateway.invoke(Gateway.java:282)
+	at py4j.commands.AbstractCommand.invokeMethod(AbstractCommand.java:132)
+	at py4j.commands.CallCommand.execute(CallCommand.java:79)
+	at py4j.ClientServerConnection.sendCommand(ClientServerConnection.java:244)
+	at py4j.CallbackClient.sendCommand(CallbackClient.java:384)
+	at py4j.CallbackClient.sendCommand(CallbackClient.java:356)
+	at py4j.reflection.PythonProxyHandler.invoke(PythonProxyHandler.java:106)
+	at com.sun.proxy.$Proxy30.call(Unknown Source)
+	at org.apache.spark.sql.execution.streaming.sources.PythonForeachBatchHelper$.$anonfun$callForeachBatch$1(ForeachBatchSink.scala:53)
+	at org.apache.spark.sql.execution.streaming.sources.PythonForeachBatchHelper$.$anonfun$callForeachBatch$1$adapted(ForeachBatchSink.scala:53)
+	at org.apache.spark.sql.execution.streaming.sources.ForeachBatchSink.addBatch(ForeachBatchSink.scala:34)
+	at org.apache.spark.sql.execution.streaming.MicroBatchExecution.$anonfun$runBatch$17(MicroBatchExecution.scala:732)
+	at org.apache.spark.sql.execution.SQLExecution$.$anonfun$withNewExecutionId$6(SQLExecution.scala:125)
+	at org.apache.spark.sql.execution.SQLExecution$.withSQLConfPropagated(SQLExecution.scala:201)
+	at org.apache.spark.sql.execution.SQLExecution$.$anonfun$withNewExecutionId$1(SQLExecution.scala:108)
+	at org.apache.spark.sql.SparkSession.withActive(SparkSession.scala:900)
+	at org.apache.spark.sql.execution.SQLExecution$.withNewExecutionId(SQLExecution.scala:66)
+	at org.apache.spark.sql.execution.streaming.MicroBatchExecution.$anonfun$runBatch$16(MicroBatchExecution.scala:729)
+	at org.apache.spark.sql.execution.streaming.ProgressReporter.reportTimeTaken(ProgressReporter.scala:427)
+	at org.apache.spark.sql.execution.streaming.ProgressReporter.reportTimeTaken$(ProgressReporter.scala:425)
+	at org.apache.spark.sql.execution.streaming.StreamExecution.reportTimeTaken(StreamExecution.scala:67)
+	at org.apache.spark.sql.execution.streaming.MicroBatchExecution.runBatch(MicroBatchExecution.scala:729)
+	at org.apache.spark.sql.execution.streaming.MicroBatchExecution.$anonfun$runActivatedStream$2(MicroBatchExecution.scala:286)
+	at scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.java:23)
+	at org.apache.spark.sql.execution.streaming.ProgressReporter.reportTimeTaken(ProgressReporter.scala:427)
+	at org.apache.spark.sql.execution.streaming.ProgressReporter.reportTimeTaken$(ProgressReporter.scala:425)
+	at org.apache.spark.sql.execution.streaming.StreamExecution.reportTimeTaken(StreamExecution.scala:67)
+	at org.apache.spark.sql.execution.streaming.MicroBatchExecution.$anonfun$runActivatedStream$1(MicroBatchExecution.scala:249)
+	at org.apache.spark.sql.execution.streaming.ProcessingTimeExecutor.execute(TriggerExecutor.scala:67)
+	at org.apache.spark.sql.execution.streaming.MicroBatchExecution.runActivatedStream(MicroBatchExecution.scala:239)
+	at org.apache.spark.sql.execution.streaming.StreamExecution.$anonfun$runStream$1(StreamExecution.scala:311)
+	at scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.java:23)
+	at org.apache.spark.sql.SparkSession.withActive(SparkSession.scala:900)
+	at org.apache.spark.sql.execution.streaming.StreamExecution.org$apache$spark$sql$execution$streaming$StreamExecution$$runStream(StreamExecution.scala:289)
+	at org.apache.spark.sql.execution.streaming.StreamExecution$$anon$1.$anonfun$run$1(StreamExecution.scala:211)
+	at scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.java:23)
+	at org.apache.spark.JobArtifactSet$.withActiveJobArtifactState(JobArtifactSet.scala:94)
+	at org.apache.spark.sql.execution.streaming.StreamExecution$$anon$1.run(StreamExecution.scala:211)
+Caused by: java.lang.IllegalStateException: Cannot fetch offset 1 (GroupId: spark-kafka-source-9919066e-8766-4fa2-91e2-b71d7eb7e687--758195550-executor, TopicPartition: users_created-0). 
+Some data may have been lost because they are not available in Kafka any more; either the
+ data was aged out by Kafka or the topic may have been deleted before all the data in the
+ topic was processed. If you don't want your streaming query to fail on such cases, set the
+ source option "failOnDataLoss" to "false".
+    
+	at org.apache.spark.sql.kafka010.consumer.KafkaDataConsumer$.org$apache$spark$sql$kafka010$consumer$KafkaDataConsumer$$reportDataLoss0(KafkaDataConsumer.scala:677)
+	at org.apache.spark.sql.kafka010.consumer.KafkaDataConsumer.reportDataLoss(KafkaDataConsumer.scala:612)
+	at org.apache.spark.sql.kafka010.consumer.KafkaDataConsumer.$anonfun$get$1(KafkaDataConsumer.scala:333)
+	at org.apache.spark.sql.kafka010.consumer.KafkaDataConsumer.runUninterruptiblyIfPossible(KafkaDataConsumer.scala:621)
+	at org.apache.spark.sql.kafka010.consumer.KafkaDataConsumer.get(KafkaDataConsumer.scala:288)
+	at org.apache.spark.sql.kafka010.KafkaBatchPartitionReader.next(KafkaBatchPartitionReader.scala:64)
+	at org.apache.spark.sql.execution.datasources.v2.PartitionIterator.hasNext(DataSourceRDD.scala:120)
+	at org.apache.spark.sql.execution.datasources.v2.MetricsIterator.hasNext(DataSourceRDD.scala:158)
+	at org.apache.spark.sql.execution.datasources.v2.DataSourceRDD$$anon$1.$anonfun$hasNext$1(DataSourceRDD.scala:63)
+	at org.apache.spark.sql.execution.datasources.v2.DataSourceRDD$$anon$1.$anonfun$hasNext$1$adapted(DataSourceRDD.scala:63)
+	at scala.Option.exists(Option.scala:376)
+	at org.apache.spark.sql.execution.datasources.v2.DataSourceRDD$$anon$1.hasNext(DataSourceRDD.scala:63)
+	at org.apache.spark.sql.execution.datasources.v2.DataSourceRDD$$anon$1.advanceToNextIter(DataSourceRDD.scala:97)
+	at org.apache.spark.sql.execution.datasources.v2.DataSourceRDD$$anon$1.hasNext(DataSourceRDD.scala:63)
+	at org.apache.spark.InterruptibleIterator.hasNext(InterruptibleIterator.scala:37)
+	at scala.collection.Iterator$$anon$10.hasNext(Iterator.scala:460)
+	at scala.collection.Iterator$$anon$10.hasNext(Iterator.scala:460)
+	at scala.collection.Iterator$$anon$10.hasNext(Iterator.scala:460)
+	at org.apache.spark.ContextAwareIterator.hasNext(ContextAwareIterator.scala:39)
+	at scala.collection.Iterator$$anon$10.hasNext(Iterator.scala:460)
+	at org.apache.spark.sql.execution.python.BatchIterator.hasNext(ArrowEvalPythonExec.scala:38)
+	at org.apache.spark.sql.execution.python.BasicPythonArrowInput.writeIteratorToArrowStream(PythonArrowInput.scala:131)
+	at org.apache.spark.sql.execution.python.BasicPythonArrowInput.writeIteratorToArrowStream$(PythonArrowInput.scala:124)
+	at org.apache.spark.sql.execution.python.ArrowPythonRunner.writeIteratorToArrowStream(ArrowPythonRunner.scala:30)
+	at org.apache.spark.sql.execution.python.PythonArrowInput$$anon$1.$anonfun$writeIteratorToStream$1(PythonArrowInput.scala:96)
+	at scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.java:23)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally(SparkErrorUtils.scala:64)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally$(SparkErrorUtils.scala:61)
+	at org.apache.spark.util.Utils$.tryWithSafeFinally(Utils.scala:94)
+	at org.apache.spark.sql.execution.python.PythonArrowInput$$anon$1.writeIteratorToStream(PythonArrowInput.scala:102)
+	at org.apache.spark.api.python.BasePythonRunner$WriterThread.$anonfun$run$1(PythonRunner.scala:451)
+	at org.apache.spark.util.Utils$.logUncaughtExceptions(Utils.scala:1928)
+	at org.apache.spark.api.python.BasePythonRunner$WriterThread.run(PythonRunner.scala:282)
+Caused by: org.apache.kafka.clients.consumer.OffsetOutOfRangeException: Fetch position FetchPosition{offset=1, offsetEpoch=Optional.empty, currentLeader=LeaderAndEpoch{leader=Optional[localhost:9092 (id: 1 rack: null)], epoch=0}} is out of range for partition users_created-0
+	at org.apache.kafka.clients.consumer.internals.Fetcher.handleOffsetOutOfRange(Fetcher.java:1408)
+	at org.apache.kafka.clients.consumer.internals.Fetcher.initializeCompletedFetch(Fetcher.java:1360)
+	at org.apache.kafka.clients.consumer.internals.Fetcher.collectFetch(Fetcher.java:659)
+	at org.apache.kafka.clients.consumer.KafkaConsumer.pollForFetches(KafkaConsumer.java:1318)
+	at org.apache.kafka.clients.consumer.KafkaConsumer.poll(KafkaConsumer.java:1247)
+	at org.apache.kafka.clients.consumer.KafkaConsumer.poll(KafkaConsumer.java:1220)
+	at org.apache.spark.sql.kafka010.consumer.InternalKafkaConsumer.fetch(KafkaDataConsumer.scala:78)
+	at org.apache.spark.sql.kafka010.consumer.KafkaDataConsumer.fetchData(KafkaDataConsumer.scala:551)
+	at org.apache.spark.sql.kafka010.consumer.KafkaDataConsumer.fetchRecord(KafkaDataConsumer.scala:475)
+	at org.apache.spark.sql.kafka010.consumer.KafkaDataConsumer.$anonfun$get$1(KafkaDataConsumer.scala:312)
+	... 30 more
+
+2025-06-27 17:12:00,357 [INFO] Closing down clientserver connection
+2025-06-27 17:12:46,759 [INFO] ✅ Spark connection created successfully.
+2025-06-27 17:12:48,899 [INFO] ✅ Selection dataframe created from Kafka stream
+2025-06-27 17:12:48,936 [WARNING] Cluster.__init__ called with contact_points specified, but no load_balancing_policy. In the next major version, this will raise an error; please specify a load-balancing policy. (contact_points = ['localhost'], lbp = None)
+2025-06-27 17:12:49,179 [INFO] Using datacenter 'datacenter1' for DCAwareRoundRobinPolicy (via host '127.0.0.1:9042'); if incorrect, please specify a local_dc to the constructor, or limit contact points to local cluster nodes
+2025-06-27 17:12:50,434 [INFO] ⚡ Streaming started with feature extraction...
+2025-06-27 17:12:50,465 [INFO] Callback Server Starting
+2025-06-27 17:12:50,466 [INFO] Socket listening on ('127.0.0.1', 41339)
+2025-06-27 17:12:52,169 [INFO] Python Server ready to receive messages
+2025-06-27 17:12:52,170 [INFO] Received command c on object id p0
+2025-06-27 17:13:14,734 [INFO] Received command c on object id p0
+2025-06-27 17:13:15,447 [INFO] Received command c on object id p0
+2025-06-27 17:13:31,793 [INFO] [Batch ID: 7] ✅ Written to Cassandra using safe insert per row.
+2025-06-27 17:13:31,942 [INFO] Received command c on object id p0
+2025-06-27 17:15:18,023 [INFO] [Batch ID: 8] ✅ Written to Cassandra using safe insert per row.
+2025-06-27 17:15:18,211 [INFO] Received command c on object id p0
+2025-06-27 17:16:35,857 [WARNING] Host 127.0.0.1:9042 has been marked down
+2025-06-27 17:16:35,868 [WARNING] [control connection] Error connecting to 127.0.0.1:9042:
+Traceback (most recent call last):
+  File "cassandra/cluster.py", line 3577, in cassandra.cluster.ControlConnection._reconnect_internal
+  File "cassandra/cluster.py", line 3599, in cassandra.cluster.ControlConnection._try_connect
+  File "cassandra/cluster.py", line 1670, in cassandra.cluster.Cluster.connection_factory
+  File "cassandra/connection.py", line 846, in cassandra.connection.Connection.factory
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/cassandra/io/libevreactor.py", line 267, in __init__
+    self._connect_socket()
+  File "cassandra/connection.py", line 951, in cassandra.connection.Connection._connect_socket
+ConnectionRefusedError: [Errno 111] Tried connecting to [('127.0.0.1', 9042)]. Last error: Connection refused
+2025-06-27 17:16:36,957 [WARNING] Error attempting to reconnect to 127.0.0.1:9042, scheduling retry in 2.3 seconds: [Errno 111] Tried connecting to [('127.0.0.1', 9042)]. Last error: Connection refused
+2025-06-27 17:16:39,271 [WARNING] Error attempting to reconnect to 127.0.0.1:9042, scheduling retry in 4.24 seconds: [Errno 111] Tried connecting to [('127.0.0.1', 9042)]. Last error: Connection refused
+2025-06-27 17:16:43,598 [WARNING] Error attempting to reconnect to 127.0.0.1:9042, scheduling retry in 6.8 seconds: [Errno 111] Tried connecting to [('127.0.0.1', 9042)]. Last error: Connection refused
+2025-06-27 17:16:50,433 [WARNING] Error attempting to reconnect to 127.0.0.1:9042, scheduling retry in 15.04 seconds: [Errno 111] Tried connecting to [('127.0.0.1', 9042)]. Last error: Connection refused
+2025-06-27 17:17:05,515 [WARNING] Error attempting to reconnect to 127.0.0.1:9042, scheduling retry in 35.84 seconds: [Errno 111] Tried connecting to [('127.0.0.1', 9042)]. Last error: Connection refused
+2025-06-27 17:17:30,170 [ERROR] There was an exception while executing the Python Proxy on the Python Side.
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 617, in _call_proxy
+    return_value = getattr(self.pool[obj_id], method)(*params)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/sql/utils.py", line 120, in call
+    raise e
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/sql/utils.py", line 117, in call
+    self.func(DataFrame(jdf, wrapped_session_jdf), batch_id)
+  File "/home/anhkhoa/spark_video_streaming/pipeline/spark_preprocessing.py", line 307, in process_batch
+    batch_df.foreachPartition(write_partition)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/sql/dataframe.py", line 1491, in foreachPartition
+    self.rdd.foreachPartition(f)  # type: ignore[arg-type]
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/rdd.py", line 1801, in foreachPartition
+    self.mapPartitions(func).count()  # Force evaluation
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/rdd.py", line 2316, in count
+    return self.mapPartitions(lambda i: [sum(1 for _ in i)]).sum()
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/rdd.py", line 2291, in sum
+    return self.mapPartitions(lambda x: [sum(x)]).fold(  # type: ignore[return-value]
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/rdd.py", line 2044, in fold
+    vals = self.mapPartitions(func).collect()
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/rdd.py", line 1833, in collect
+    sock_info = self.ctx._jvm.PythonRDD.collectAndServe(self._jrdd.rdd())
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/java_gateway.py", line 1322, in __call__
+    return_value = get_return_value(
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/errors/exceptions/captured.py", line 179, in deco
+    return f(*a, **kw)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/protocol.py", line 326, in get_return_value
+    raise Py4JJavaError(
+py4j.protocol.Py4JJavaError: An error occurred while calling z:org.apache.spark.api.python.PythonRDD.collectAndServe.
+: org.apache.spark.SparkException: Job aborted due to stage failure: Task 0 in stage 6.0 failed 1 times, most recent failure: Lost task 0.0 in stage 6.0 (TID 6) (10.255.255.254 executor driver): org.apache.spark.api.python.PythonException: Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/python/lib/pyspark.zip/pyspark/worker.py", line 1247, in main
+    process()
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/python/lib/pyspark.zip/pyspark/worker.py", line 1237, in process
+    out_iter = func(split_index, iterator)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/rdd.py", line 5434, in pipeline_func
+    return func(split, prev_func(split, iterator))
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/rdd.py", line 5434, in pipeline_func
+    return func(split, prev_func(split, iterator))
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/rdd.py", line 5434, in pipeline_func
+    return func(split, prev_func(split, iterator))
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/rdd.py", line 840, in func
+    return f(iterator)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/rdd.py", line 1795, in func
+    r = f(it)
+  File "/home/anhkhoa/spark_video_streaming/pipeline/spark_preprocessing.py", line 286, in write_partition
+    session = cluster.connect("spark_streams")
+  File "cassandra/cluster.py", line 1717, in cassandra.cluster.Cluster.connect
+  File "cassandra/cluster.py", line 1753, in cassandra.cluster.Cluster.connect
+  File "cassandra/cluster.py", line 1740, in cassandra.cluster.Cluster.connect
+  File "cassandra/cluster.py", line 3543, in cassandra.cluster.ControlConnection.connect
+  File "cassandra/cluster.py", line 3588, in cassandra.cluster.ControlConnection._reconnect_internal
+cassandra.cluster.NoHostAvailable: ('Unable to connect to any servers', {'127.0.0.1:9042': ConnectionRefusedError(111, "Tried connecting to [('127.0.0.1', 9042)]. Last error: Connection refused")})
+
+	at org.apache.spark.api.python.BasePythonRunner$ReaderIterator.handlePythonException(PythonRunner.scala:572)
+	at org.apache.spark.api.python.PythonRunner$$anon$3.read(PythonRunner.scala:784)
+	at org.apache.spark.api.python.PythonRunner$$anon$3.read(PythonRunner.scala:766)
+	at org.apache.spark.api.python.BasePythonRunner$ReaderIterator.hasNext(PythonRunner.scala:525)
+	at org.apache.spark.InterruptibleIterator.hasNext(InterruptibleIterator.scala:37)
+	at scala.collection.Iterator.foreach(Iterator.scala:943)
+	at scala.collection.Iterator.foreach$(Iterator.scala:943)
+	at org.apache.spark.InterruptibleIterator.foreach(InterruptibleIterator.scala:28)
+	at scala.collection.generic.Growable.$plus$plus$eq(Growable.scala:62)
+	at scala.collection.generic.Growable.$plus$plus$eq$(Growable.scala:53)
+	at scala.collection.mutable.ArrayBuffer.$plus$plus$eq(ArrayBuffer.scala:105)
+	at scala.collection.mutable.ArrayBuffer.$plus$plus$eq(ArrayBuffer.scala:49)
+	at scala.collection.TraversableOnce.to(TraversableOnce.scala:366)
+	at scala.collection.TraversableOnce.to$(TraversableOnce.scala:364)
+	at org.apache.spark.InterruptibleIterator.to(InterruptibleIterator.scala:28)
+	at scala.collection.TraversableOnce.toBuffer(TraversableOnce.scala:358)
+	at scala.collection.TraversableOnce.toBuffer$(TraversableOnce.scala:358)
+	at org.apache.spark.InterruptibleIterator.toBuffer(InterruptibleIterator.scala:28)
+	at scala.collection.TraversableOnce.toArray(TraversableOnce.scala:345)
+	at scala.collection.TraversableOnce.toArray$(TraversableOnce.scala:339)
+	at org.apache.spark.InterruptibleIterator.toArray(InterruptibleIterator.scala:28)
+	at org.apache.spark.rdd.RDD.$anonfun$collect$2(RDD.scala:1049)
+	at org.apache.spark.SparkContext.$anonfun$runJob$5(SparkContext.scala:2433)
+	at org.apache.spark.scheduler.ResultTask.runTask(ResultTask.scala:93)
+	at org.apache.spark.TaskContext.runTaskWithListeners(TaskContext.scala:166)
+	at org.apache.spark.scheduler.Task.run(Task.scala:141)
+	at org.apache.spark.executor.Executor$TaskRunner.$anonfun$run$4(Executor.scala:620)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally(SparkErrorUtils.scala:64)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally$(SparkErrorUtils.scala:61)
+	at org.apache.spark.util.Utils$.tryWithSafeFinally(Utils.scala:94)
+	at org.apache.spark.executor.Executor$TaskRunner.run(Executor.scala:623)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+	at java.base/java.lang.Thread.run(Thread.java:829)
+
+Driver stacktrace:
+	at org.apache.spark.scheduler.DAGScheduler.failJobAndIndependentStages(DAGScheduler.scala:2856)
+	at org.apache.spark.scheduler.DAGScheduler.$anonfun$abortStage$2(DAGScheduler.scala:2792)
+	at org.apache.spark.scheduler.DAGScheduler.$anonfun$abortStage$2$adapted(DAGScheduler.scala:2791)
+	at scala.collection.mutable.ResizableArray.foreach(ResizableArray.scala:62)
+	at scala.collection.mutable.ResizableArray.foreach$(ResizableArray.scala:55)
+	at scala.collection.mutable.ArrayBuffer.foreach(ArrayBuffer.scala:49)
+	at org.apache.spark.scheduler.DAGScheduler.abortStage(DAGScheduler.scala:2791)
+	at org.apache.spark.scheduler.DAGScheduler.$anonfun$handleTaskSetFailed$1(DAGScheduler.scala:1247)
+	at org.apache.spark.scheduler.DAGScheduler.$anonfun$handleTaskSetFailed$1$adapted(DAGScheduler.scala:1247)
+	at scala.Option.foreach(Option.scala:407)
+	at org.apache.spark.scheduler.DAGScheduler.handleTaskSetFailed(DAGScheduler.scala:1247)
+	at org.apache.spark.scheduler.DAGSchedulerEventProcessLoop.doOnReceive(DAGScheduler.scala:3060)
+	at org.apache.spark.scheduler.DAGSchedulerEventProcessLoop.onReceive(DAGScheduler.scala:2994)
+	at org.apache.spark.scheduler.DAGSchedulerEventProcessLoop.onReceive(DAGScheduler.scala:2983)
+	at org.apache.spark.util.EventLoop$$anon$1.run(EventLoop.scala:49)
+	at org.apache.spark.scheduler.DAGScheduler.runJob(DAGScheduler.scala:989)
+	at org.apache.spark.SparkContext.runJob(SparkContext.scala:2393)
+	at org.apache.spark.SparkContext.runJob(SparkContext.scala:2414)
+	at org.apache.spark.SparkContext.runJob(SparkContext.scala:2433)
+	at org.apache.spark.SparkContext.runJob(SparkContext.scala:2458)
+	at org.apache.spark.rdd.RDD.$anonfun$collect$1(RDD.scala:1049)
+	at org.apache.spark.rdd.RDDOperationScope$.withScope(RDDOperationScope.scala:151)
+	at org.apache.spark.rdd.RDDOperationScope$.withScope(RDDOperationScope.scala:112)
+	at org.apache.spark.rdd.RDD.withScope(RDD.scala:410)
+	at org.apache.spark.rdd.RDD.collect(RDD.scala:1048)
+	at org.apache.spark.api.python.PythonRDD$.collectAndServe(PythonRDD.scala:195)
+	at org.apache.spark.api.python.PythonRDD.collectAndServe(PythonRDD.scala)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:566)
+	at py4j.reflection.MethodInvoker.invoke(MethodInvoker.java:244)
+	at py4j.reflection.ReflectionEngine.invoke(ReflectionEngine.java:374)
+	at py4j.Gateway.invoke(Gateway.java:282)
+	at py4j.commands.AbstractCommand.invokeMethod(AbstractCommand.java:132)
+	at py4j.commands.CallCommand.execute(CallCommand.java:79)
+	at py4j.ClientServerConnection.sendCommand(ClientServerConnection.java:244)
+	at py4j.CallbackClient.sendCommand(CallbackClient.java:384)
+	at py4j.CallbackClient.sendCommand(CallbackClient.java:356)
+	at py4j.reflection.PythonProxyHandler.invoke(PythonProxyHandler.java:106)
+	at com.sun.proxy.$Proxy30.call(Unknown Source)
+	at org.apache.spark.sql.execution.streaming.sources.PythonForeachBatchHelper$.$anonfun$callForeachBatch$1(ForeachBatchSink.scala:53)
+	at org.apache.spark.sql.execution.streaming.sources.PythonForeachBatchHelper$.$anonfun$callForeachBatch$1$adapted(ForeachBatchSink.scala:53)
+	at org.apache.spark.sql.execution.streaming.sources.ForeachBatchSink.addBatch(ForeachBatchSink.scala:34)
+	at org.apache.spark.sql.execution.streaming.MicroBatchExecution.$anonfun$runBatch$17(MicroBatchExecution.scala:732)
+	at org.apache.spark.sql.execution.SQLExecution$.$anonfun$withNewExecutionId$6(SQLExecution.scala:125)
+	at org.apache.spark.sql.execution.SQLExecution$.withSQLConfPropagated(SQLExecution.scala:201)
+	at org.apache.spark.sql.execution.SQLExecution$.$anonfun$withNewExecutionId$1(SQLExecution.scala:108)
+	at org.apache.spark.sql.SparkSession.withActive(SparkSession.scala:900)
+	at org.apache.spark.sql.execution.SQLExecution$.withNewExecutionId(SQLExecution.scala:66)
+	at org.apache.spark.sql.execution.streaming.MicroBatchExecution.$anonfun$runBatch$16(MicroBatchExecution.scala:729)
+	at org.apache.spark.sql.execution.streaming.ProgressReporter.reportTimeTaken(ProgressReporter.scala:427)
+	at org.apache.spark.sql.execution.streaming.ProgressReporter.reportTimeTaken$(ProgressReporter.scala:425)
+	at org.apache.spark.sql.execution.streaming.StreamExecution.reportTimeTaken(StreamExecution.scala:67)
+	at org.apache.spark.sql.execution.streaming.MicroBatchExecution.runBatch(MicroBatchExecution.scala:729)
+	at org.apache.spark.sql.execution.streaming.MicroBatchExecution.$anonfun$runActivatedStream$2(MicroBatchExecution.scala:286)
+	at scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.java:23)
+	at org.apache.spark.sql.execution.streaming.ProgressReporter.reportTimeTaken(ProgressReporter.scala:427)
+	at org.apache.spark.sql.execution.streaming.ProgressReporter.reportTimeTaken$(ProgressReporter.scala:425)
+	at org.apache.spark.sql.execution.streaming.StreamExecution.reportTimeTaken(StreamExecution.scala:67)
+	at org.apache.spark.sql.execution.streaming.MicroBatchExecution.$anonfun$runActivatedStream$1(MicroBatchExecution.scala:249)
+	at org.apache.spark.sql.execution.streaming.ProcessingTimeExecutor.execute(TriggerExecutor.scala:67)
+	at org.apache.spark.sql.execution.streaming.MicroBatchExecution.runActivatedStream(MicroBatchExecution.scala:239)
+	at org.apache.spark.sql.execution.streaming.StreamExecution.$anonfun$runStream$1(StreamExecution.scala:311)
+	at scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.java:23)
+	at org.apache.spark.sql.SparkSession.withActive(SparkSession.scala:900)
+	at org.apache.spark.sql.execution.streaming.StreamExecution.org$apache$spark$sql$execution$streaming$StreamExecution$$runStream(StreamExecution.scala:289)
+	at org.apache.spark.sql.execution.streaming.StreamExecution$$anon$1.$anonfun$run$1(StreamExecution.scala:211)
+	at scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.java:23)
+	at org.apache.spark.JobArtifactSet$.withActiveJobArtifactState(JobArtifactSet.scala:94)
+	at org.apache.spark.sql.execution.streaming.StreamExecution$$anon$1.run(StreamExecution.scala:211)
+Caused by: org.apache.spark.api.python.PythonException: Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/python/lib/pyspark.zip/pyspark/worker.py", line 1247, in main
+    process()
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/python/lib/pyspark.zip/pyspark/worker.py", line 1237, in process
+    out_iter = func(split_index, iterator)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/rdd.py", line 5434, in pipeline_func
+    return func(split, prev_func(split, iterator))
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/rdd.py", line 5434, in pipeline_func
+    return func(split, prev_func(split, iterator))
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/rdd.py", line 5434, in pipeline_func
+    return func(split, prev_func(split, iterator))
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/rdd.py", line 840, in func
+    return f(iterator)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/rdd.py", line 1795, in func
+    r = f(it)
+  File "/home/anhkhoa/spark_video_streaming/pipeline/spark_preprocessing.py", line 286, in write_partition
+    session = cluster.connect("spark_streams")
+  File "cassandra/cluster.py", line 1717, in cassandra.cluster.Cluster.connect
+  File "cassandra/cluster.py", line 1753, in cassandra.cluster.Cluster.connect
+  File "cassandra/cluster.py", line 1740, in cassandra.cluster.Cluster.connect
+  File "cassandra/cluster.py", line 3543, in cassandra.cluster.ControlConnection.connect
+  File "cassandra/cluster.py", line 3588, in cassandra.cluster.ControlConnection._reconnect_internal
+cassandra.cluster.NoHostAvailable: ('Unable to connect to any servers', {'127.0.0.1:9042': ConnectionRefusedError(111, "Tried connecting to [('127.0.0.1', 9042)]. Last error: Connection refused")})
+
+	at org.apache.spark.api.python.BasePythonRunner$ReaderIterator.handlePythonException(PythonRunner.scala:572)
+	at org.apache.spark.api.python.PythonRunner$$anon$3.read(PythonRunner.scala:784)
+	at org.apache.spark.api.python.PythonRunner$$anon$3.read(PythonRunner.scala:766)
+	at org.apache.spark.api.python.BasePythonRunner$ReaderIterator.hasNext(PythonRunner.scala:525)
+	at org.apache.spark.InterruptibleIterator.hasNext(InterruptibleIterator.scala:37)
+	at scala.collection.Iterator.foreach(Iterator.scala:943)
+	at scala.collection.Iterator.foreach$(Iterator.scala:943)
+	at org.apache.spark.InterruptibleIterator.foreach(InterruptibleIterator.scala:28)
+	at scala.collection.generic.Growable.$plus$plus$eq(Growable.scala:62)
+	at scala.collection.generic.Growable.$plus$plus$eq$(Growable.scala:53)
+	at scala.collection.mutable.ArrayBuffer.$plus$plus$eq(ArrayBuffer.scala:105)
+	at scala.collection.mutable.ArrayBuffer.$plus$plus$eq(ArrayBuffer.scala:49)
+	at scala.collection.TraversableOnce.to(TraversableOnce.scala:366)
+	at scala.collection.TraversableOnce.to$(TraversableOnce.scala:364)
+	at org.apache.spark.InterruptibleIterator.to(InterruptibleIterator.scala:28)
+	at scala.collection.TraversableOnce.toBuffer(TraversableOnce.scala:358)
+	at scala.collection.TraversableOnce.toBuffer$(TraversableOnce.scala:358)
+	at org.apache.spark.InterruptibleIterator.toBuffer(InterruptibleIterator.scala:28)
+	at scala.collection.TraversableOnce.toArray(TraversableOnce.scala:345)
+	at scala.collection.TraversableOnce.toArray$(TraversableOnce.scala:339)
+	at org.apache.spark.InterruptibleIterator.toArray(InterruptibleIterator.scala:28)
+	at org.apache.spark.rdd.RDD.$anonfun$collect$2(RDD.scala:1049)
+	at org.apache.spark.SparkContext.$anonfun$runJob$5(SparkContext.scala:2433)
+	at org.apache.spark.scheduler.ResultTask.runTask(ResultTask.scala:93)
+	at org.apache.spark.TaskContext.runTaskWithListeners(TaskContext.scala:166)
+	at org.apache.spark.scheduler.Task.run(Task.scala:141)
+	at org.apache.spark.executor.Executor$TaskRunner.$anonfun$run$4(Executor.scala:620)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally(SparkErrorUtils.scala:64)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally$(SparkErrorUtils.scala:61)
+	at org.apache.spark.util.Utils$.tryWithSafeFinally(Utils.scala:94)
+	at org.apache.spark.executor.Executor$TaskRunner.run(Executor.scala:623)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+	at java.base/java.lang.Thread.run(Thread.java:829)
+
+2025-06-27 17:17:30,773 [INFO] Closing down clientserver connection
+2025-06-27 17:18:49,289 [INFO] ✅ Spark connection created successfully.
+2025-06-27 17:18:51,542 [INFO] ✅ Selection dataframe created from Kafka stream
+2025-06-27 17:18:51,573 [WARNING] Cluster.__init__ called with contact_points specified, but no load_balancing_policy. In the next major version, this will raise an error; please specify a load-balancing policy. (contact_points = ['localhost'], lbp = None)
+2025-06-27 17:18:51,744 [WARNING] [control connection] Error connecting to 127.0.0.1:9042:
+Traceback (most recent call last):
+  File "cassandra/cluster.py", line 3577, in cassandra.cluster.ControlConnection._reconnect_internal
+  File "cassandra/cluster.py", line 3599, in cassandra.cluster.ControlConnection._try_connect
+  File "cassandra/cluster.py", line 1670, in cassandra.cluster.Cluster.connection_factory
+  File "cassandra/connection.py", line 846, in cassandra.connection.Connection.factory
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/cassandra/io/libevreactor.py", line 267, in __init__
+    self._connect_socket()
+  File "cassandra/connection.py", line 951, in cassandra.connection.Connection._connect_socket
+ConnectionRefusedError: [Errno 111] Tried connecting to [('127.0.0.1', 9042)]. Last error: Connection refused
+2025-06-27 17:18:51,747 [ERROR] Control connection failed to connect, shutting down Cluster:
+Traceback (most recent call last):
+  File "cassandra/cluster.py", line 1740, in cassandra.cluster.Cluster.connect
+  File "cassandra/cluster.py", line 3543, in cassandra.cluster.ControlConnection.connect
+  File "cassandra/cluster.py", line 3588, in cassandra.cluster.ControlConnection._reconnect_internal
+cassandra.cluster.NoHostAvailable: ('Unable to connect to any servers', {'127.0.0.1:9042': ConnectionRefusedError(111, "Tried connecting to [('127.0.0.1', 9042)]. Last error: Connection refused")})
+2025-06-27 17:18:51,747 [ERROR] Could not create cassandra connection due to ('Unable to connect to any servers', {'127.0.0.1:9042': ConnectionRefusedError(111, "Tried connecting to [('127.0.0.1', 9042)]. Last error: Connection refused")})
+2025-06-27 17:18:51,747 [INFO] ⚡ Streaming started with feature extraction...
+2025-06-27 17:18:51,768 [INFO] Callback Server Starting
+2025-06-27 17:18:51,769 [INFO] Socket listening on ('127.0.0.1', 42439)
+2025-06-27 17:18:53,521 [INFO] Python Server ready to receive messages
+2025-06-27 17:18:53,521 [INFO] Received command c on object id p0
+2025-06-27 17:19:34,756 [INFO] Error while receiving.
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 511, in send_command
+    answer = smart_decode(self.stream.readline()[:-1])
+RuntimeError: reentrant call inside <_io.BufferedReader name=4>
+2025-06-27 17:19:34,759 [INFO] Closing down clientserver connection
+2025-06-27 17:19:34,759 [ERROR] Exception while sending command.
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 511, in send_command
+    answer = smart_decode(self.stream.readline()[:-1])
+RuntimeError: reentrant call inside <_io.BufferedReader name=4>
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/java_gateway.py", line 1038, in send_command
+    response = connection.send_command(command)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 539, in send_command
+    raise Py4JNetworkError(
+py4j.protocol.Py4JNetworkError: Error while sending or receiving
+2025-06-27 17:19:34,760 [INFO] Error while receiving.
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 511, in send_command
+    answer = smart_decode(self.stream.readline()[:-1])
+  File "/usr/lib/python3.10/socket.py", line 705, in readinto
+    return self._sock.recv_into(b)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/context.py", line 381, in signal_handler
+    self.cancelAllJobs()
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/context.py", line 2446, in cancelAllJobs
+    self._jsc.sc().cancelAllJobs()
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/java_gateway.py", line 1322, in __call__
+    return_value = get_return_value(
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/errors/exceptions/captured.py", line 179, in deco
+    return f(*a, **kw)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/protocol.py", line 334, in get_return_value
+    raise Py4JError(
+py4j.protocol.Py4JError: An error occurred while calling o30.sc
+2025-06-27 17:19:34,763 [INFO] Closing down clientserver connection
+2025-06-27 17:19:34,763 [ERROR] Exception while sending command.
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 511, in send_command
+    answer = smart_decode(self.stream.readline()[:-1])
+  File "/usr/lib/python3.10/socket.py", line 705, in readinto
+    return self._sock.recv_into(b)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/context.py", line 381, in signal_handler
+    self.cancelAllJobs()
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/context.py", line 2446, in cancelAllJobs
+    self._jsc.sc().cancelAllJobs()
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/java_gateway.py", line 1322, in __call__
+    return_value = get_return_value(
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/errors/exceptions/captured.py", line 179, in deco
+    return f(*a, **kw)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/protocol.py", line 334, in get_return_value
+    raise Py4JError(
+py4j.protocol.Py4JError: An error occurred while calling o30.sc
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/java_gateway.py", line 1038, in send_command
+    response = connection.send_command(command)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 539, in send_command
+    raise Py4JNetworkError(
+py4j.protocol.Py4JNetworkError: Error while sending or receiving
+2025-06-27 17:19:34,763 [INFO] Closing down clientserver connection
+2025-06-27 17:19:34,780 [INFO] Closing down clientserver connection
+2025-06-27 17:21:35,980 [INFO] ✅ Spark connection created successfully.
+2025-06-27 17:21:38,479 [INFO] ✅ Selection dataframe created from Kafka stream
+2025-06-27 17:21:38,514 [WARNING] Cluster.__init__ called with contact_points specified, but no load_balancing_policy. In the next major version, this will raise an error; please specify a load-balancing policy. (contact_points = ['localhost'], lbp = None)
+2025-06-27 17:21:38,781 [INFO] Using datacenter 'datacenter1' for DCAwareRoundRobinPolicy (via host '127.0.0.1:9042'); if incorrect, please specify a local_dc to the constructor, or limit contact points to local cluster nodes
+2025-06-27 17:21:39,078 [INFO] ⚡ Streaming started with feature extraction...
+2025-06-27 17:21:39,102 [INFO] Callback Server Starting
+2025-06-27 17:21:39,103 [INFO] Socket listening on ('127.0.0.1', 44133)
+2025-06-27 17:21:39,010 [INFO] Python Server ready to receive messages
+2025-06-27 17:21:39,010 [INFO] Received command c on object id p0
+2025-06-27 17:22:00,077 [INFO] Received command c on object id p0
+2025-06-27 17:22:15,049 [INFO] Received command c on object id p0
+2025-06-27 17:22:30,942 [INFO] Received command c on object id p0
+2025-06-27 17:24:16,408 [INFO] Received command c on object id p0
+2025-06-27 17:25:21,567 [WARNING] [control connection] Error connecting to 127.0.0.1:9042:
+Traceback (most recent call last):
+  File "cassandra/cluster.py", line 3577, in cassandra.cluster.ControlConnection._reconnect_internal
+  File "cassandra/cluster.py", line 3599, in cassandra.cluster.ControlConnection._try_connect
+  File "cassandra/cluster.py", line 1670, in cassandra.cluster.Cluster.connection_factory
+  File "cassandra/connection.py", line 846, in cassandra.connection.Connection.factory
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/cassandra/io/libevreactor.py", line 267, in __init__
+    self._connect_socket()
+  File "cassandra/connection.py", line 951, in cassandra.connection.Connection._connect_socket
+ConnectionRefusedError: [Errno 111] Tried connecting to [('127.0.0.1', 9042)]. Last error: Connection refused
+2025-06-27 17:25:21,555 [WARNING] Host 127.0.0.1:9042 has been marked down
+2025-06-27 17:25:22,714 [WARNING] Error attempting to reconnect to 127.0.0.1:9042, scheduling retry in 2.12 seconds: [Errno 111] Tried connecting to [('127.0.0.1', 9042)]. Last error: Connection refused
+2025-06-27 17:25:24,838 [WARNING] Error attempting to reconnect to 127.0.0.1:9042, scheduling retry in 4.56 seconds: [Errno 111] Tried connecting to [('127.0.0.1', 9042)]. Last error: Connection refused
+2025-06-27 17:25:29,487 [WARNING] Error attempting to reconnect to 127.0.0.1:9042, scheduling retry in 8.24 seconds: [Errno 111] Tried connecting to [('127.0.0.1', 9042)]. Last error: Connection refused
+2025-06-27 17:25:37,756 [WARNING] Error attempting to reconnect to 127.0.0.1:9042, scheduling retry in 15.68 seconds: [Errno 111] Tried connecting to [('127.0.0.1', 9042)]. Last error: Connection refused
+2025-06-27 17:25:53,483 [WARNING] Error attempting to reconnect to 127.0.0.1:9042, scheduling retry in 28.48 seconds: [Errno 111] Tried connecting to [('127.0.0.1', 9042)]. Last error: Connection refused
+2025-06-27 17:26:22,047 [WARNING] Error attempting to reconnect to 127.0.0.1:9042, scheduling retry in 66.56 seconds: [Errno 111] Tried connecting to [('127.0.0.1', 9042)]. Last error: Connection refused
+2025-06-27 17:27:28,662 [WARNING] Error attempting to reconnect to 127.0.0.1:9042, scheduling retry in 130.56 seconds: [Errno 111] Tried connecting to [('127.0.0.1', 9042)]. Last error: Connection refused
+2025-06-27 17:29:34,835 [INFO] Error while receiving.
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 511, in send_command
+    answer = smart_decode(self.stream.readline()[:-1])
+RuntimeError: reentrant call inside <_io.BufferedReader name=4>
+2025-06-27 17:29:34,846 [INFO] Closing down clientserver connection
+2025-06-27 17:29:34,851 [ERROR] Exception while sending command.
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 511, in send_command
+    answer = smart_decode(self.stream.readline()[:-1])
+RuntimeError: reentrant call inside <_io.BufferedReader name=4>
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/java_gateway.py", line 1038, in send_command
+    response = connection.send_command(command)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 539, in send_command
+    raise Py4JNetworkError(
+py4j.protocol.Py4JNetworkError: Error while sending or receiving
+2025-06-27 17:29:34,856 [INFO] Error while receiving.
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 511, in send_command
+    answer = smart_decode(self.stream.readline()[:-1])
+  File "/usr/lib/python3.10/socket.py", line 705, in readinto
+    return self._sock.recv_into(b)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/context.py", line 381, in signal_handler
+    self.cancelAllJobs()
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/context.py", line 2446, in cancelAllJobs
+    self._jsc.sc().cancelAllJobs()
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/java_gateway.py", line 1322, in __call__
+    return_value = get_return_value(
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/errors/exceptions/captured.py", line 179, in deco
+    return f(*a, **kw)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/protocol.py", line 334, in get_return_value
+    raise Py4JError(
+py4j.protocol.Py4JError: An error occurred while calling o30.sc
+2025-06-27 17:29:34,862 [INFO] Closing down clientserver connection
+2025-06-27 17:29:34,862 [ERROR] Exception while sending command.
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 511, in send_command
+    answer = smart_decode(self.stream.readline()[:-1])
+  File "/usr/lib/python3.10/socket.py", line 705, in readinto
+    return self._sock.recv_into(b)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/context.py", line 381, in signal_handler
+    self.cancelAllJobs()
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/context.py", line 2446, in cancelAllJobs
+    self._jsc.sc().cancelAllJobs()
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/java_gateway.py", line 1322, in __call__
+    return_value = get_return_value(
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/errors/exceptions/captured.py", line 179, in deco
+    return f(*a, **kw)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/protocol.py", line 334, in get_return_value
+    raise Py4JError(
+py4j.protocol.Py4JError: An error occurred while calling o30.sc
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/java_gateway.py", line 1038, in send_command
+    response = connection.send_command(command)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 539, in send_command
+    raise Py4JNetworkError(
+py4j.protocol.Py4JNetworkError: Error while sending or receiving
+2025-06-27 17:29:34,862 [INFO] Closing down clientserver connection
+2025-06-27 17:29:34,988 [INFO] Closing down clientserver connection
+2025-06-27 17:32:32,107 [INFO] ✅ Spark connection created successfully.
+2025-06-27 17:32:34,387 [INFO] ✅ Selection dataframe created from Kafka stream
+2025-06-27 17:32:34,426 [WARNING] Cluster.__init__ called with contact_points specified, but no load_balancing_policy. In the next major version, this will raise an error; please specify a load-balancing policy. (contact_points = ['localhost'], lbp = None)
+2025-06-27 17:32:34,721 [ERROR] Closing connection <LibevConnection(140265049329520) 127.0.0.1:9042> due to protocol error: Error from server: code=000a [Protocol error] message="Beta version of the protocol used (5/v5-beta), but USE_BETA flag is unset"
+2025-06-27 17:32:34,721 [WARNING] [control connection] Error connecting to 127.0.0.1:9042:
+Traceback (most recent call last):
+  File "cassandra/cluster.py", line 3577, in cassandra.cluster.ControlConnection._reconnect_internal
+  File "cassandra/cluster.py", line 3613, in cassandra.cluster.ControlConnection._try_connect
+  File "cassandra/cluster.py", line 3599, in cassandra.cluster.ControlConnection._try_connect
+  File "cassandra/cluster.py", line 1670, in cassandra.cluster.Cluster.connection_factory
+  File "cassandra/connection.py", line 852, in cassandra.connection.Connection.factory
+cassandra.protocol.ProtocolException: <Error from server: code=000a [Protocol error] message="Beta version of the protocol used (5/v5-beta), but USE_BETA flag is unset">
+2025-06-27 17:32:34,723 [ERROR] Control connection failed to connect, shutting down Cluster:
+Traceback (most recent call last):
+  File "cassandra/cluster.py", line 1740, in cassandra.cluster.Cluster.connect
+  File "cassandra/cluster.py", line 3543, in cassandra.cluster.ControlConnection.connect
+  File "cassandra/cluster.py", line 3588, in cassandra.cluster.ControlConnection._reconnect_internal
+cassandra.cluster.NoHostAvailable: ('Unable to connect to any servers', {'127.0.0.1:9042': <Error from server: code=000a [Protocol error] message="Beta version of the protocol used (5/v5-beta), but USE_BETA flag is unset">})
+2025-06-27 17:32:34,723 [ERROR] Could not create cassandra connection due to ('Unable to connect to any servers', {'127.0.0.1:9042': <Error from server: code=000a [Protocol error] message="Beta version of the protocol used (5/v5-beta), but USE_BETA flag is unset">})
+2025-06-27 17:32:34,723 [INFO] ⚡ Streaming started with feature extraction...
+2025-06-27 17:32:34,749 [INFO] Callback Server Starting
+2025-06-27 17:32:34,749 [INFO] Socket listening on ('127.0.0.1', 41857)
+2025-06-27 17:32:36,766 [INFO] Python Server ready to receive messages
+2025-06-27 17:32:36,766 [INFO] Received command c on object id p0
+2025-06-27 17:32:51,757 [INFO] Received command c on object id p0
+2025-06-27 17:33:13,559 [INFO] Received command c on object id p0
+2025-06-27 17:33:21,389 [ERROR] There was an exception while executing the Python Proxy on the Python Side.
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 617, in _call_proxy
+    return_value = getattr(self.pool[obj_id], method)(*params)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/sql/utils.py", line 120, in call
+    raise e
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/sql/utils.py", line 117, in call
+    self.func(DataFrame(jdf, wrapped_session_jdf), batch_id)
+  File "/home/anhkhoa/spark_video_streaming/pipeline/spark_preprocessing.py", line 288, in process_batch
+    .save()
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/sql/readwriter.py", line 1461, in save
+    self._jwrite.save()
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/java_gateway.py", line 1322, in __call__
+    return_value = get_return_value(
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/errors/exceptions/captured.py", line 185, in deco
+    raise converted from None
+pyspark.errors.exceptions.captured.AnalysisException: Couldn't find spark_streams or any similarly named keyspaces
+2025-06-27 17:33:21,567 [INFO] Closing down clientserver connection
+2025-06-27 17:34:01,955 [INFO] ✅ Spark connection created successfully.
+2025-06-27 17:34:03,996 [INFO] ✅ Selection dataframe created from Kafka stream
+2025-06-27 17:34:04,025 [WARNING] Cluster.__init__ called with contact_points specified, but no load_balancing_policy. In the next major version, this will raise an error; please specify a load-balancing policy. (contact_points = ['localhost'], lbp = None)
+2025-06-27 17:34:04,203 [ERROR] Closing connection <LibevConnection(140444892533456) 127.0.0.1:9042> due to protocol error: Error from server: code=000a [Protocol error] message="Beta version of the protocol used (5/v5-beta), but USE_BETA flag is unset"
+2025-06-27 17:34:04,203 [WARNING] [control connection] Error connecting to 127.0.0.1:9042:
+Traceback (most recent call last):
+  File "cassandra/cluster.py", line 3577, in cassandra.cluster.ControlConnection._reconnect_internal
+  File "cassandra/cluster.py", line 3613, in cassandra.cluster.ControlConnection._try_connect
+  File "cassandra/cluster.py", line 3599, in cassandra.cluster.ControlConnection._try_connect
+  File "cassandra/cluster.py", line 1670, in cassandra.cluster.Cluster.connection_factory
+  File "cassandra/connection.py", line 852, in cassandra.connection.Connection.factory
+cassandra.protocol.ProtocolException: <Error from server: code=000a [Protocol error] message="Beta version of the protocol used (5/v5-beta), but USE_BETA flag is unset">
+2025-06-27 17:34:04,205 [ERROR] Control connection failed to connect, shutting down Cluster:
+Traceback (most recent call last):
+  File "cassandra/cluster.py", line 1740, in cassandra.cluster.Cluster.connect
+  File "cassandra/cluster.py", line 3543, in cassandra.cluster.ControlConnection.connect
+  File "cassandra/cluster.py", line 3588, in cassandra.cluster.ControlConnection._reconnect_internal
+cassandra.cluster.NoHostAvailable: ('Unable to connect to any servers', {'127.0.0.1:9042': <Error from server: code=000a [Protocol error] message="Beta version of the protocol used (5/v5-beta), but USE_BETA flag is unset">})
+2025-06-27 17:34:04,205 [ERROR] Could not create cassandra connection due to ('Unable to connect to any servers', {'127.0.0.1:9042': <Error from server: code=000a [Protocol error] message="Beta version of the protocol used (5/v5-beta), but USE_BETA flag is unset">})
+2025-06-27 17:34:04,205 [INFO] ⚡ Streaming started with feature extraction...
+2025-06-27 17:34:04,222 [INFO] Callback Server Starting
+2025-06-27 17:34:04,223 [INFO] Socket listening on ('127.0.0.1', 46223)
+2025-06-27 17:34:05,972 [INFO] Python Server ready to receive messages
+2025-06-27 17:34:05,973 [INFO] Received command c on object id p0
+2025-06-27 17:34:25,410 [ERROR] There was an exception while executing the Python Proxy on the Python Side.
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 617, in _call_proxy
+    return_value = getattr(self.pool[obj_id], method)(*params)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/sql/utils.py", line 120, in call
+    raise e
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/sql/utils.py", line 117, in call
+    self.func(DataFrame(jdf, wrapped_session_jdf), batch_id)
+  File "/home/anhkhoa/spark_video_streaming/pipeline/spark_preprocessing.py", line 288, in process_batch
+    .save()
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/sql/readwriter.py", line 1461, in save
+    self._jwrite.save()
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/java_gateway.py", line 1322, in __call__
+    return_value = get_return_value(
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/errors/exceptions/captured.py", line 185, in deco
+    raise converted from None
+pyspark.errors.exceptions.captured.AnalysisException: Couldn't find spark_streams or any similarly named keyspaces
+2025-06-27 17:34:25,619 [INFO] Closing down clientserver connection
+2025-06-27 17:36:45,362 [INFO] ✅ Spark connection created successfully.
+2025-06-27 17:36:47,331 [INFO] ✅ Selection dataframe created from Kafka stream
+2025-06-27 17:36:47,357 [WARNING] Cluster.__init__ called with contact_points specified, but no load_balancing_policy. In the next major version, this will raise an error; please specify a load-balancing policy. (contact_points = ['localhost'], lbp = None)
+2025-06-27 17:36:47,541 [ERROR] Closing connection <LibevConnection(140153774428160) 127.0.0.1:9042> due to protocol error: Error from server: code=000a [Protocol error] message="Beta version of the protocol used (5/v5-beta), but USE_BETA flag is unset"
+2025-06-27 17:36:47,542 [WARNING] [control connection] Error connecting to 127.0.0.1:9042:
+Traceback (most recent call last):
+  File "cassandra/cluster.py", line 3577, in cassandra.cluster.ControlConnection._reconnect_internal
+  File "cassandra/cluster.py", line 3613, in cassandra.cluster.ControlConnection._try_connect
+  File "cassandra/cluster.py", line 3599, in cassandra.cluster.ControlConnection._try_connect
+  File "cassandra/cluster.py", line 1670, in cassandra.cluster.Cluster.connection_factory
+  File "cassandra/connection.py", line 852, in cassandra.connection.Connection.factory
+cassandra.protocol.ProtocolException: <Error from server: code=000a [Protocol error] message="Beta version of the protocol used (5/v5-beta), but USE_BETA flag is unset">
+2025-06-27 17:36:47,544 [ERROR] Control connection failed to connect, shutting down Cluster:
+Traceback (most recent call last):
+  File "cassandra/cluster.py", line 1740, in cassandra.cluster.Cluster.connect
+  File "cassandra/cluster.py", line 3543, in cassandra.cluster.ControlConnection.connect
+  File "cassandra/cluster.py", line 3588, in cassandra.cluster.ControlConnection._reconnect_internal
+cassandra.cluster.NoHostAvailable: ('Unable to connect to any servers', {'127.0.0.1:9042': <Error from server: code=000a [Protocol error] message="Beta version of the protocol used (5/v5-beta), but USE_BETA flag is unset">})
+2025-06-27 17:36:47,545 [ERROR] Could not create cassandra connection due to ('Unable to connect to any servers', {'127.0.0.1:9042': <Error from server: code=000a [Protocol error] message="Beta version of the protocol used (5/v5-beta), but USE_BETA flag is unset">})
+2025-06-27 17:36:47,545 [INFO] ⚡ Streaming started with feature extraction...
+2025-06-27 17:36:47,565 [INFO] Callback Server Starting
+2025-06-27 17:36:47,565 [INFO] Socket listening on ('127.0.0.1', 33135)
+2025-06-27 17:36:49,156 [INFO] Python Server ready to receive messages
+2025-06-27 17:36:49,156 [INFO] Received command c on object id p0
+2025-06-27 17:37:19,438 [ERROR] There was an exception while executing the Python Proxy on the Python Side.
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 617, in _call_proxy
+    return_value = getattr(self.pool[obj_id], method)(*params)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/sql/utils.py", line 120, in call
+    raise e
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/sql/utils.py", line 117, in call
+    self.func(DataFrame(jdf, wrapped_session_jdf), batch_id)
+  File "/home/anhkhoa/spark_video_streaming/pipeline/spark_preprocessing.py", line 288, in process_batch
+    .save()
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/sql/readwriter.py", line 1461, in save
+    self._jwrite.save()
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/java_gateway.py", line 1322, in __call__
+    return_value = get_return_value(
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/errors/exceptions/captured.py", line 185, in deco
+    raise converted from None
+pyspark.errors.exceptions.captured.AnalysisException: Couldn't find spark_streams or any similarly named keyspaces
+2025-06-27 17:37:19,642 [INFO] Closing down clientserver connection
+2025-06-27 17:38:27,967 [INFO] ✅ Spark connection created successfully.
+2025-06-27 17:38:30,018 [INFO] ✅ Selection dataframe created from Kafka stream
+2025-06-27 17:38:30,046 [WARNING] Cluster.__init__ called with contact_points specified, but no load_balancing_policy. In the next major version, this will raise an error; please specify a load-balancing policy. (contact_points = ['localhost'], lbp = None)
+2025-06-27 17:38:30,247 [INFO] Using datacenter 'datacenter1' for DCAwareRoundRobinPolicy (via host '127.0.0.1:9042'); if incorrect, please specify a local_dc to the constructor, or limit contact points to local cluster nodes
+2025-06-27 17:38:30,637 [INFO] ⚡ Streaming started with feature extraction...
+2025-06-27 17:38:30,657 [INFO] Callback Server Starting
+2025-06-27 17:38:30,658 [INFO] Socket listening on ('127.0.0.1', 44261)
+2025-06-27 17:38:32,240 [INFO] Python Server ready to receive messages
+2025-06-27 17:38:32,240 [INFO] Received command c on object id p0
+2025-06-27 17:39:07,172 [INFO] Received command c on object id p0
+2025-06-27 17:41:04,098 [INFO] Received command c on object id p0
+2025-06-27 17:42:50,741 [INFO] Received command c on object id p0
+2025-06-27 17:43:39,436 [INFO] Error while receiving.
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 511, in send_command
+    answer = smart_decode(self.stream.readline()[:-1])
+RuntimeError: reentrant call inside <_io.BufferedReader name=4>
+2025-06-27 17:43:39,479 [INFO] Closing down clientserver connection
+2025-06-27 17:43:39,481 [ERROR] Exception while sending command.
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 511, in send_command
+    answer = smart_decode(self.stream.readline()[:-1])
+RuntimeError: reentrant call inside <_io.BufferedReader name=4>
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/java_gateway.py", line 1038, in send_command
+    response = connection.send_command(command)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 539, in send_command
+    raise Py4JNetworkError(
+py4j.protocol.Py4JNetworkError: Error while sending or receiving
+2025-06-27 17:43:39,485 [INFO] Error while receiving.
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 511, in send_command
+    answer = smart_decode(self.stream.readline()[:-1])
+  File "/usr/lib/python3.10/socket.py", line 705, in readinto
+    return self._sock.recv_into(b)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/context.py", line 381, in signal_handler
+    self.cancelAllJobs()
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/context.py", line 2446, in cancelAllJobs
+    self._jsc.sc().cancelAllJobs()
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/java_gateway.py", line 1322, in __call__
+    return_value = get_return_value(
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/errors/exceptions/captured.py", line 179, in deco
+    return f(*a, **kw)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/protocol.py", line 334, in get_return_value
+    raise Py4JError(
+py4j.protocol.Py4JError: An error occurred while calling o30.sc
+2025-06-27 17:43:39,490 [INFO] Closing down clientserver connection
+2025-06-27 17:43:39,490 [ERROR] Exception while sending command.
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 511, in send_command
+    answer = smart_decode(self.stream.readline()[:-1])
+  File "/usr/lib/python3.10/socket.py", line 705, in readinto
+    return self._sock.recv_into(b)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/context.py", line 381, in signal_handler
+    self.cancelAllJobs()
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/context.py", line 2446, in cancelAllJobs
+    self._jsc.sc().cancelAllJobs()
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/java_gateway.py", line 1322, in __call__
+    return_value = get_return_value(
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/errors/exceptions/captured.py", line 179, in deco
+    return f(*a, **kw)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/protocol.py", line 334, in get_return_value
+    raise Py4JError(
+py4j.protocol.Py4JError: An error occurred while calling o30.sc
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/java_gateway.py", line 1038, in send_command
+    response = connection.send_command(command)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 539, in send_command
+    raise Py4JNetworkError(
+py4j.protocol.Py4JNetworkError: Error while sending or receiving
+2025-06-27 17:43:39,491 [INFO] Closing down clientserver connection
+2025-06-27 17:43:40,137 [INFO] Closing down clientserver connection

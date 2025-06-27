@@ -17,35 +17,39 @@ def get_data():
     json_data = load_json("/home/anhkhoa/spark_video_streaming/json/train.json")
     for key, value in json_data.items():
         yield {
-            "idx": str(uuid.uuid4()),  # convert key to UUID
+            "idx": str(uuid.uuid4()),
             "url": value["url"],
             "label": value["label"],
-            "video_encoded": get_encoded_video(value["url"]),
-            "text_embedding": [],
-            "split" : ""
+            # "video_encoded": get_encoded_video(value["url"]),
+            "text_embedding": [0.0],
+            "split": ""
         }
 
 def stream_data():
     try:
-        producer = KafkaProducer(bootstrap_servers=['localhost:9092'], max_block_ms=5000)
-
-
+        producer = KafkaProducer(
+            bootstrap_servers=['localhost:9092'], 
+            acks='all',
+            max_block_ms=5000,
+            max_request_size=15 * 1024 * 1024  # ✅ 15 MB
+        )
     except Exception as e:
         logging.error(f'Kafka connection failed: {e}')
         return
 
-    curr_time = time.time()
     j = 0
     for res in get_data():
-        if time.time() > curr_time + 120:
-            break
         try:
-            producer.send('users_created', json.dumps(res).encode('utf-8'))
-            print(f"Sent data: {j}")
-            j += 1
-            time.sleep(1)  # optional delay
-        except Exception as e:
-            logging.error(f'An error occurred while sending: {e}')
-            continue
+            future = producer.send('users_created', json.dumps(res).encode('utf-8'))
+            future.get(timeout=10)  # Chờ xác nhận gửi thành công
+            print(f"✅ Sent data: {j}")
+        except Exception as send_err:
+            logging.error(f"❌ Failed to send message {j}: {send_err}")
+        j += 1
+        time.sleep(1)
+
+    producer.flush()
+    producer.close()
+    print(f"🚀 Finished sending {j} messages.")
 
 stream_data()

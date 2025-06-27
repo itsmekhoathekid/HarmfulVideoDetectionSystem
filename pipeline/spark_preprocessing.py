@@ -13,8 +13,10 @@ import pandas as pd
 import uuid
 import os
 import base64
-
+import numpy as np
 import logging
+from concurrent.futures import ThreadPoolExecutor
+from functools import partial
 
 # Ghi log vào file
 logging.basicConfig(
@@ -27,44 +29,116 @@ logging.basicConfig(
 )
 
 video_processor = VideoProcessor({
-    "num_frames": 10,
-    "resize": (112, 112),
-    "n_mfcc": 20,
-    "max_length": 20
+    "num_frames": 30,
+    "resize": (224, 224),
+    "n_mfcc": 40,
+    "max_length": 40
 })
+import io
 
-@pandas_udf(ArrayType(FloatType()))
-def extract_video_features(video_strings: pd.Series) -> pd.Series:
-    
+import gzip
+
+def tensor_to_base64(tensor: torch.Tensor) -> str:
+    buffer = io.BytesIO()
+    torch.save(tensor, buffer)
+    compressed = gzip.compress(buffer.getvalue())  # 👈 nén trước khi base64
+    return base64.b64encode(compressed).decode("utf-8")
+
+def base64_to_tensor(b64_str: str) -> torch.Tensor:
+    compressed = base64.b64decode(b64_str)
+    decompressed = gzip.decompress(compressed)
+    buffer = io.BytesIO(decompressed)
+    return torch.load(buffer)
+
+@pandas_udf(StringType())
+def extract_video_features_base64(video_strings: pd.Series) -> pd.Series:
     results = []
+    count = 0
     for video_string in video_strings:
         try:
             tensor = video_processor.process_video_base64(video_string)
-            flat = tensor.flatten().tolist()
         except Exception as e:
-            print(e)
-            flat = [0.0] * (3 * 30 * 224 * 224)
-        results.append(flat)
-    print(f"✅ Processing video: {video_strings}")
+            print(f"❌ Video error: {e}")
+            tensor = torch.zeros((30, 3, 224, 224))
+        results.append(tensor_to_base64(tensor))
+        count += 1
+        logging.info(f"Processed {count}/{len(video_strings)} videos")
+    
     return pd.Series(results)
 
-@pandas_udf(ArrayType(FloatType()))
-def extract_audio_features(video_strings: pd.Series) -> pd.Series:
-
+@pandas_udf(StringType())
+def extract_audio_features_base64(video_strings: pd.Series) -> pd.Series:
     results = []
     for video_string in video_strings:
         try:
             tensor = video_processor.process_audio_base64(video_string)
-            flat = tensor.flatten().tolist()
         except Exception as e:
-            print(e)
-            flat = [0.0] * (40 * 40)
-        results.append(flat)
-    print(f"✅ Processing video: {video_strings}")
+            print(f"❌ Audio error: {e}")
+            tensor = torch.zeros((40, 40))
+        results.append(tensor_to_base64(tensor))
     return pd.Series(results)
 
 
+@pandas_udf(StringType())
+def extract_video_features(video_paths: pd.Series) -> pd.Series:
+    results = []
+    count = 0
+    for path in video_paths:
+        try:
+            tensor = video_processor.process_video(path)
+        except Exception as e:
+            print(f"❌ Video error: {e}")
+            tensor = torch.zeros((30, 3, 224, 224))
+        results.append(tensor_to_base64(tensor))
+        count += 1
+        print(f"[Video processing] {count}/{len(video_paths)} videos at path {path}")
+    
+    return pd.Series(results)
 
+@pandas_udf(StringType())
+def extract_audio_features(video_strings: pd.Series) -> pd.Series:
+    results = []
+    count = 0 
+    for video_string in video_strings:
+        try:
+            tensor = video_processor.process_audio(video_string)
+        except Exception as e:
+            print(f"❌ Audio error: {e}")
+            tensor = torch.zeros((40, 40))
+        results.append(tensor_to_base64(tensor))
+        count += 1
+        print(f"[Video audio] {count}/{len(video_strings)} audio ")
+    return pd.Series(results)
+
+@pandas_udf(StringType())
+def extract_audio_features_base64_parallel(video_strings: pd.Series) -> pd.Series:
+    def process_one(video_string):
+        try:
+            tensor = video_processor.process_audio_base64(video_string)
+        except Exception as e:
+            print(f"❌ Audio error: {e}")
+            tensor = torch.zeros((40, 40))
+        return tensor_to_base64(tensor)
+
+    with ThreadPoolExecutor(max_workers=4) as executor:  # bạn có thể tăng lên tùy CPU
+        results = list(executor.map(process_one, video_strings.tolist()))
+
+    return pd.Series(results)
+
+@pandas_udf(StringType())
+def extract_video_features_base64_parallel(video_strings: pd.Series) -> pd.Series:
+    def process_one(video_string):
+        try:
+            tensor = video_processor.process_video_base64(video_string)
+        except Exception as e:
+            print(f"❌ Audio error: {e}")
+            tensor = torch.zeros((40, 40))
+        return tensor_to_base64(tensor)
+
+    with ThreadPoolExecutor(max_workers=4) as executor:  # bạn có thể tăng lên tùy CPU
+        results = list(executor.map(process_one, video_strings.tolist()))
+
+    return pd.Series(results)
 
 def create_keyspace(session):
     session.execute("""
@@ -82,8 +156,8 @@ def create_table(session):
             id UUID PRIMARY KEY,
             url TEXT,
             label TEXT,
-            video_feat LIST<FLOAT>,
-            audio_feat LIST<FLOAT>,
+            video_feat TEXT,
+            audio_feat TEXT,
             text_embedding LIST<FLOAT>,
             split TEXT
         );
@@ -113,27 +187,35 @@ def create_table(session):
 
 def create_spark_connection():
     s_conn = None
-    try:    
+    try:
         s_conn = SparkSession.builder \
             .appName("SparkVideoStreaming") \
-            .config("spark.jars.packages", "com.datastax.spark:spark-cassandra-connector_2.12:3.4.1,"
-                               "org.apache.spark:spark-sql-kafka-0-10_2.12:3.4.1") \
+            .config("spark.jars.packages",
+                    "com.datastax.spark:spark-cassandra-connector_2.12:3.4.1,"
+                    "org.apache.spark:spark-sql-kafka-0-10_2.12:3.4.1") \
             .config("spark.cassandra.connection.host", "localhost") \
+            .config("spark.executor.memory", "4g") \
+            .config("spark.driver.memory", "4g") \
+            .config("spark.executor.instances", "2") \
+            .config("spark.sql.shuffle.partitions", "2") \
+            .config("spark.default.parallelism", "2") \
             .getOrCreate()
 
         s_conn.sparkContext.setLogLevel("ERROR")
         s_conn.sparkContext.addPyFile("/home/anhkhoa/spark_video_streaming/pipeline/feature_extractor.py")
-        logging.info("Spark connection created successfully.")
+        logging.info("✅ Spark connection created successfully.")
     except Exception as e:
-        logging.error(f"Failed to create Spark connection: {e}")
+        logging.error(f"❌ Failed to create Spark connection: {e}")
     
     return s_conn
+
+
 
 
 def create_cassandra_connection():
     try:
         # connecting to the cassandra cluster
-        cluster = Cluster(['localhost'], protocol_version=5)
+        cluster = Cluster(['localhost'], protocol_version=5, allow_beta_protocol_version=True)
 
         cas_session = cluster.connect()
 
@@ -143,21 +225,15 @@ def create_cassandra_connection():
         return None
 
 
-def connect_to_kafka(spark_conn):
-    spark_df = None
-    try:
-        spark_df = spark_conn.readStream \
-            .format('kafka') \
-            .option('kafka.bootstrap.servers', 'localhost:9092') \
-            .option('subscribe', 'users_created') \
-            .option('startingOffsets', 'earliest') \
-            .option("failOnDataLoss", "false") \
-            .load()
-        logging.info("kafka dataframe created successfully")
-    except Exception as e:
-        logging.warning(f"kafka dataframe could not be created because: {e}")
-
-    return spark_df
+def connect_to_kafka(spark):
+    return (spark.readStream
+        .format("kafka")
+        .option("kafka.bootstrap.servers", "localhost:9092")
+        .option("subscribe", "users_created")
+        .option("startingOffsets", "earliest")
+        .option("maxOffsetsPerTrigger", 10) # ✅ chỉ xử lý 10 record/batch
+        .option("failOnDataLoss", "false")  # ✅ Bỏ qua offset lỗi
+        .load())
 
 from pyspark.sql.functions import udf
 from pyspark.sql.types import StringType, ArrayType, FloatType
@@ -171,7 +247,7 @@ def create_selection_df_from_kafka(spark_df):
             StructField("idx", StringType()),
             StructField("url", StringType()),
             StructField("label", StringType()),
-            StructField("video_encoded", StringType()),
+            # StructField("video_encoded", StringType()),
             StructField("text_embedding", ArrayType(FloatType())),
             StructField("split", StringType())
         ])
@@ -185,10 +261,11 @@ def create_selection_df_from_kafka(spark_df):
         selection_df = selection_df.withColumn("id", col("idx"))  # tạo id
 
         selection_df = selection_df \
-            .withColumn("video_feat", extract_video_features(col("video_encoded"))) \
-            .withColumn("audio_feat", extract_audio_features(col("video_encoded")))
+            .withColumn("video_feat", extract_video_features(col("url"))) \
+            .withColumn("audio_feat", extract_audio_features(col("url")))
 
-        return selection_df.select("id", "url", "label", "video_feat", "audio_feat")  # ✅ chỉ giữ cần thiết
+        logging.info("✅ Selection dataframe created from Kafka stream")
+        return selection_df.select("id", "url", "label", "video_feat", "audio_feat", "split", "text_embedding")  # ✅ chỉ giữ cần thiết
     else:
         logging.warning("❌ No valid Kafka dataframe available")
         return None
@@ -212,6 +289,7 @@ def process_batch(batch_df, batch_id):
         print(f"[Batch ID: {batch_id}] Written to Cassandra.\n")
 
 
+
 if __name__ == "__main__":
     spark_conn = create_spark_connection()
     if spark_conn is not None:
@@ -226,10 +304,21 @@ if __name__ == "__main__":
 
             logging.info("⚡ Streaming started with feature extraction...")
 
+            # streaming_query = (selection_df.writeStream
+            #                    .foreachBatch(process_batch)  # ✅ Thay vì writeStream trực tiếp
+            #                    .option("checkpointLocation", "/tmp/checkpoint-v2")
+            #                    .start())
+
+            # streaming_query = (selection_df.writeStream
+            #        .format("console")
+            #        .option("truncate", "false")
+            #        .start())
+
             streaming_query = (selection_df.writeStream
-                               .foreachBatch(process_batch)  # ✅ Thay vì writeStream trực tiếp
-                               .option("checkpointLocation", "/tmp/checkpoint-v2")
-                               .start())
+                   .foreachBatch(process_batch)
+                   .option("checkpointLocation", "/tmp/checkpoint-v2")
+                   .start())
+
 
             streaming_query.awaitTermination()
         else:

@@ -1967,3 +1967,338 @@ Traceback (most recent call last):
 py4j.protocol.Py4JNetworkError: Error while sending or receiving
 2025-06-27 17:43:39,491 [INFO] Closing down clientserver connection
 2025-06-27 17:43:40,137 [INFO] Closing down clientserver connection
+2025-06-27 17:48:36,892 [INFO] ✅ Spark connection created successfully.
+2025-06-27 17:48:39,350 [INFO] ✅ Selection dataframe created from Kafka stream
+2025-06-27 17:48:39,386 [WARNING] Cluster.__init__ called with contact_points specified, but no load_balancing_policy. In the next major version, this will raise an error; please specify a load-balancing policy. (contact_points = ['localhost'], lbp = None)
+2025-06-27 17:48:39,618 [WARNING] [control connection] Error connecting to 127.0.0.1:9042:
+Traceback (most recent call last):
+  File "cassandra/cluster.py", line 3577, in cassandra.cluster.ControlConnection._reconnect_internal
+  File "cassandra/cluster.py", line 3654, in cassandra.cluster.ControlConnection._try_connect
+  File "cassandra/cluster.py", line 3625, in cassandra.cluster.ControlConnection._try_connect
+  File "cassandra/connection.py", line 1146, in cassandra.connection.Connection.register_watchers
+  File "cassandra/connection.py", line 1082, in cassandra.connection.Connection.wait_for_response
+  File "cassandra/connection.py", line 1129, in cassandra.connection.Connection.wait_for_responses
+  File "cassandra/connection.py", line 1124, in cassandra.connection.Connection.wait_for_responses
+  File "cassandra/connection.py", line 1634, in cassandra.connection.ResponseWaiter.deliver
+cassandra.connection.ConnectionShutdown: CRC mismatch on header 1085. Received 0", computed 6ab8cc.
+2025-06-27 17:48:39,620 [WARNING] Host 127.0.0.1:9042 has been marked down
+2025-06-27 17:48:39,622 [ERROR] Control connection failed to connect, shutting down Cluster:
+Traceback (most recent call last):
+  File "cassandra/cluster.py", line 1740, in cassandra.cluster.Cluster.connect
+  File "cassandra/cluster.py", line 3543, in cassandra.cluster.ControlConnection.connect
+  File "cassandra/cluster.py", line 3588, in cassandra.cluster.ControlConnection._reconnect_internal
+cassandra.cluster.NoHostAvailable: ('Unable to connect to any servers', {'127.0.0.1:9042': ConnectionShutdown('CRC mismatch on header 1085. Received 0", computed 6ab8cc.')})
+2025-06-27 17:48:39,723 [ERROR] Could not create cassandra connection due to ('Unable to connect to any servers', {'127.0.0.1:9042': ConnectionShutdown('CRC mismatch on header 1085. Received 0", computed 6ab8cc.')})
+2025-06-27 17:48:39,723 [INFO] ⚡ Streaming started with feature extraction...
+2025-06-27 17:48:39,745 [INFO] Callback Server Starting
+2025-06-27 17:48:39,746 [INFO] Socket listening on ('127.0.0.1', 44811)
+2025-06-27 17:48:41,628 [INFO] Python Server ready to receive messages
+2025-06-27 17:48:41,628 [INFO] Received command c on object id p0
+2025-06-27 17:49:02,277 [INFO] Received command c on object id p0
+2025-06-27 17:49:35,477 [INFO] Received command c on object id p0
+2025-06-27 17:49:46,877 [ERROR] There was an exception while executing the Python Proxy on the Python Side.
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 617, in _call_proxy
+    return_value = getattr(self.pool[obj_id], method)(*params)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/sql/utils.py", line 120, in call
+    raise e
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/sql/utils.py", line 117, in call
+    self.func(DataFrame(jdf, wrapped_session_jdf), batch_id)
+  File "/home/anhkhoa/spark_video_streaming/pipeline/spark_preprocessing.py", line 288, in process_batch
+    .save()
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/sql/readwriter.py", line 1461, in save
+    self._jwrite.save()
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/java_gateway.py", line 1322, in __call__
+    return_value = get_return_value(
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/errors/exceptions/captured.py", line 185, in deco
+    raise converted from None
+pyspark.errors.exceptions.captured.AnalysisException: Couldn't find spark_streams or any similarly named keyspaces
+2025-06-27 17:49:47,095 [INFO] Closing down clientserver connection
+2025-06-27 17:51:21,280 [INFO] ✅ Spark connection created successfully.
+2025-06-27 17:51:23,465 [INFO] ✅ Selection dataframe created from Kafka stream
+2025-06-27 17:51:23,491 [WARNING] Cluster.__init__ called with contact_points specified, but no load_balancing_policy. In the next major version, this will raise an error; please specify a load-balancing policy. (contact_points = ['localhost'], lbp = None)
+2025-06-27 17:51:23,680 [WARNING] [control connection] Error connecting to 127.0.0.1:9042:
+Traceback (most recent call last):
+  File "cassandra/cluster.py", line 3577, in cassandra.cluster.ControlConnection._reconnect_internal
+  File "cassandra/cluster.py", line 3654, in cassandra.cluster.ControlConnection._try_connect
+  File "cassandra/cluster.py", line 3625, in cassandra.cluster.ControlConnection._try_connect
+  File "cassandra/connection.py", line 1146, in cassandra.connection.Connection.register_watchers
+  File "cassandra/connection.py", line 1082, in cassandra.connection.Connection.wait_for_response
+  File "cassandra/connection.py", line 1129, in cassandra.connection.Connection.wait_for_responses
+  File "cassandra/connection.py", line 1124, in cassandra.connection.Connection.wait_for_responses
+  File "cassandra/connection.py", line 1634, in cassandra.connection.ResponseWaiter.deliver
+cassandra.connection.ConnectionShutdown: CRC mismatch on header 1085. Received 0", computed 6ab8cc.
+2025-06-27 17:51:23,682 [WARNING] Host 127.0.0.1:9042 has been marked down
+2025-06-27 17:51:23,683 [ERROR] Control connection failed to connect, shutting down Cluster:
+Traceback (most recent call last):
+  File "cassandra/cluster.py", line 1740, in cassandra.cluster.Cluster.connect
+  File "cassandra/cluster.py", line 3543, in cassandra.cluster.ControlConnection.connect
+  File "cassandra/cluster.py", line 3588, in cassandra.cluster.ControlConnection._reconnect_internal
+cassandra.cluster.NoHostAvailable: ('Unable to connect to any servers', {'127.0.0.1:9042': ConnectionShutdown('CRC mismatch on header 1085. Received 0", computed 6ab8cc.')})
+2025-06-27 17:51:23,785 [ERROR] Could not create cassandra connection due to ('Unable to connect to any servers', {'127.0.0.1:9042': ConnectionShutdown('CRC mismatch on header 1085. Received 0", computed 6ab8cc.')})
+2025-06-27 17:51:23,785 [INFO] ⚡ Streaming started with feature extraction...
+2025-06-27 17:51:23,821 [INFO] Callback Server Starting
+2025-06-27 17:51:23,821 [INFO] Socket listening on ('127.0.0.1', 33459)
+2025-06-27 17:51:25,470 [INFO] Python Server ready to receive messages
+2025-06-27 17:51:25,470 [INFO] Received command c on object id p0
+2025-06-27 17:51:47,444 [ERROR] There was an exception while executing the Python Proxy on the Python Side.
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 617, in _call_proxy
+    return_value = getattr(self.pool[obj_id], method)(*params)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/sql/utils.py", line 120, in call
+    raise e
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/sql/utils.py", line 117, in call
+    self.func(DataFrame(jdf, wrapped_session_jdf), batch_id)
+  File "/home/anhkhoa/spark_video_streaming/pipeline/spark_preprocessing.py", line 288, in process_batch
+    .save()
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/sql/readwriter.py", line 1461, in save
+    self._jwrite.save()
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/java_gateway.py", line 1322, in __call__
+    return_value = get_return_value(
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/errors/exceptions/captured.py", line 185, in deco
+    raise converted from None
+pyspark.errors.exceptions.captured.AnalysisException: Couldn't find spark_streams or any similarly named keyspaces
+2025-06-27 17:51:47,674 [INFO] Closing down clientserver connection
+2025-06-27 17:53:28,505 [INFO] ✅ Spark connection created successfully.
+2025-06-27 17:53:30,674 [INFO] ✅ Selection dataframe created from Kafka stream
+2025-06-27 17:53:30,698 [WARNING] Cluster.__init__ called with contact_points specified, but no load_balancing_policy. In the next major version, this will raise an error; please specify a load-balancing policy. (contact_points = ['localhost'], lbp = None)
+2025-06-27 17:53:30,898 [WARNING] [control connection] Error connecting to 127.0.0.1:9042:
+Traceback (most recent call last):
+  File "cassandra/cluster.py", line 3577, in cassandra.cluster.ControlConnection._reconnect_internal
+  File "cassandra/cluster.py", line 3654, in cassandra.cluster.ControlConnection._try_connect
+  File "cassandra/cluster.py", line 3625, in cassandra.cluster.ControlConnection._try_connect
+  File "cassandra/connection.py", line 1146, in cassandra.connection.Connection.register_watchers
+  File "cassandra/connection.py", line 1082, in cassandra.connection.Connection.wait_for_response
+  File "cassandra/connection.py", line 1129, in cassandra.connection.Connection.wait_for_responses
+  File "cassandra/connection.py", line 1124, in cassandra.connection.Connection.wait_for_responses
+  File "cassandra/connection.py", line 1634, in cassandra.connection.ResponseWaiter.deliver
+cassandra.connection.ConnectionShutdown: CRC mismatch on header 1085. Received 0", computed 6ab8cc.
+2025-06-27 17:53:30,902 [WARNING] Host 127.0.0.1:9042 has been marked down
+2025-06-27 17:53:30,902 [ERROR] Control connection failed to connect, shutting down Cluster:
+Traceback (most recent call last):
+  File "cassandra/cluster.py", line 1740, in cassandra.cluster.Cluster.connect
+  File "cassandra/cluster.py", line 3543, in cassandra.cluster.ControlConnection.connect
+  File "cassandra/cluster.py", line 3588, in cassandra.cluster.ControlConnection._reconnect_internal
+cassandra.cluster.NoHostAvailable: ('Unable to connect to any servers', {'127.0.0.1:9042': ConnectionShutdown('CRC mismatch on header 1085. Received 0", computed 6ab8cc.')})
+2025-06-27 17:53:31,006 [ERROR] Could not create cassandra connection due to ('Unable to connect to any servers', {'127.0.0.1:9042': ConnectionShutdown('CRC mismatch on header 1085. Received 0", computed 6ab8cc.')})
+2025-06-27 17:53:31,006 [INFO] ⚡ Streaming started with feature extraction...
+2025-06-27 17:53:31,029 [INFO] Callback Server Starting
+2025-06-27 17:53:31,029 [INFO] Socket listening on ('127.0.0.1', 37701)
+2025-06-27 17:53:30,468 [INFO] Python Server ready to receive messages
+2025-06-27 17:53:30,468 [INFO] Received command c on object id p0
+2025-06-27 17:53:40,882 [INFO] Error while receiving.
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 511, in send_command
+    answer = smart_decode(self.stream.readline()[:-1])
+RuntimeError: reentrant call inside <_io.BufferedReader name=4>
+2025-06-27 17:53:40,884 [INFO] Closing down clientserver connection
+2025-06-27 17:53:40,884 [ERROR] Exception while sending command.
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 511, in send_command
+    answer = smart_decode(self.stream.readline()[:-1])
+RuntimeError: reentrant call inside <_io.BufferedReader name=4>
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/java_gateway.py", line 1038, in send_command
+    response = connection.send_command(command)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 539, in send_command
+    raise Py4JNetworkError(
+py4j.protocol.Py4JNetworkError: Error while sending or receiving
+2025-06-27 17:53:40,886 [INFO] Error while receiving.
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 511, in send_command
+    answer = smart_decode(self.stream.readline()[:-1])
+  File "/usr/lib/python3.10/socket.py", line 705, in readinto
+    return self._sock.recv_into(b)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/context.py", line 381, in signal_handler
+    self.cancelAllJobs()
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/context.py", line 2446, in cancelAllJobs
+    self._jsc.sc().cancelAllJobs()
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/java_gateway.py", line 1322, in __call__
+    return_value = get_return_value(
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/errors/exceptions/captured.py", line 179, in deco
+    return f(*a, **kw)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/protocol.py", line 334, in get_return_value
+    raise Py4JError(
+py4j.protocol.Py4JError: An error occurred while calling o30.sc
+2025-06-27 17:53:40,889 [INFO] Closing down clientserver connection
+2025-06-27 17:53:40,889 [ERROR] Exception while sending command.
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 511, in send_command
+    answer = smart_decode(self.stream.readline()[:-1])
+  File "/usr/lib/python3.10/socket.py", line 705, in readinto
+    return self._sock.recv_into(b)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/context.py", line 381, in signal_handler
+    self.cancelAllJobs()
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/context.py", line 2446, in cancelAllJobs
+    self._jsc.sc().cancelAllJobs()
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/java_gateway.py", line 1322, in __call__
+    return_value = get_return_value(
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/errors/exceptions/captured.py", line 179, in deco
+    return f(*a, **kw)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/protocol.py", line 334, in get_return_value
+    raise Py4JError(
+py4j.protocol.Py4JError: An error occurred while calling o30.sc
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/java_gateway.py", line 1038, in send_command
+    response = connection.send_command(command)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 539, in send_command
+    raise Py4JNetworkError(
+py4j.protocol.Py4JNetworkError: Error while sending or receiving
+2025-06-27 17:53:40,890 [INFO] Closing down clientserver connection
+2025-06-27 17:53:40,906 [INFO] Closing down clientserver connection
+2025-06-27 17:56:14,405 [INFO] ✅ Spark connection created successfully.
+2025-06-27 17:56:16,393 [INFO] ✅ Selection dataframe created from Kafka stream
+2025-06-27 17:56:26,432 [ERROR] Could not create cassandra connection due to {}
+2025-06-27 17:56:26,432 [INFO] ⚡ Streaming started with feature extraction...
+2025-06-27 17:56:26,462 [INFO] Callback Server Starting
+2025-06-27 17:56:26,462 [INFO] Socket listening on ('127.0.0.1', 41131)
+2025-06-27 17:56:28,061 [INFO] Python Server ready to receive messages
+2025-06-27 17:56:28,062 [INFO] Received command c on object id p0
+2025-06-27 17:56:55,115 [ERROR] There was an exception while executing the Python Proxy on the Python Side.
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 617, in _call_proxy
+    return_value = getattr(self.pool[obj_id], method)(*params)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/sql/utils.py", line 120, in call
+    raise e
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/sql/utils.py", line 117, in call
+    self.func(DataFrame(jdf, wrapped_session_jdf), batch_id)
+  File "/home/anhkhoa/spark_video_streaming/pipeline/spark_preprocessing.py", line 288, in process_batch
+    .save()
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/sql/readwriter.py", line 1461, in save
+    self._jwrite.save()
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/java_gateway.py", line 1322, in __call__
+    return_value = get_return_value(
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/errors/exceptions/captured.py", line 185, in deco
+    raise converted from None
+pyspark.errors.exceptions.captured.AnalysisException: Couldn't find spark_streams or any similarly named keyspaces
+2025-06-27 17:56:55,661 [INFO] Closing down clientserver connection
+2025-06-27 17:58:34,223 [INFO] ✅ Spark connection created successfully.
+2025-06-27 17:58:36,210 [INFO] ✅ Selection dataframe created from Kafka stream
+2025-06-27 17:58:36,246 [WARNING] Cluster.__init__ called with contact_points specified, but no load_balancing_policy. In the next major version, this will raise an error; please specify a load-balancing policy. (contact_points = ['localhost'], lbp = None)
+2025-06-27 17:58:36,468 [WARNING] [control connection] Error connecting to 127.0.0.1:9042:
+Traceback (most recent call last):
+  File "cassandra/cluster.py", line 3577, in cassandra.cluster.ControlConnection._reconnect_internal
+  File "cassandra/cluster.py", line 3654, in cassandra.cluster.ControlConnection._try_connect
+  File "cassandra/cluster.py", line 3625, in cassandra.cluster.ControlConnection._try_connect
+  File "cassandra/connection.py", line 1146, in cassandra.connection.Connection.register_watchers
+  File "cassandra/connection.py", line 1082, in cassandra.connection.Connection.wait_for_response
+  File "cassandra/connection.py", line 1129, in cassandra.connection.Connection.wait_for_responses
+  File "cassandra/connection.py", line 1124, in cassandra.connection.Connection.wait_for_responses
+  File "cassandra/connection.py", line 1634, in cassandra.connection.ResponseWaiter.deliver
+cassandra.connection.ConnectionShutdown: CRC mismatch on header 1085. Received 0", computed 6ab8cc.
+2025-06-27 17:58:36,470 [WARNING] Host 127.0.0.1:9042 has been marked down
+2025-06-27 17:58:36,470 [ERROR] Control connection failed to connect, shutting down Cluster:
+Traceback (most recent call last):
+  File "cassandra/cluster.py", line 1740, in cassandra.cluster.Cluster.connect
+  File "cassandra/cluster.py", line 3543, in cassandra.cluster.ControlConnection.connect
+  File "cassandra/cluster.py", line 3588, in cassandra.cluster.ControlConnection._reconnect_internal
+cassandra.cluster.NoHostAvailable: ('Unable to connect to any servers', {'127.0.0.1:9042': ConnectionShutdown('CRC mismatch on header 1085. Received 0", computed 6ab8cc.')})
+2025-06-27 17:58:36,571 [ERROR] Could not create cassandra connection due to ('Unable to connect to any servers', {'127.0.0.1:9042': ConnectionShutdown('CRC mismatch on header 1085. Received 0", computed 6ab8cc.')})
+2025-06-27 17:58:36,572 [INFO] ⚡ Streaming started with feature extraction...
+2025-06-27 17:58:36,587 [INFO] Callback Server Starting
+2025-06-27 17:58:36,588 [INFO] Socket listening on ('127.0.0.1', 42663)
+2025-06-27 17:58:38,343 [INFO] Python Server ready to receive messages
+2025-06-27 17:58:38,343 [INFO] Received command c on object id p0
+2025-06-27 17:59:03,171 [ERROR] There was an exception while executing the Python Proxy on the Python Side.
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 617, in _call_proxy
+    return_value = getattr(self.pool[obj_id], method)(*params)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/sql/utils.py", line 120, in call
+    raise e
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/sql/utils.py", line 117, in call
+    self.func(DataFrame(jdf, wrapped_session_jdf), batch_id)
+  File "/home/anhkhoa/spark_video_streaming/pipeline/spark_preprocessing.py", line 288, in process_batch
+    .save()
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/sql/readwriter.py", line 1461, in save
+    self._jwrite.save()
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/java_gateway.py", line 1322, in __call__
+    return_value = get_return_value(
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/errors/exceptions/captured.py", line 185, in deco
+    raise converted from None
+pyspark.errors.exceptions.captured.AnalysisException: Couldn't find spark_streams.created_users or any similarly named keyspace and table pairs
+2025-06-27 17:59:03,416 [INFO] Closing down clientserver connection
+2025-06-27 18:01:55,637 [INFO] ✅ Spark connection created successfully.
+2025-06-27 18:01:57,317 [INFO] ✅ Selection dataframe created from Kafka stream
+2025-06-27 18:01:57,341 [WARNING] Cluster.__init__ called with contact_points specified, but no load_balancing_policy. In the next major version, this will raise an error; please specify a load-balancing policy. (contact_points = ['localhost'], lbp = None)
+2025-06-27 18:01:57,525 [INFO] Using datacenter 'datacenter1' for DCAwareRoundRobinPolicy (via host '127.0.0.1:9042'); if incorrect, please specify a local_dc to the constructor, or limit contact points to local cluster nodes
+2025-06-27 18:01:57,927 [INFO] ⚡ Streaming started with feature extraction...
+2025-06-27 18:01:57,941 [INFO] Callback Server Starting
+2025-06-27 18:01:57,942 [INFO] Socket listening on ('127.0.0.1', 41535)
+2025-06-27 18:01:59,353 [INFO] Python Server ready to receive messages
+2025-06-27 18:01:59,353 [INFO] Received command c on object id p0
+2025-06-27 18:02:21,825 [INFO] Received command c on object id p0
+2025-06-27 18:03:59,406 [INFO] Received command c on object id p0
+2025-06-27 18:05:38,118 [INFO] Received command c on object id p0
+2025-06-27 18:07:09,882 [INFO] Received command c on object id p0
+2025-06-27 18:08:32,833 [INFO] Received command c on object id p0
+2025-06-27 18:09:43,464 [INFO] Error while receiving.
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 511, in send_command
+    answer = smart_decode(self.stream.readline()[:-1])
+RuntimeError: reentrant call inside <_io.BufferedReader name=4>
+2025-06-27 18:09:43,572 [INFO] Closing down clientserver connection
+2025-06-27 18:09:43,573 [ERROR] Exception while sending command.
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 511, in send_command
+    answer = smart_decode(self.stream.readline()[:-1])
+RuntimeError: reentrant call inside <_io.BufferedReader name=4>
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/java_gateway.py", line 1038, in send_command
+    response = connection.send_command(command)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 539, in send_command
+    raise Py4JNetworkError(
+py4j.protocol.Py4JNetworkError: Error while sending or receiving
+2025-06-27 18:09:43,591 [INFO] Error while receiving.
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 511, in send_command
+    answer = smart_decode(self.stream.readline()[:-1])
+  File "/usr/lib/python3.10/socket.py", line 705, in readinto
+    return self._sock.recv_into(b)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/context.py", line 381, in signal_handler
+    self.cancelAllJobs()
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/context.py", line 2446, in cancelAllJobs
+    self._jsc.sc().cancelAllJobs()
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/java_gateway.py", line 1322, in __call__
+    return_value = get_return_value(
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/errors/exceptions/captured.py", line 179, in deco
+    return f(*a, **kw)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/protocol.py", line 334, in get_return_value
+    raise Py4JError(
+py4j.protocol.Py4JError: An error occurred while calling o30.sc
+2025-06-27 18:09:43,604 [INFO] Closing down clientserver connection
+2025-06-27 18:09:43,604 [ERROR] Exception while sending command.
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 511, in send_command
+    answer = smart_decode(self.stream.readline()[:-1])
+  File "/usr/lib/python3.10/socket.py", line 705, in readinto
+    return self._sock.recv_into(b)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/context.py", line 381, in signal_handler
+    self.cancelAllJobs()
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/context.py", line 2446, in cancelAllJobs
+    self._jsc.sc().cancelAllJobs()
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/java_gateway.py", line 1322, in __call__
+    return_value = get_return_value(
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/errors/exceptions/captured.py", line 179, in deco
+    return f(*a, **kw)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/protocol.py", line 334, in get_return_value
+    raise Py4JError(
+py4j.protocol.Py4JError: An error occurred while calling o30.sc
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/java_gateway.py", line 1038, in send_command
+    response = connection.send_command(command)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 539, in send_command
+    raise Py4JNetworkError(
+py4j.protocol.Py4JNetworkError: Error while sending or receiving
+2025-06-27 18:09:43,605 [INFO] Closing down clientserver connection

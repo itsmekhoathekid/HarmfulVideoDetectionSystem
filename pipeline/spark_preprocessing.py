@@ -215,7 +215,7 @@ def create_spark_connection():
 def create_cassandra_connection():
     try:
         # connecting to the cassandra cluster
-        cluster = Cluster(['localhost'], protocol_version=5, allow_beta_protocol_version=True)
+        cluster = Cluster(['localhost'], protocol_version=4, allow_beta_protocol_version=True)
 
         cas_session = cluster.connect()
 
@@ -303,16 +303,6 @@ if __name__ == "__main__":
                 create_table(session)
 
             logging.info("⚡ Streaming started with feature extraction...")
-
-            # streaming_query = (selection_df.writeStream
-            #                    .foreachBatch(process_batch)  # ✅ Thay vì writeStream trực tiếp
-            #                    .option("checkpointLocation", "/tmp/checkpoint-v2")
-            #                    .start())
-
-            # streaming_query = (selection_df.writeStream
-            #        .format("console")
-            #        .option("truncate", "false")
-            #        .start())
 
             streaming_query = (selection_df.writeStream
                    .foreachBatch(process_batch)

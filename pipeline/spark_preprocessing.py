@@ -153,7 +153,7 @@ def create_table(session):
     session.execute("DROP TABLE IF EXISTS spark_streams.created_users")
     session.execute("""
         CREATE TABLE IF NOT EXISTS spark_streams.created_users (
-            id UUID PRIMARY KEY,
+            id TEXT PRIMARY KEY,
             url TEXT,
             label TEXT,
             video_feat TEXT,
@@ -231,7 +231,7 @@ def connect_to_kafka(spark):
         .option("kafka.bootstrap.servers", "localhost:9092")
         .option("subscribe", "users_created")
         .option("startingOffsets", "earliest")
-        .option("maxOffsetsPerTrigger", 10) # ✅ chỉ xử lý 10 record/batch
+        .option("maxOffsetsPerTrigger", 3) # ✅ chỉ xử lý 10 record/batch
         .option("failOnDataLoss", "false")  # ✅ Bỏ qua offset lỗi
         .load())
 
@@ -274,19 +274,24 @@ def create_selection_df_from_kafka(spark_df):
 
 
 def process_batch(batch_df, batch_id):
+    print(f"[Batch ID: {batch_id}] Received batch with {batch_df.count()} rows")
     from pyspark.sql.functions import col
 
     if not batch_df.rdd.isEmpty():
+        print(f"[Batch ID: {batch_id}] Row count: {batch_df.count()}")
+        try:
+            batch_df.write \
+                .format("org.apache.spark.sql.cassandra") \
+                .option("keyspace", "spark_streams") \
+                .option("table", "created_users") \
+                .mode("append") \
+                .save()
+            print(f"[Batch ID: {batch_id}] ✅ Written to Cassandra.\n")
+        except Exception as e:
+            print(f"[Batch ID: {batch_id}] ❌ Failed to write to Cassandra: {e}")
+    else:
+        print(f"[Batch ID: {batch_id}] ⚠️ No data to write to Cassandra.\n")
 
-
-        # Ghi vào Cassandra
-        batch_df.write \
-            .format("org.apache.spark.sql.cassandra") \
-            .option("keyspace", "spark_streams") \
-            .option("table", "created_users") \
-            .mode("append") \
-            .save()
-        print(f"[Batch ID: {batch_id}] Written to Cassandra.\n")
 
 
 
@@ -307,6 +312,7 @@ if __name__ == "__main__":
             streaming_query = (selection_df.writeStream
                    .foreachBatch(process_batch)
                    .option("checkpointLocation", "/tmp/checkpoint-v2")
+                   .trigger(processingTime="5 seconds")
                    .start())
 
 

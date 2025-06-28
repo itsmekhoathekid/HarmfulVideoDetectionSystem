@@ -1,4 +1,4 @@
-from utils import moving_files, rename_files, split_videos, create_json
+from spark_video_streaming.utils.utils import moving_files, rename_files, split_videos, create_json
 
 # source_dir = "/home/anhkhoa/spark_video_streaming/data"
 # dest_dir = "/home/anhkhoa/spark_video_streaming/data_folder/video"

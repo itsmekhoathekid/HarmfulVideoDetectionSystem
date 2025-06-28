@@ -2,6 +2,10 @@ import os
 import shutil
 import random
 from pathlib import Path
+import io
+import gzip
+import torch
+import base64
 
 # source_path = os.path.join(source_dir, filename)
 #         target_path = os.path.join(target_dir, filename)
@@ -145,3 +149,15 @@ def load_json(json_path):
     with open(json_path, "r") as f:
         data = json.load(f)
     return data
+
+def tensor_to_base64(tensor: torch.Tensor) -> str:
+    buffer = io.BytesIO()
+    torch.save(tensor, buffer)
+    compressed = gzip.compress(buffer.getvalue())  # 👈 nén trước khi base64
+    return base64.b64encode(compressed).decode("utf-8")
+
+def base64_to_tensor(b64_str: str) -> torch.Tensor:
+    compressed = base64.b64decode(b64_str)
+    decompressed = gzip.decompress(compressed)
+    buffer = io.BytesIO(decompressed)
+    return torch.load(buffer)

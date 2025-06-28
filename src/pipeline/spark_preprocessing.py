@@ -17,6 +17,7 @@ import numpy as np
 import logging
 from concurrent.futures import ThreadPoolExecutor
 from functools import partial
+from utils import tensor_to_base64
 
 # Ghi log vào file
 logging.basicConfig(
@@ -34,21 +35,7 @@ video_processor = VideoProcessor({
     "n_mfcc": 40,
     "max_length": 40
 })
-import io
 
-import gzip
-
-def tensor_to_base64(tensor: torch.Tensor) -> str:
-    buffer = io.BytesIO()
-    torch.save(tensor, buffer)
-    compressed = gzip.compress(buffer.getvalue())  # 👈 nén trước khi base64
-    return base64.b64encode(compressed).decode("utf-8")
-
-def base64_to_tensor(b64_str: str) -> torch.Tensor:
-    compressed = base64.b64decode(b64_str)
-    decompressed = gzip.decompress(compressed)
-    buffer = io.BytesIO(decompressed)
-    return torch.load(buffer)
 
 @pandas_udf(StringType())
 def extract_video_features_base64(video_strings: pd.Series) -> pd.Series:
@@ -150,7 +137,7 @@ def create_keyspace(session):
 
 
 def create_table(session):
-    session.execute("DROP TABLE IF EXISTS spark_streams.created_users")
+    # session.execute("DROP TABLE IF EXISTS spark_streams.created_users")
     session.execute("""
         CREATE TABLE IF NOT EXISTS spark_streams.created_users (
             id TEXT PRIMARY KEY,
@@ -163,7 +150,7 @@ def create_table(session):
         );
     """)
     print("Table created successfully!")
-
+    
 
 
 # def insert_data(session, **kwargs):
@@ -202,7 +189,7 @@ def create_spark_connection():
             .getOrCreate()
 
         s_conn.sparkContext.setLogLevel("ERROR")
-        s_conn.sparkContext.addPyFile("/home/anhkhoa/spark_video_streaming/pipeline/feature_extractor.py")
+        s_conn.sparkContext.addPyFile("/home/anhkhoa/spark_video_streaming/src/pipeline/feature_extractor.py")
         logging.info("✅ Spark connection created successfully.")
     except Exception as e:
         logging.error(f"❌ Failed to create Spark connection: {e}")
@@ -230,7 +217,7 @@ def connect_to_kafka(spark):
         .format("kafka")
         .option("kafka.bootstrap.servers", "localhost:9092")
         .option("subscribe", "users_created")
-        .option("startingOffsets", "earliest")
+        .option("startingOffsets", "latest")
         .option("maxOffsetsPerTrigger", 3) # ✅ chỉ xử lý 10 record/batch
         .option("failOnDataLoss", "false")  # ✅ Bỏ qua offset lỗi
         .load())
@@ -312,7 +299,7 @@ if __name__ == "__main__":
             streaming_query = (selection_df.writeStream
                    .foreachBatch(process_batch)
                    .option("checkpointLocation", "/tmp/checkpoint-v2")
-                   .trigger(processingTime="5 seconds")
+                #    .trigger(processingTime="5 seconds")
                    .start())
 
 

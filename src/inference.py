@@ -5,7 +5,6 @@ from pyspark.sql import SparkSession
 
 
 
-
 import logging
 
 
@@ -21,10 +20,15 @@ import pandas as pd
 import uuid
 import os
 import base64
-
+import gzip
 import logging
 
-# Đọc dữ liệu từ Kafka
+
+import sys
+sys.path.append("/home/anhkhoa/spark_video_streaming/src")  
+
+
+
 schema = StructType([
             StructField("label", StringType()),
             StructField("video_name", StringType()),
@@ -39,21 +43,22 @@ s_conn = SparkSession.builder \
             "com.datastax.spark:spark-cassandra-connector_2.12:3.4.1,"
             "org.apache.spark:spark-sql-kafka-0-10_2.12:3.4.1") \
     .config("spark.cassandra.connection.host", "localhost") \
-    .config("spark.executor.memory", "4g") \
-    .config("spark.driver.memory", "4g") \
+    .config("spark.executor.memory", "6g") \
+    .config("spark.driver.memory", "6g") \
     .config("spark.executor.instances", "2") \
     .config("spark.sql.shuffle.partitions", "2") \
     .config("spark.default.parallelism", "2") \
     .getOrCreate()
 
 s_conn.sparkContext.setLogLevel("ERROR")
+s_conn.sparkContext.addPyFile("/home/anhkhoa/spark_video_streaming/src/pipeline/feature_extractor.py")
 
 # Đọc dữ liệu từ Cassandra vào DataFrame
 df = s_conn.readStream \
     .format("kafka") \
     .option("kafka.bootstrap.servers", "localhost:9092") \
     .option("subscribe", "data-test") \
-    .option("startingOffsets", "latest") \
+    .option("startingOffsets", "earliest") \
     .option("maxOffsetsPerTrigger", 1) \
     .option("failOnDataLoss", "false") \
     .load()
@@ -68,36 +73,47 @@ video_processor = VideoProcessor({
 })
 
 
+def base64_to_tensor(b64_str: str) -> torch.Tensor:
+    compressed = base64.b64decode(b64_str)
+    decompressed = gzip.decompress(compressed)
+    buffer = io.BytesIO(decompressed)
+    return torch.load(buffer)
+
+def tensor_to_base64(tensor: torch.Tensor) -> str:
+    buffer = io.BytesIO()
+    torch.save(tensor, buffer)
+    compressed = gzip.compress(buffer.getvalue())  # 👈 nén trước khi base64
+    return base64.b64encode(compressed).decode("utf-8")
+
 @pandas_udf(StringType())
-def extract_video_features(video_paths: pd.Series) -> pd.Series:
+def extract_video_features_base64(video_strings: pd.Series) -> pd.Series:
     results = []
     count = 0
-    for path in video_paths:
+    for video_string in video_strings:
         try:
-            tensor = video_processor.process_video(path)
+            tensor = video_processor.process_video_base64(video_string)
         except Exception as e:
             print(f"❌ Video error: {e}")
             tensor = torch.zeros((30, 3, 224, 224))
+        results.append(tensor_to_base64(tensor))
         count += 1
-        print(f"[Video processing] {count}/{len(video_paths)} videos at path {path}")
-        results.append(tensor)
-    
+        logging.info(f"Processed {count}/{len(video_strings)} videos")
+
     return pd.Series(results)
 
+
 @pandas_udf(StringType())
-def extract_audio_features(video_strings: pd.Series) -> pd.Series:
+def extract_audio_features_base64(video_strings: pd.Series) -> pd.Series:
     results = []
-    count = 0 
     for video_string in video_strings:
         try:
-            tensor = video_processor.process_audio(video_string)
+            tensor = video_processor.process_audio_base64(video_string)
         except Exception as e:
             print(f"❌ Audio error: {e}")
             tensor = torch.zeros((40, 40))
-        count += 1
-        print(f"[Video audio] {count}/{len(video_strings)} audio ")
-        results.append(tensor)
+        results.append(tensor_to_base64(tensor))
     return pd.Series(results)
+
 
 import torch
 import torchvision.transforms as transforms
@@ -146,13 +162,16 @@ def map_class_idx(pred_class: int):
 @pandas_udf("string")
 def predict_label_udf(video_feats: pd.Series, audio_feats: pd.Series, text_embeds: pd.Series) -> pd.Series:
     preds = []
+    model.to(device)
     model.eval()
-
+    print("Predicting labels...")
     for v_feat, a_feat, t_embed in zip(video_feats, audio_feats, text_embeds):
         try:
             # Convert list -> tensor
-            a = a_feat.unsqueeze(0).to(device)
-            v = v_feat.unsqueeze(0).to(device)
+            # a = a_feat.unsqueeze(0).to(device)
+            # v = v_feat.unsqueeze(0).to(device)
+            a = base64_to_tensor(a_feat).unsqueeze(0).to(device)
+            v = base64_to_tensor(v_feat).unsqueeze(0).to(device)
             t = torch.tensor(t_embed, dtype=torch.float)
             t = t.unsqueeze(0).to(device)
 
@@ -167,6 +186,7 @@ def predict_label_udf(video_feats: pd.Series, audio_feats: pd.Series, text_embed
             preds.append("unknown")  # fallback
 
     return pd.Series(preds)
+
 
 
 # Đọc dữ liệu từ Kafka
@@ -190,8 +210,8 @@ print("Schema of selection_df:")
 selection_df.printSchema()
 
 final_df = selection_df \
-            .withColumn("video_feat", extract_video_features(col("video_data"))) \
-            .withColumn("audio_feat", extract_audio_features(col("video_data")))
+            .withColumn("video_feat", extract_video_features_base64(col("video_data"))) \
+            .withColumn("audio_feat", extract_audio_features_base64(col("video_data")))
 
 
 with_prediction = final_df.withColumn(

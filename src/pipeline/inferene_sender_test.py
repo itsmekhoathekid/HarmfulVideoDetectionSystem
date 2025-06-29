@@ -52,9 +52,8 @@ for key, value in data.items():
 
 
     label = value["label"]
-    full_path = value["url"]  # ví dụ: /home/anhkhoa/spark_video_streaming/data/train/superstitious/0102.mp4
-
-    # Đọc video và encode
+    full_path = value["url"]  
+    
     try:
         with open(full_path, 'rb') as f:
             video_bytes = f.read()

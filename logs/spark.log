@@ -585,3 +585,353 @@ Traceback (most recent call last):
     raise Py4JNetworkError(
 py4j.protocol.Py4JNetworkError: Error while sending or receiving
 2025-06-28 15:50:48,490 [INFO] Closing down clientserver connection
+2025-06-30 00:47:52,519 [INFO] ✅ Spark connection created successfully.
+2025-06-30 00:47:55,708 [INFO] ✅ Selection dataframe created from Kafka stream
+2025-06-30 00:47:55,766 [WARNING] Cluster.__init__ called with contact_points specified, but no load_balancing_policy. In the next major version, this will raise an error; please specify a load-balancing policy. (contact_points = ['localhost'], lbp = None)
+2025-06-30 00:47:56,255 [INFO] Using datacenter 'datacenter1' for DCAwareRoundRobinPolicy (via host '127.0.0.1:9042'); if incorrect, please specify a local_dc to the constructor, or limit contact points to local cluster nodes
+2025-06-30 00:47:56,307 [INFO] ⚡ Streaming started with feature extraction...
+2025-06-30 00:47:56,326 [INFO] Callback Server Starting
+2025-06-30 00:47:56,327 [INFO] Socket listening on ('127.0.0.1', 40945)
+2025-06-30 00:50:35,144 [INFO] Closing down clientserver connection
+2025-06-30 00:52:04,629 [INFO] ✅ Spark connection created successfully.
+2025-06-30 00:52:04,914 [INFO] ✅ Selection dataframe created from Kafka stream
+2025-06-30 00:52:04,951 [WARNING] Cluster.__init__ called with contact_points specified, but no load_balancing_policy. In the next major version, this will raise an error; please specify a load-balancing policy. (contact_points = ['localhost'], lbp = None)
+2025-06-30 00:52:05,254 [INFO] Using datacenter 'datacenter1' for DCAwareRoundRobinPolicy (via host '127.0.0.1:9042'); if incorrect, please specify a local_dc to the constructor, or limit contact points to local cluster nodes
+2025-06-30 00:52:05,307 [INFO] ⚡ Streaming started with feature extraction...
+2025-06-30 00:52:05,331 [INFO] Callback Server Starting
+2025-06-30 00:52:05,332 [INFO] Socket listening on ('127.0.0.1', 46009)
+2025-06-30 00:52:08,216 [INFO] Python Server ready to receive messages
+2025-06-30 00:52:08,216 [INFO] Received command c on object id p0
+2025-06-30 00:52:09,214 [INFO] Received command c on object id p0
+2025-06-30 00:52:28,289 [ERROR] There was an exception while executing the Python Proxy on the Python Side.
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 617, in _call_proxy
+    return_value = getattr(self.pool[obj_id], method)(*params)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/sql/utils.py", line 120, in call
+    raise e
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/sql/utils.py", line 117, in call
+    self.func(DataFrame(jdf, wrapped_session_jdf), batch_id)
+  File "/home/anhkhoa/spark_video_streaming/src/pipeline/spark_preprocessing.py", line 265, in process_batch
+    print(f"[Batch ID: {batch_id}] Received batch with {batch_df.count()} rows")
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/sql/dataframe.py", line 1240, in count
+    return int(self._jdf.count())
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/java_gateway.py", line 1322, in __call__
+    return_value = get_return_value(
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/errors/exceptions/captured.py", line 185, in deco
+    raise converted from None
+pyspark.errors.exceptions.captured.PythonException: 
+  An exception was thrown from the Python worker. Please see the stack trace below.
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/python/lib/pyspark.zip/pyspark/worker.py", line 1231, in main
+    func, profiler, deserializer, serializer = read_udfs(pickleSer, infile, eval_type)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/python/lib/pyspark.zip/pyspark/worker.py", line 1067, in read_udfs
+    udfs.append(read_single_udf(pickleSer, infile, eval_type, runner_conf, udf_index=i))
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/python/lib/pyspark.zip/pyspark/worker.py", line 529, in read_single_udf
+    f, return_type = read_command(pickleSer, infile)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/python/lib/pyspark.zip/pyspark/worker.py", line 90, in read_command
+    command = serializer._read_with_length(file)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/python/lib/pyspark.zip/pyspark/serializers.py", line 174, in _read_with_length
+    return self.loads(obj)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/python/lib/pyspark.zip/pyspark/serializers.py", line 472, in loads
+    return cloudpickle.loads(obj, encoding=encoding)
+ModuleNotFoundError: No module named 'utils'
+
+2025-06-30 00:52:28,518 [INFO] Closing down clientserver connection
+2025-06-30 00:55:02,375 [INFO] ✅ Spark connection created successfully.
+2025-06-30 00:55:04,245 [INFO] ✅ Selection dataframe created from Kafka stream
+2025-06-30 00:55:04,270 [WARNING] Cluster.__init__ called with contact_points specified, but no load_balancing_policy. In the next major version, this will raise an error; please specify a load-balancing policy. (contact_points = ['localhost'], lbp = None)
+2025-06-30 00:55:04,462 [INFO] Using datacenter 'datacenter1' for DCAwareRoundRobinPolicy (via host '127.0.0.1:9042'); if incorrect, please specify a local_dc to the constructor, or limit contact points to local cluster nodes
+2025-06-30 00:55:04,487 [INFO] ⚡ Streaming started with feature extraction...
+2025-06-30 00:55:04,503 [INFO] Callback Server Starting
+2025-06-30 00:55:04,518 [INFO] Socket listening on ('127.0.0.1', 35767)
+2025-06-30 00:55:06,134 [INFO] Python Server ready to receive messages
+2025-06-30 00:55:06,134 [INFO] Received command c on object id p0
+2025-06-30 00:55:54,481 [INFO] Received command c on object id p0
+2025-06-30 00:56:34,030 [INFO] Received command c on object id p0
+2025-06-30 00:57:56,017 [INFO] Error while receiving.
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 511, in send_command
+    answer = smart_decode(self.stream.readline()[:-1])
+RuntimeError: reentrant call inside <_io.BufferedReader name=4>
+2025-06-30 00:57:56,030 [INFO] Closing down clientserver connection
+2025-06-30 00:57:56,030 [ERROR] Exception while sending command.
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 511, in send_command
+    answer = smart_decode(self.stream.readline()[:-1])
+RuntimeError: reentrant call inside <_io.BufferedReader name=4>
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/java_gateway.py", line 1038, in send_command
+    response = connection.send_command(command)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 539, in send_command
+    raise Py4JNetworkError(
+py4j.protocol.Py4JNetworkError: Error while sending or receiving
+2025-06-30 00:57:56,033 [INFO] Error while receiving.
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 511, in send_command
+    answer = smart_decode(self.stream.readline()[:-1])
+  File "/usr/lib/python3.10/socket.py", line 705, in readinto
+    return self._sock.recv_into(b)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/context.py", line 381, in signal_handler
+    self.cancelAllJobs()
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/context.py", line 2446, in cancelAllJobs
+    self._jsc.sc().cancelAllJobs()
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/java_gateway.py", line 1322, in __call__
+    return_value = get_return_value(
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/errors/exceptions/captured.py", line 179, in deco
+    return f(*a, **kw)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/protocol.py", line 334, in get_return_value
+    raise Py4JError(
+py4j.protocol.Py4JError: An error occurred while calling o30.sc
+2025-06-30 00:57:56,037 [INFO] Closing down clientserver connection
+2025-06-30 00:57:56,038 [ERROR] Exception while sending command.
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 511, in send_command
+    answer = smart_decode(self.stream.readline()[:-1])
+  File "/usr/lib/python3.10/socket.py", line 705, in readinto
+    return self._sock.recv_into(b)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/context.py", line 381, in signal_handler
+    self.cancelAllJobs()
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/context.py", line 2446, in cancelAllJobs
+    self._jsc.sc().cancelAllJobs()
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/java_gateway.py", line 1322, in __call__
+    return_value = get_return_value(
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/errors/exceptions/captured.py", line 179, in deco
+    return f(*a, **kw)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/protocol.py", line 334, in get_return_value
+    raise Py4JError(
+py4j.protocol.Py4JError: An error occurred while calling o30.sc
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/java_gateway.py", line 1038, in send_command
+    response = connection.send_command(command)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 539, in send_command
+    raise Py4JNetworkError(
+py4j.protocol.Py4JNetworkError: Error while sending or receiving
+2025-06-30 00:57:56,038 [INFO] Closing down clientserver connection
+2025-06-30 00:57:56,124 [INFO] Closing down clientserver connection
+2025-06-30 00:59:18,117 [INFO] ✅ Spark connection created successfully.
+2025-06-30 00:59:20,100 [INFO] ✅ Selection dataframe created from Kafka stream
+2025-06-30 00:59:20,130 [WARNING] Cluster.__init__ called with contact_points specified, but no load_balancing_policy. In the next major version, this will raise an error; please specify a load-balancing policy. (contact_points = ['localhost'], lbp = None)
+2025-06-30 00:59:20,371 [INFO] Using datacenter 'datacenter1' for DCAwareRoundRobinPolicy (via host '127.0.0.1:9042'); if incorrect, please specify a local_dc to the constructor, or limit contact points to local cluster nodes
+2025-06-30 00:59:20,415 [INFO] ⚡ Streaming started with feature extraction...
+2025-06-30 00:59:20,432 [INFO] Callback Server Starting
+2025-06-30 00:59:20,432 [INFO] Socket listening on ('127.0.0.1', 34119)
+2025-06-30 00:59:22,190 [INFO] Python Server ready to receive messages
+2025-06-30 00:59:22,191 [INFO] Received command c on object id p0
+2025-06-30 00:59:29,991 [INFO] Received command c on object id p0
+2025-06-30 00:59:30,965 [INFO] Received command c on object id p0
+2025-06-30 00:59:31,788 [INFO] Received command c on object id p0
+2025-06-30 00:59:32,636 [INFO] Received command c on object id p0
+2025-06-30 00:59:33,370 [INFO] Received command c on object id p0
+2025-06-30 00:59:34,087 [INFO] Received command c on object id p0
+2025-06-30 00:59:34,728 [INFO] Received command c on object id p0
+2025-06-30 00:59:35,430 [INFO] Received command c on object id p0
+2025-06-30 00:59:36,116 [INFO] Received command c on object id p0
+2025-06-30 00:59:34,369 [INFO] Received command c on object id p0
+2025-06-30 00:59:35,061 [INFO] Received command c on object id p0
+2025-06-30 00:59:35,656 [INFO] Received command c on object id p0
+2025-06-30 00:59:36,410 [INFO] Received command c on object id p0
+2025-06-30 00:59:37,058 [INFO] Received command c on object id p0
+2025-06-30 00:59:37,731 [INFO] Received command c on object id p0
+2025-06-30 00:59:38,385 [INFO] Received command c on object id p0
+2025-06-30 00:59:39,250 [INFO] Received command c on object id p0
+2025-06-30 00:59:39,943 [INFO] Received command c on object id p0
+2025-06-30 00:59:42,364 [INFO] Received command c on object id p0
+2025-06-30 00:59:43,115 [INFO] Received command c on object id p0
+2025-06-30 00:59:43,872 [INFO] Received command c on object id p0
+2025-06-30 00:59:44,528 [INFO] Received command c on object id p0
+2025-06-30 00:59:45,209 [INFO] Received command c on object id p0
+2025-06-30 00:59:45,915 [INFO] Received command c on object id p0
+2025-06-30 00:59:46,529 [INFO] Received command c on object id p0
+2025-06-30 00:59:47,220 [INFO] Received command c on object id p0
+2025-06-30 00:59:47,840 [INFO] Received command c on object id p0
+2025-06-30 00:59:48,449 [INFO] Received command c on object id p0
+2025-06-30 00:59:49,166 [INFO] Received command c on object id p0
+2025-06-30 00:59:49,776 [INFO] Received command c on object id p0
+2025-06-30 00:59:50,603 [INFO] Received command c on object id p0
+2025-06-30 00:59:51,341 [INFO] Received command c on object id p0
+2025-06-30 00:59:51,993 [INFO] Received command c on object id p0
+2025-06-30 00:59:52,700 [INFO] Received command c on object id p0
+2025-06-30 00:59:53,324 [INFO] Received command c on object id p0
+2025-06-30 00:59:53,935 [INFO] Received command c on object id p0
+2025-06-30 00:59:54,607 [INFO] Received command c on object id p0
+2025-06-30 00:59:55,232 [INFO] Received command c on object id p0
+2025-06-30 00:59:55,803 [INFO] Received command c on object id p0
+2025-06-30 00:59:56,388 [INFO] Received command c on object id p0
+2025-06-30 00:59:56,987 [INFO] Received command c on object id p0
+2025-06-30 00:59:57,577 [INFO] Received command c on object id p0
+2025-06-30 00:59:58,112 [INFO] Received command c on object id p0
+2025-06-30 00:59:58,737 [INFO] Received command c on object id p0
+2025-06-30 00:59:59,290 [INFO] Received command c on object id p0
+2025-06-30 00:59:59,820 [INFO] Received command c on object id p0
+2025-06-30 01:00:00,408 [INFO] Received command c on object id p0
+2025-06-30 01:00:00,923 [INFO] Received command c on object id p0
+2025-06-30 01:00:01,527 [INFO] Received command c on object id p0
+2025-06-30 01:00:02,069 [INFO] Received command c on object id p0
+2025-06-30 01:00:02,624 [INFO] Received command c on object id p0
+2025-06-30 01:00:03,195 [INFO] Received command c on object id p0
+2025-06-30 01:00:03,806 [INFO] Received command c on object id p0
+2025-06-30 01:00:04,184 [INFO] Error while receiving.
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 511, in send_command
+    answer = smart_decode(self.stream.readline()[:-1])
+RuntimeError: reentrant call inside <_io.BufferedReader name=4>
+2025-06-30 01:00:04,185 [INFO] Closing down clientserver connection
+2025-06-30 01:00:04,185 [ERROR] Exception while sending command.
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 511, in send_command
+    answer = smart_decode(self.stream.readline()[:-1])
+RuntimeError: reentrant call inside <_io.BufferedReader name=4>
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/java_gateway.py", line 1038, in send_command
+    response = connection.send_command(command)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 539, in send_command
+    raise Py4JNetworkError(
+py4j.protocol.Py4JNetworkError: Error while sending or receiving
+2025-06-30 01:00:04,187 [INFO] Error while receiving.
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 511, in send_command
+    answer = smart_decode(self.stream.readline()[:-1])
+  File "/usr/lib/python3.10/socket.py", line 705, in readinto
+    return self._sock.recv_into(b)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/context.py", line 381, in signal_handler
+    self.cancelAllJobs()
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/context.py", line 2446, in cancelAllJobs
+    self._jsc.sc().cancelAllJobs()
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/java_gateway.py", line 1322, in __call__
+    return_value = get_return_value(
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/errors/exceptions/captured.py", line 179, in deco
+    return f(*a, **kw)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/protocol.py", line 334, in get_return_value
+    raise Py4JError(
+py4j.protocol.Py4JError: An error occurred while calling o30.sc
+2025-06-30 01:00:04,187 [INFO] Closing down clientserver connection
+2025-06-30 01:00:04,188 [ERROR] Exception while sending command.
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 511, in send_command
+    answer = smart_decode(self.stream.readline()[:-1])
+  File "/usr/lib/python3.10/socket.py", line 705, in readinto
+    return self._sock.recv_into(b)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/context.py", line 381, in signal_handler
+    self.cancelAllJobs()
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/context.py", line 2446, in cancelAllJobs
+    self._jsc.sc().cancelAllJobs()
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/java_gateway.py", line 1322, in __call__
+    return_value = get_return_value(
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/errors/exceptions/captured.py", line 179, in deco
+    return f(*a, **kw)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/protocol.py", line 334, in get_return_value
+    raise Py4JError(
+py4j.protocol.Py4JError: An error occurred while calling o30.sc
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/java_gateway.py", line 1038, in send_command
+    response = connection.send_command(command)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 539, in send_command
+    raise Py4JNetworkError(
+py4j.protocol.Py4JNetworkError: Error while sending or receiving
+2025-06-30 01:00:04,188 [INFO] Closing down clientserver connection
+2025-06-30 01:00:04,207 [INFO] Closing down clientserver connection
+2025-06-30 01:02:07,515 [INFO] ✅ Spark connection created successfully.
+2025-06-30 01:02:09,240 [INFO] ✅ Selection dataframe created from Kafka stream
+2025-06-30 01:02:09,277 [WARNING] Cluster.__init__ called with contact_points specified, but no load_balancing_policy. In the next major version, this will raise an error; please specify a load-balancing policy. (contact_points = ['localhost'], lbp = None)
+2025-06-30 01:02:09,483 [INFO] Using datacenter 'datacenter1' for DCAwareRoundRobinPolicy (via host '127.0.0.1:9042'); if incorrect, please specify a local_dc to the constructor, or limit contact points to local cluster nodes
+2025-06-30 01:02:09,509 [INFO] ⚡ Streaming started with feature extraction...
+2025-06-30 01:02:09,527 [INFO] Callback Server Starting
+2025-06-30 01:02:09,528 [INFO] Socket listening on ('127.0.0.1', 42313)
+2025-06-30 01:02:10,953 [INFO] Python Server ready to receive messages
+2025-06-30 01:02:10,953 [INFO] Received command c on object id p0
+2025-06-30 01:02:38,611 [INFO] Received command c on object id p0
+2025-06-30 01:02:48,875 [INFO] Received command c on object id p0
+2025-06-30 01:02:56,976 [INFO] Received command c on object id p0
+2025-06-30 01:03:05,116 [INFO] Received command c on object id p0
+2025-06-30 01:03:12,502 [INFO] Received command c on object id p0
+2025-06-30 01:03:21,027 [INFO] Received command c on object id p0
+2025-06-30 01:03:30,197 [INFO] Received command c on object id p0
+2025-06-30 01:03:34,928 [INFO] Received command c on object id p0
+2025-06-30 01:03:43,268 [INFO] Received command c on object id p0
+2025-06-30 01:03:52,320 [INFO] Received command c on object id p0
+2025-06-30 01:04:02,216 [INFO] Received command c on object id p0
+2025-06-30 01:04:06,983 [INFO] Received command c on object id p0
+2025-06-30 01:04:14,073 [INFO] Received command c on object id p0
+2025-06-30 01:04:22,768 [INFO] Received command c on object id p0
+2025-06-30 01:04:31,375 [INFO] Received command c on object id p0
+2025-06-30 01:04:37,855 [INFO] Received command c on object id p0
+2025-06-30 01:04:46,088 [INFO] Received command c on object id p0
+2025-06-30 01:04:54,779 [INFO] Received command c on object id p0
+2025-06-30 01:04:57,172 [INFO] Error while receiving.
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 511, in send_command
+    answer = smart_decode(self.stream.readline()[:-1])
+RuntimeError: reentrant call inside <_io.BufferedReader name=4>
+2025-06-30 01:04:57,203 [INFO] Closing down clientserver connection
+2025-06-30 01:04:57,204 [ERROR] Exception while sending command.
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 511, in send_command
+    answer = smart_decode(self.stream.readline()[:-1])
+RuntimeError: reentrant call inside <_io.BufferedReader name=4>
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/java_gateway.py", line 1038, in send_command
+    response = connection.send_command(command)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 539, in send_command
+    raise Py4JNetworkError(
+py4j.protocol.Py4JNetworkError: Error while sending or receiving
+2025-06-30 01:04:57,207 [INFO] Error while receiving.
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 511, in send_command
+    answer = smart_decode(self.stream.readline()[:-1])
+  File "/usr/lib/python3.10/socket.py", line 705, in readinto
+    return self._sock.recv_into(b)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/context.py", line 381, in signal_handler
+    self.cancelAllJobs()
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/context.py", line 2446, in cancelAllJobs
+    self._jsc.sc().cancelAllJobs()
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/java_gateway.py", line 1322, in __call__
+    return_value = get_return_value(
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/errors/exceptions/captured.py", line 179, in deco
+    return f(*a, **kw)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/protocol.py", line 334, in get_return_value
+    raise Py4JError(
+py4j.protocol.Py4JError: An error occurred while calling o30.sc
+2025-06-30 01:04:57,213 [INFO] Closing down clientserver connection
+2025-06-30 01:04:57,213 [ERROR] Exception while sending command.
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 511, in send_command
+    answer = smart_decode(self.stream.readline()[:-1])
+  File "/usr/lib/python3.10/socket.py", line 705, in readinto
+    return self._sock.recv_into(b)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/context.py", line 381, in signal_handler
+    self.cancelAllJobs()
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/context.py", line 2446, in cancelAllJobs
+    self._jsc.sc().cancelAllJobs()
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/java_gateway.py", line 1322, in __call__
+    return_value = get_return_value(
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/pyspark/errors/exceptions/captured.py", line 179, in deco
+    return f(*a, **kw)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/protocol.py", line 334, in get_return_value
+    raise Py4JError(
+py4j.protocol.Py4JError: An error occurred while calling o30.sc
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/java_gateway.py", line 1038, in send_command
+    response = connection.send_command(command)
+  File "/home/anhkhoa/.venv/lib/python3.10/site-packages/py4j/clientserver.py", line 539, in send_command
+    raise Py4JNetworkError(
+py4j.protocol.Py4JNetworkError: Error while sending or receiving
+2025-06-30 01:04:57,214 [INFO] Closing down clientserver connection
+2025-06-30 01:04:57,399 [INFO] Closing down clientserver connection

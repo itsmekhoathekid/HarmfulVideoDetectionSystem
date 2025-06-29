@@ -17,7 +17,20 @@ import numpy as np
 import logging
 from concurrent.futures import ThreadPoolExecutor
 from functools import partial
-from utils import tensor_to_base64
+import io
+import gzip
+
+def tensor_to_base64(tensor: torch.Tensor) -> str:
+    buffer = io.BytesIO()
+    torch.save(tensor, buffer)
+    compressed = gzip.compress(buffer.getvalue())  # 👈 nén trước khi base64
+    return base64.b64encode(compressed).decode("utf-8")
+
+def base64_to_tensor(b64_str: str) -> torch.Tensor:
+    compressed = base64.b64decode(b64_str)
+    decompressed = gzip.decompress(compressed)
+    buffer = io.BytesIO(decompressed)
+    return torch.load(buffer)
 
 # Ghi log vào file
 logging.basicConfig(
@@ -247,12 +260,12 @@ def create_selection_df_from_kafka(spark_df):
 
         selection_df = selection_df.withColumn("id", col("idx"))  # tạo id
 
-        selection_df = selection_df \
-            .withColumn("video_feat", extract_video_features(col("url"))) \
-            .withColumn("audio_feat", extract_audio_features(col("url")))
+        # selection_df = selection_df \
+        #     .withColumn("video_feat", extract_video_features(col("url"))) \
+        #     .withColumn("audio_feat", extract_audio_features(col("url")))
 
         logging.info("✅ Selection dataframe created from Kafka stream")
-        return selection_df.select("id", "url", "label", "video_feat", "audio_feat", "split", "text_embedding")  # ✅ chỉ giữ cần thiết
+        return selection_df.select("id", "url", "label", "split", "text_embedding")  # ✅ chỉ giữ cần thiết
     else:
         logging.warning("❌ No valid Kafka dataframe available")
         return None
@@ -266,6 +279,10 @@ def process_batch(batch_df, batch_id):
 
     if not batch_df.rdd.isEmpty():
         print(f"[Batch ID: {batch_id}] Row count: {batch_df.count()}")
+        batch_df = batch_df \
+            .withColumn("video_feat", extract_video_features(col("url"))) \
+            .withColumn("audio_feat", extract_audio_features(col("url")))
+
         try:
             batch_df.write \
                 .format("org.apache.spark.sql.cassandra") \

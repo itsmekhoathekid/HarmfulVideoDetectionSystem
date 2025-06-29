@@ -112,8 +112,6 @@ def split_videos(
 
 def create_json(src_folder, dst_folder):
 
-    
-
     for split in os.listdir(src_folder):
         res = {}
         split_path = os.path.join(src_folder, split)

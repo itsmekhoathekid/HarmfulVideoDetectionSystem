@@ -63,10 +63,42 @@ def base64_to_tensor_udf(b64_str):
 
 from tqdm import tqdm
 
+def get_data_dic():
+    # Cấu hình SparkSession
+    s_conn = SparkSession.builder \
+        .appName("SparkVideoStreaming") \
+        .config("spark.jars.packages",
+                "com.datastax.spark:spark-cassandra-connector_2.12:3.4.1,"
+                "org.apache.spark:spark-sql-kafka-0-10_2.12:3.4.1") \
+        .config("spark.cassandra.connection.host", "localhost") \
+        .config("spark.executor.memory", "4g") \
+        .config("spark.driver.memory", "4g") \
+        .config("spark.executor.instances", "2") \
+        .config("spark.sql.shuffle.partitions", "2") \
+        .config("spark.default.parallelism", "2") \
+        .getOrCreate()
+
+    s_conn.sparkContext.setLogLevel("ERROR")
+
+    # Đọc dữ liệu từ Cassandra vào DataFrame
+    df = s_conn.read \
+        .format("org.apache.spark.sql.cassandra") \
+        .options(table="created_users", keyspace="spark_streams") \
+        .load()
+
+    df_rows = df.collect()
+    data_dict = [row.asDict() for row in df_rows]
+
+    return data_dict
+
+
 class cassandraExtractedFeatures(Dataset):
-    def __init__(self):
+    def __init__(self, data_dic, split):
+        self.data_dict = data_dic
+        self.split = split
         self.data = self.load_and_process()
-    
+        
+
     def map_class_to_idx(self, class_name):
         class_to_idx = {
             "horrible": 0,
@@ -79,47 +111,21 @@ class cassandraExtractedFeatures(Dataset):
         return class_to_idx.get(class_name, -1)
 
     def load_and_process(self):
-        # Cấu hình SparkSession
-        s_conn = SparkSession.builder \
-            .appName("SparkVideoStreaming") \
-            .config("spark.jars.packages",
-                    "com.datastax.spark:spark-cassandra-connector_2.12:3.4.1,"
-                    "org.apache.spark:spark-sql-kafka-0-10_2.12:3.4.1") \
-            .config("spark.cassandra.connection.host", "localhost") \
-            .config("spark.executor.memory", "4g") \
-            .config("spark.driver.memory", "4g") \
-            .config("spark.executor.instances", "2") \
-            .config("spark.sql.shuffle.partitions", "2") \
-            .config("spark.default.parallelism", "2") \
-            .getOrCreate()
-
-        s_conn.sparkContext.setLogLevel("ERROR")
-
-        # Đọc dữ liệu từ Cassandra vào DataFrame
-        df = s_conn.read \
-            .format("org.apache.spark.sql.cassandra") \
-            .options(table="created_users", keyspace="spark_streams") \
-            .load()
-
-        df_rows = df.collect()
-        data_dict = [row.asDict() for row in df_rows]
-
         decoded_data = []
-        for row_dict in tqdm(data_dict, desc = "Extracting features from Cassandra"):
-            # Decode video_feat_tensor và audio_feat_tensor
-            video_feat_tensor = base64_to_tensor(row_dict['video_feat'])
-            audio_feat_tensor = base64_to_tensor(row_dict['audio_feat'])
-            text_embedding = row_dict['text_embedding'] if len(row_dict['text_embedding']) > 2 else torch.zeros(768)
-            label = self.map_class_to_idx(row_dict['label'])  # Nhận nhãn (label)
+        for row_dict in tqdm(self.data_dict, desc = "Extracting features from Cassandra"):
+            if row_dict["split"] == self.split:
 
-            # print(video_feat_tensor.dtype)
-            # Lưu dữ liệu vào list sau khi decode
-            decoded_data.append({
-                'video_feat_tensor': video_feat_tensor,
-                'audio_feat_tensor': audio_feat_tensor,
-                'label': label,
-                "text_embedding": text_embedding
-            })
+                video_feat_tensor = base64_to_tensor(row_dict['video_feat'])
+                audio_feat_tensor = base64_to_tensor(row_dict['audio_feat'])
+                text_embedding = row_dict['text_embedding'] if len(row_dict['text_embedding']) > 2 else torch.zeros(768)
+                label = self.map_class_to_idx(row_dict['label'])  # Nhận nhãn (label)
+
+                decoded_data.append({
+                    'video_feat_tensor': video_feat_tensor,
+                    'audio_feat_tensor': audio_feat_tensor,
+                    'label': label,
+                    "text_embedding": text_embedding
+                })
         
         return decoded_data
 

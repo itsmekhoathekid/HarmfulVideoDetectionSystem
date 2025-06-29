@@ -22,7 +22,7 @@ def get_data():
             "label": value["label"],
             # "video_encoded": get_encoded_video(value["url"]),
             "text_embedding": [0.0],
-            "split": ""
+            "split": "train"
         }
 
 def stream_data():

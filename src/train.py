@@ -1,4 +1,5 @@
-from models import cassandraExtractedFeatures, train_model, evaluate_loss, device, MultimodalModel
+from models import cassandraExtractedFeatures, train_model, evaluate_loss, device, MultimodalModel, get_data_dic
+
 from torch.utils.data import DataLoader
 import torch.nn as nn
 import torch.optim as optim
@@ -15,7 +16,11 @@ model = MultimodalModel(
     embed_dim=256
 ).to(device)
 
-train_dataset = cassandraExtractedFeatures()
+# load data_dict
+
+data_dict = get_data_dic()
+
+train_dataset = cassandraExtractedFeatures(data_dic=data_dict, split="train")
 train_loader = DataLoader(
     train_dataset, 
     batch_size=4, 

@@ -62,13 +62,14 @@ def extract_video_features_base64(video_strings: pd.Series) -> pd.Series:
             tensor = torch.zeros((30, 3, 224, 224))
         results.append(tensor_to_base64(tensor))
         count += 1
-        logging.info(f"Processed {count}/{len(video_strings)} videos")
+        print(f"[Video processing] {count}/{len(video_strings)}")
     
     return pd.Series(results)
 
 @pandas_udf(StringType())
 def extract_audio_features_base64(video_strings: pd.Series) -> pd.Series:
     results = []
+    count = 0
     for video_string in video_strings:
         try:
             tensor = video_processor.process_audio_base64(video_string)
@@ -76,6 +77,8 @@ def extract_audio_features_base64(video_strings: pd.Series) -> pd.Series:
             print(f"❌ Audio error: {e}")
             tensor = torch.zeros((40, 40))
         results.append(tensor_to_base64(tensor))
+        count += 1
+        print(f"[Audio processing] {count}/{len(video_strings)}")
     return pd.Series(results)
 
 
@@ -109,6 +112,8 @@ def extract_audio_features(video_strings: pd.Series) -> pd.Series:
         count += 1
         print(f"[Video audio] {count}/{len(video_strings)} audio ")
     return pd.Series(results)
+
+
 
 @pandas_udf(StringType())
 def extract_audio_features_base64_parallel(video_strings: pd.Series) -> pd.Series:
@@ -150,7 +155,7 @@ def create_keyspace(session):
 
 
 def create_table(session):
-    # session.execute("DROP TABLE IF EXISTS spark_streams.created_users")
+    session.execute("DROP TABLE IF EXISTS spark_streams.created_users")
     session.execute("""
         CREATE TABLE IF NOT EXISTS spark_streams.created_users (
             id TEXT PRIMARY KEY,
@@ -230,7 +235,7 @@ def connect_to_kafka(spark):
         .format("kafka")
         .option("kafka.bootstrap.servers", "localhost:9092")
         .option("subscribe", "users_created")
-        .option("startingOffsets", "latest")
+        .option("startingOffsets", "earliest")
         .option("maxOffsetsPerTrigger", 3) # ✅ chỉ xử lý 10 record/batch
         .option("failOnDataLoss", "false")  # ✅ Bỏ qua offset lỗi
         .load())
@@ -282,7 +287,8 @@ def process_batch(batch_df, batch_id):
         batch_df = batch_df \
             .withColumn("video_feat", extract_video_features(col("url"))) \
             .withColumn("audio_feat", extract_audio_features(col("url")))
-
+        
+        # batch_df = batch_df.drop("video_encoded")
         try:
             batch_df.write \
                 .format("org.apache.spark.sql.cassandra") \

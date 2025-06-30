@@ -96,8 +96,10 @@ def stream_data():
         j += 1
         time.sleep(1)
 
+
     producer.flush()
     producer.close()
     print(f"🚀 Finished sending {j} messages.")
+    
 
 stream_data()

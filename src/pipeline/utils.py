@@ -159,3 +159,5 @@ def base64_to_tensor(b64_str: str) -> torch.Tensor:
     decompressed = gzip.decompress(compressed)
     buffer = io.BytesIO(decompressed)
     return torch.load(buffer)
+
+

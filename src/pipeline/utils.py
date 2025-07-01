@@ -6,12 +6,9 @@ import io
 import gzip
 import torch
 import base64
+import yaml
+import logging
 
-# source_path = os.path.join(source_dir, filename)
-#         target_path = os.path.join(target_dir, filename)
-
-#         # Move the file
-#         shutil.move(source_path, target_path)
 
 def moving_files(source_dir, dest_dir):
     if dest_dir is None:
@@ -160,4 +157,16 @@ def base64_to_tensor(b64_str: str) -> torch.Tensor:
     buffer = io.BytesIO(decompressed)
     return torch.load(buffer)
 
+def load_config(config_path):
+    with open(config_path, 'r') as f:
+        return yaml.safe_load(f)
 
+def logg(config):
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s [%(levelname)s] %(message)s",
+        handlers=[
+            logging.FileHandler(config['spark']['logging_path']),
+            logging.StreamHandler()  # vẫn hiển thị ra console
+        ]
+    )

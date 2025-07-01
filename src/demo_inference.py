@@ -8,18 +8,8 @@ from models import MultimodalModel
 import io
 import base64
 import gzip
+from pipeline import tensor_to_base64, base64_to_tensor
 
-def tensor_to_base64(tensor: torch.Tensor) -> str:
-    buffer = io.BytesIO()
-    torch.save(tensor, buffer)
-    compressed = gzip.compress(buffer.getvalue())  # 👈 nén trước khi base64
-    return base64.b64encode(compressed).decode("utf-8")
-
-def base64_to_tensor(b64_str: str) -> torch.Tensor:
-    compressed = base64.b64decode(b64_str)
-    decompressed = gzip.decompress(compressed)
-    buffer = io.BytesIO(decompressed)
-    return torch.load(buffer)
 
 # === Khởi tạo model ===
 device = "cuda" if torch.cuda.is_available() else "cpu"

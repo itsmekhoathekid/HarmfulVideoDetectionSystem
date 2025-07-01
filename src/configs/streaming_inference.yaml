@@ -1,0 +1,33 @@
+kafka:
+  max_request_size: 15728640
+  timeout: 10
+  topic: data-test
+  json_data: '/home/anhkhoa/spark_video_streaming/json/new_data.json'
+  acks: 'all'
+  bootstrap_servers: 'localhost:9092'
+  max_block_ms: 5000
+  max_offsets : 3
+  starting_offsets: 'earliest'
+  fail_on_error: 'false'
+  inference: False
+
+spark:
+  spark_name: 'Spark Video Streaming'
+  executor_memory: '4g'
+  executor_cores: 2
+  driver_memory: '4g'
+  executer_instances: '2'
+  shuffle_partitions: '2'
+  parallelism: '2'
+  connection_host : 'localhost'
+  logging_path: '/home/anhkhoa/spark_video_streaming/logs/spark.log'
+
+cassandra:
+  keyspace: 'spark_streams'
+  table: 'created_users'
+  contact_points: ['localhost']
+  protocal_version : 4
+  allow_beta_protocol_version: True
+
+
+

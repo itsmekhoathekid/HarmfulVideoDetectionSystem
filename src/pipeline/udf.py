@@ -8,7 +8,7 @@ from .utils import tensor_to_base64, base64_to_tensor
 import numpy as np
 
 video_processor = VideoProcessor({
-    "num_frames": 5,
+    "num_frames": 1,
     "resize": (112, 112),
     "n_mfcc": 20,
     "max_length": 20

@@ -71,7 +71,7 @@ if __name__ == "__main__":
         if selection_df is not None:
             session = create_cassandra_connection(config)
             if session is not None:
-                create_keyspace(session, config)
+                # create_keyspace(session, config)
                 create_table(session, config)
 
             logging.info("⚡ Streaming started with feature extraction...")

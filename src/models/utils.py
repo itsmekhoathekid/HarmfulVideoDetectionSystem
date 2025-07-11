@@ -55,9 +55,10 @@ def base64_to_tensor(b64_str) -> torch.Tensor:
 # Định nghĩa UDF trong PySpark, trả về ArrayType(FloatType) (mảng các float)
 @pandas_udf(ArrayType(FloatType()))  # Chỉ định kiểu trả về là mảng các float
 def base64_to_tensor_udf(b64_str):
-    print(b64_str.dtype)  
+    print("Decoding base64 string to tensor...")  
     
     tensor = base64_to_tensor(b64_str)
+
     # Chuyển tensor thành list hoặc numpy array
     return tensor # Trả về dưới dạng list (mảng số thực)
 

@@ -22,9 +22,11 @@ def create_table(session, config):
     table = config['cassandra']['table']
     
     # CQL query to create table
+    delete_table_query = """        DROP TABLE IF EXISTS {}.{};
+    """.format(keyspace, table)
     create_table_query = """
         CREATE TABLE IF NOT EXISTS {}.{} (
-            id TEXT PRIMARY KEY,
+            idx TEXT PRIMARY KEY,
             url TEXT,
             label TEXT,
             video_feat TEXT,
@@ -35,6 +37,7 @@ def create_table(session, config):
     """.format(keyspace, table)
     
     try:
+        session.execute(delete_table_query)  # Xoá bảng nếu đã tồn tại
         session.execute(create_table_query)
         print(f"Table '{table}' created successfully in keyspace '{keyspace}'!")
     except Exception as e:
@@ -128,7 +131,6 @@ def create_selection_df_from_kafka(spark_df, config):
 
         selection_df.printSchema()
 
-        selection_df = selection_df.withColumn("id", col("idx"))  # tạo id
 
         logging.info("✅ Selection dataframe created from Kafka stream")
         return selection_df # ✅ chỉ giữ cần thiết

@@ -38,7 +38,7 @@ def infer_model(row):
     output = model(video_feat, audio_feat, text_emb)
     probs = torch.softmax(output, dim=1)
     pred_class = torch.argmax(probs, dim=1).item()
-    print(f"Predicted class: {pred_class} for video: {row['video_name']}")
+    print(f"Predicted class: {pred_class} for video: {row['idx']}")
     return map_class_idx(pred_class)
 
 # === UI Streamlit ===
@@ -73,7 +73,7 @@ while True:
 
     if new_rows:
         final_df = pd.concat(new_rows, ignore_index=True)
-        display_df = final_df[["batch_id", "video_name", "predicted_label"]]
+        display_df = final_df[["idx", "label", "predicted_label"]]
 
         # === Highlight nhãn nhạy cảm ===
         def highlight_label(val):

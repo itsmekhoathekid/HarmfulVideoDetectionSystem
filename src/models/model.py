@@ -30,7 +30,7 @@ class VisualModelLessComplex(nn.Module):
 
 
 class AudioModelLessComplex(nn.Module):
-    def __init__(self, n_mfcc=40, max_length=40, hidden_size=128):
+    def __init__(self, n_mfcc=20, max_length=20, hidden_size=128):
         super(AudioModelLessComplex, self).__init__()
         self.conv1 = nn.Conv2d(1, 32, kernel_size=(3,3), stride=(1,1), padding=(1,1))
         self.bn1 = nn.BatchNorm2d(32)

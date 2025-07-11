@@ -13,12 +13,12 @@ kafka:
 
 spark:
   spark_name: 'Spark Video Streaming'
-  executor_memory: '4g'
-  executor_cores: 2
-  driver_memory: '4g'
-  executer_instances: '2'
-  shuffle_partitions: '2'
-  parallelism: '2'
+  executor_memory: '512m'
+  executor_cores: 1
+  driver_memory: '512m'
+  executer_instances: '1'
+  shuffle_partitions: '1'
+  parallelism: '1'
   connection_host : 'localhost'
   logging_path: '/home/anhkhoa/spark_video_streaming/logs/spark.log'
 

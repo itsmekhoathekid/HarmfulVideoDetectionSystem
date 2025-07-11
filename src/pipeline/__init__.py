@@ -13,7 +13,9 @@ from .udf import (
     extract_video_features_base64,
     extract_audio_features_base64,
     extract_video_features,
-    extract_audio_features
+    extract_audio_features,
+    extract_video_tensor,
+    extract_audio_tensor,
 )
 
 from .connection import (

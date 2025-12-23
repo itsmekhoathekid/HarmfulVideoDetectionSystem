@@ -8,6 +8,6 @@ The overall system architecture and inference pipeline are illustrated in the di
 
 ![Model Flow](logs/flow.png)
 
-## Demo
-Demo videos demonstrating real-time detection results are available at:  
+## Demo & Presentation 
+Demo & Presentation videos demonstrating real-time detection results are available at:  
 https://drive.google.com/drive/u/1/folders/1Kni1NSkH7kawjOoSSppYmDsMYt7TMu0f

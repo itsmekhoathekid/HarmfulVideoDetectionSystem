@@ -1,0 +1,50 @@
+
+sudo apt update
+sudo apt install docker.io
+
+docker --version
+sudo systemctl status docker
+
+sudo systemctl start docker
+
+
+
+
+
+
+sudo docker-compose down -v --remove-orphans
+sudo docker volume prune -f
+sudo docker-compose up -d
+
+
+kafka-topics.sh --create \
+  --topic users_created \
+  --bootstrap-server localhost:9092 \
+  --partitions 1 --replication-factor 1
+
+cqlsh
+
+USE spark_streams;
+
+SELECT * FROM created_users LIMIT 10;
+
+SELECT count(idx) FROM spark_streams.created_users;
+
+kafka-run-class.sh kafka.tools.GetOffsetShell \
+  --broker-list localhost:9092 \
+  --topic users_created \
+  --time -1
+
+docker restart broker
+
+
+export PYTHONPATH=/home/anhkhoa/spark_video_streaming/src:$PYTHONPATH
+
+kafka-topics.sh --bootstrap-server 172.19.0.4:9092 --delete --topic <topic_name>
+
+cd src
+python -m pipeline.spark_preprocessing
+
+
+
+

@@ -6,7 +6,7 @@ This repository contains a real-time multimodal system for detecting harmful vid
 ## Model Flow
 The overall system architecture and inference pipeline are illustrated in the diagram below.
 
-![Model Flow](logs/flow.png)
+![Model Flow](logs/flow2.png)
 
 ## Demo & Presentation 
 Demo & Presentation videos demonstrating real-time detection results are available [here](https://drive.google.com/drive/u/1/folders/1Kni1NSkH7kawjOoSSppYmDsMYt7TMu0f)
